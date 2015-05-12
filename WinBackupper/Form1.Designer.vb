@@ -31,13 +31,16 @@ Partial Class home
         Me.b_searchBackup = New System.Windows.Forms.Button()
         Me.b_start = New System.Windows.Forms.Button()
         Me.b_settings = New System.Windows.Forms.Button()
+        Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
+        Me.fbd_searchBackup = New System.Windows.Forms.FolderBrowserDialog()
+        Me.l_version = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'l_title
         '
         Me.l_title.AutoSize = True
         Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_title.Location = New System.Drawing.Point(137, 9)
+        Me.l_title.Location = New System.Drawing.Point(132, 23)
         Me.l_title.Name = "l_title"
         Me.l_title.Size = New System.Drawing.Size(208, 25)
         Me.l_title.TabIndex = 0
@@ -46,7 +49,7 @@ Partial Class home
         'l_sourcePath
         '
         Me.l_sourcePath.AutoSize = True
-        Me.l_sourcePath.Location = New System.Drawing.Point(12, 78)
+        Me.l_sourcePath.Location = New System.Drawing.Point(12, 66)
         Me.l_sourcePath.Name = "l_sourcePath"
         Me.l_sourcePath.Size = New System.Drawing.Size(69, 13)
         Me.l_sourcePath.TabIndex = 1
@@ -55,7 +58,7 @@ Partial Class home
         'l_backupPath
         '
         Me.l_backupPath.AutoSize = True
-        Me.l_backupPath.Location = New System.Drawing.Point(12, 156)
+        Me.l_backupPath.Location = New System.Drawing.Point(12, 130)
         Me.l_backupPath.Name = "l_backupPath"
         Me.l_backupPath.Size = New System.Drawing.Size(72, 13)
         Me.l_backupPath.TabIndex = 2
@@ -63,21 +66,23 @@ Partial Class home
         '
         'tb_sourcePath
         '
-        Me.tb_sourcePath.Location = New System.Drawing.Point(15, 92)
+        Me.tb_sourcePath.Location = New System.Drawing.Point(15, 80)
         Me.tb_sourcePath.Name = "tb_sourcePath"
+        Me.tb_sourcePath.ReadOnly = True
         Me.tb_sourcePath.Size = New System.Drawing.Size(325, 20)
         Me.tb_sourcePath.TabIndex = 3
         '
         'tb_backupPath
         '
-        Me.tb_backupPath.Location = New System.Drawing.Point(15, 169)
+        Me.tb_backupPath.Location = New System.Drawing.Point(15, 143)
         Me.tb_backupPath.Name = "tb_backupPath"
+        Me.tb_backupPath.ReadOnly = True
         Me.tb_backupPath.Size = New System.Drawing.Size(325, 20)
         Me.tb_backupPath.TabIndex = 4
         '
         'b_searchSource
         '
-        Me.b_searchSource.Location = New System.Drawing.Point(371, 92)
+        Me.b_searchSource.Location = New System.Drawing.Point(366, 78)
         Me.b_searchSource.Name = "b_searchSource"
         Me.b_searchSource.Size = New System.Drawing.Size(75, 23)
         Me.b_searchSource.TabIndex = 5
@@ -86,7 +91,7 @@ Partial Class home
         '
         'b_searchBackup
         '
-        Me.b_searchBackup.Location = New System.Drawing.Point(371, 169)
+        Me.b_searchBackup.Location = New System.Drawing.Point(366, 141)
         Me.b_searchBackup.Name = "b_searchBackup"
         Me.b_searchBackup.Size = New System.Drawing.Size(75, 23)
         Me.b_searchBackup.TabIndex = 6
@@ -95,28 +100,44 @@ Partial Class home
         '
         'b_start
         '
-        Me.b_start.Location = New System.Drawing.Point(15, 205)
+        Me.b_start.Location = New System.Drawing.Point(15, 192)
         Me.b_start.Name = "b_start"
-        Me.b_start.Size = New System.Drawing.Size(151, 35)
+        Me.b_start.Size = New System.Drawing.Size(426, 35)
         Me.b_start.TabIndex = 7
         Me.b_start.Text = "Start Backup"
         Me.b_start.UseVisualStyleBackColor = True
         '
         'b_settings
         '
-        Me.b_settings.Location = New System.Drawing.Point(15, 286)
+        Me.b_settings.Location = New System.Drawing.Point(15, 274)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(118, 23)
         Me.b_settings.TabIndex = 8
         Me.b_settings.Text = "Settings"
         Me.b_settings.UseVisualStyleBackColor = True
         '
+        'fbd_searchSource
+        '
+        '
+        'fbd_searchBackup
+        '
+        '
+        'l_version
+        '
+        Me.l_version.AutoSize = True
+        Me.l_version.Location = New System.Drawing.Point(363, 284)
+        Me.l_version.Name = "l_version"
+        Me.l_version.Size = New System.Drawing.Size(69, 13)
+        Me.l_version.TabIndex = 9
+        Me.l_version.Text = "Version: beta"
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.ClientSize = New System.Drawing.Size(491, 321)
+        Me.ClientSize = New System.Drawing.Size(454, 321)
+        Me.Controls.Add(Me.l_version)
         Me.Controls.Add(Me.b_settings)
         Me.Controls.Add(Me.b_start)
         Me.Controls.Add(Me.b_searchBackup)
@@ -141,5 +162,8 @@ Partial Class home
     Friend WithEvents b_searchBackup As System.Windows.Forms.Button
     Friend WithEvents b_start As System.Windows.Forms.Button
     Friend WithEvents b_settings As System.Windows.Forms.Button
+    Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents fbd_searchBackup As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents l_version As System.Windows.Forms.Label
 
 End Class
