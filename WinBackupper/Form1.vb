@@ -34,7 +34,6 @@
         Do
             tb_sourcePath.Text = sourcePath
         Loop While Not tb_sourcePath.Text = sourcePath
-
     End Sub
 
     ' FolderBrowserDialog to select Source Path
@@ -53,12 +52,12 @@
         fbd_searchBackup.Description = "Select Folder"
         fbd_searchBackup.RootFolder = Environment.SpecialFolder.LocalizedResources
         DialogResult = fbd_searchBackup.ShowDialog
+        backupPath = fbd_searchBackup.SelectedPath.ToString
 
         ' Show Path in TextBox
         Do
-            tb_backupPath.Text = fbd_searchBackup.SelectedPath.ToString
-            backupPath = tb_backupPath.Text
-        Loop While backupPath = Nothing
+            tb_backupPath.Text = backupPath
+        Loop While Not tb_backupPath.Text = backupPath
     End Sub
 
     ' FolderBrowserDialog to select Backup Path
