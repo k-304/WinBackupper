@@ -31,9 +31,9 @@ Partial Class home
         Me.b_searchBackup = New System.Windows.Forms.Button()
         Me.b_start = New System.Windows.Forms.Button()
         Me.b_settings = New System.Windows.Forms.Button()
+        Me.l_version = New System.Windows.Forms.Label()
         Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_searchBackup = New System.Windows.Forms.FolderBrowserDialog()
-        Me.l_version = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'l_title
@@ -116,12 +116,6 @@ Partial Class home
         Me.b_settings.Text = "Settings"
         Me.b_settings.UseVisualStyleBackColor = True
         '
-        'fbd_searchSource
-        '
-        '
-        'fbd_searchBackup
-        '
-        '
         'l_version
         '
         Me.l_version.AutoSize = True
@@ -130,6 +124,12 @@ Partial Class home
         Me.l_version.Size = New System.Drawing.Size(69, 13)
         Me.l_version.TabIndex = 9
         Me.l_version.Text = "Version: beta"
+        '
+        'fbd_searchSource
+        '
+        '
+        'fbd_searchBackup
+        '
         '
         'home
         '
@@ -162,8 +162,8 @@ Partial Class home
     Friend WithEvents b_searchBackup As System.Windows.Forms.Button
     Friend WithEvents b_start As System.Windows.Forms.Button
     Friend WithEvents b_settings As System.Windows.Forms.Button
+    Friend WithEvents l_version As System.Windows.Forms.Label
     Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents fbd_searchBackup As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents l_version As System.Windows.Forms.Label
 
 End Class

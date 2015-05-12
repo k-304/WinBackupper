@@ -71,6 +71,9 @@
         Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         If startResult = Windows.Forms.DialogResult.Yes Then
             MessageBox.Show("Starting Backup!")
+            ' Backup 
+            ' Code
+            ' here
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
         End If

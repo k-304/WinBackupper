@@ -30,6 +30,9 @@ Partial Class Settings
         Me.l_defaultSourcePath = New System.Windows.Forms.Label()
         Me.l_settings = New System.Windows.Forms.Label()
         Me.b_save = New System.Windows.Forms.Button()
+        Me.bw_writer = New System.ComponentModel.BackgroundWorker()
+        Me.fbd_searchDefaultSource = New System.Windows.Forms.FolderBrowserDialog()
+        Me.fbd_searchDefaultBackup = New System.Windows.Forms.FolderBrowserDialog()
         Me.SuspendLayout()
         '
         'b_searchDefaultBackup
@@ -103,6 +106,15 @@ Partial Class Settings
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
         '
+        'bw_writer
+        '
+        '
+        'fbd_searchDefaultSource
+        '
+        '
+        'fbd_searchDefaultBackup
+        '
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -132,4 +144,7 @@ Partial Class Settings
     Friend WithEvents l_defaultSourcePath As System.Windows.Forms.Label
     Friend WithEvents l_settings As System.Windows.Forms.Label
     Friend WithEvents b_save As System.Windows.Forms.Button
+    Friend WithEvents bw_writer As System.ComponentModel.BackgroundWorker
+    Friend WithEvents fbd_searchDefaultSource As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents fbd_searchDefaultBackup As System.Windows.Forms.FolderBrowserDialog
 End Class
