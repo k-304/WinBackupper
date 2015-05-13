@@ -24,25 +24,6 @@
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
     End Sub
 
-    'Button 'update' - executed on click
-    Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
-        'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
-        Try
-            'try to start the updater
-            Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    'Function to get Directory of current .exe-file
-    Private Function getexedir()
-        Dim path As String
-        path = System.IO.Path.GetDirectoryName( _
-           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
-        Return path.Substring(6, path.Length - 6)
-    End Function
-
     ' Button Search Source Path
     Private Sub b_searchSource_Click(sender As Object, e As EventArgs) Handles b_searchSource.Click
         ' Dialog to select Backup Path
@@ -104,6 +85,25 @@
     Private Sub b_settings_Click(sender As Object, e As EventArgs) Handles b_settings.Click
         Settings.Show()
     End Sub
+
+    'Button Update - executed on click
+    Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
+        'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
+        Try
+            'try to start the updater
+            Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    'Function to get Directory of current .exe-file
+    Private Function getexedir()
+        Dim path As String
+        path = System.IO.Path.GetDirectoryName( _
+           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
+        Return path.Substring(6, path.Length - 6)
+    End Function
 
     '*-----------------*'
     '*-----Workers-----*'
