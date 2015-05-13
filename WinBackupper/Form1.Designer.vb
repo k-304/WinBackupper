@@ -34,6 +34,7 @@ Partial Class home
         Me.l_version = New System.Windows.Forms.Label()
         Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_searchBackup = New System.Windows.Forms.FolderBrowserDialog()
+        Me.b_update = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'l_title
@@ -66,23 +67,26 @@ Partial Class home
         '
         'tb_sourcePath
         '
+        Me.tb_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_sourcePath.Location = New System.Drawing.Point(15, 80)
         Me.tb_sourcePath.Name = "tb_sourcePath"
         Me.tb_sourcePath.ReadOnly = True
-        Me.tb_sourcePath.Size = New System.Drawing.Size(325, 20)
+        Me.tb_sourcePath.Size = New System.Drawing.Size(325, 23)
         Me.tb_sourcePath.TabIndex = 3
         '
         'tb_backupPath
         '
+        Me.tb_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_backupPath.Location = New System.Drawing.Point(15, 143)
         Me.tb_backupPath.Name = "tb_backupPath"
         Me.tb_backupPath.ReadOnly = True
-        Me.tb_backupPath.Size = New System.Drawing.Size(325, 20)
+        Me.tb_backupPath.Size = New System.Drawing.Size(325, 23)
         Me.tb_backupPath.TabIndex = 4
         '
         'b_searchSource
         '
-        Me.b_searchSource.Location = New System.Drawing.Point(366, 78)
+        Me.b_searchSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_searchSource.Location = New System.Drawing.Point(366, 80)
         Me.b_searchSource.Name = "b_searchSource"
         Me.b_searchSource.Size = New System.Drawing.Size(75, 23)
         Me.b_searchSource.TabIndex = 5
@@ -91,15 +95,17 @@ Partial Class home
         '
         'b_searchBackup
         '
-        Me.b_searchBackup.Location = New System.Drawing.Point(366, 141)
+        Me.b_searchBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_searchBackup.Location = New System.Drawing.Point(366, 143)
         Me.b_searchBackup.Name = "b_searchBackup"
-        Me.b_searchBackup.Size = New System.Drawing.Size(75, 23)
+        Me.b_searchBackup.Size = New System.Drawing.Size(76, 23)
         Me.b_searchBackup.TabIndex = 6
         Me.b_searchBackup.Text = "Search"
         Me.b_searchBackup.UseVisualStyleBackColor = True
         '
         'b_start
         '
+        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_start.Location = New System.Drawing.Point(15, 192)
         Me.b_start.Name = "b_start"
         Me.b_start.Size = New System.Drawing.Size(426, 35)
@@ -109,7 +115,8 @@ Partial Class home
         '
         'b_settings
         '
-        Me.b_settings.Location = New System.Drawing.Point(15, 274)
+        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_settings.Location = New System.Drawing.Point(12, 274)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(118, 23)
         Me.b_settings.TabIndex = 8
@@ -131,12 +138,23 @@ Partial Class home
         'fbd_searchBackup
         '
         '
+        'b_update
+        '
+        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_update.Location = New System.Drawing.Point(137, 274)
+        Me.b_update.Name = "b_update"
+        Me.b_update.Size = New System.Drawing.Size(118, 23)
+        Me.b_update.TabIndex = 10
+        Me.b_update.Text = "Update"
+        Me.b_update.UseVisualStyleBackColor = True
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ClientSize = New System.Drawing.Size(454, 321)
+        Me.Controls.Add(Me.b_update)
         Me.Controls.Add(Me.l_version)
         Me.Controls.Add(Me.b_settings)
         Me.Controls.Add(Me.b_start)
@@ -165,5 +183,6 @@ Partial Class home
     Friend WithEvents l_version As System.Windows.Forms.Label
     Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents fbd_searchBackup As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents b_update As System.Windows.Forms.Button
 
 End Class
