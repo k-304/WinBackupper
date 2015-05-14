@@ -23,11 +23,11 @@ Imports System.IO
 
 Public Class Update_Mainfrm
     'global var's
-    Public Domain As String = "THCode.ddns.net" 'your domainname - nslookup needs to be able to get the IP from it!
-    Public Domainprojectdir As String = "/Portable_Helper/" 'The Directory of the Webserver all Files are in, 
+    Public Domain As String = "94.247.218.142" 'your domainname - nslookup needs to be able to get the IP from it!
+    Public Domainprojectdir As String = "/winbackupper/" 'The Directory of the Webserver all Files are in, 
     'Example Root/Application/UpdateInfo would look like =>  Public Domainprojectdir As String = "/Application/Portable_Helper/"
     'Dont forget ending "/" !!!
-    Public Deployname As String = "Portable_Helper_v" ' without version nr!
+    Public Deployname As String = "WinBackupper_v0.0.0.1" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
     Public Deployfiletype As String = ".exe" 'Fileending
     Public DomainIP As String 'needed later to store IP 

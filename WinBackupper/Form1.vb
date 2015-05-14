@@ -1,6 +1,8 @@
-﻿Public Class home
+﻿Imports System.Xml
 
-#Region "Variables"  'maybe wanted?
+Public Class home
+
+#Region "Variables"
     '*-----------------*'
     '*----Variables----*'
     '*-----------------*'
@@ -16,7 +18,29 @@
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Read XML File to load defaults
+        Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
 
+        ' Loop through XML File
+        While (xmlReader2.Read())
+            Dim type = xmlReader2.NodeType
+
+            ' Find selected Paths in XML File and write them into Var
+            If (type = XmlNodeType.Element) Then
+                ' Looking for "Source" Path
+                If (xmlReader2.Name = "Source") Then
+                    sourcePath = xmlReader2.ReadInnerXml.ToString
+                    tb_sourcePath.Text = sourcePath.ToString
+                End If
+                'Looking for "Backup" Path
+                If (xmlReader2.Name = "Backup") Then
+                    backupPath = xmlReader2.ReadInnerXml.ToString
+                    tb_backupPath.Text = backupPath.ToString
+                End If
+            End If
+
+        End While
+        xmlReader2.Close()
     End Sub
 
     ' TextBox for Source Path
@@ -91,7 +115,7 @@
         'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
         Try
             'try to start the updater
-            Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
+            Diagnostics.Process.Start(getexedir() & "/Update/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
         Catch ex As Exception
 
         End Try

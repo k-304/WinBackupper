@@ -2,14 +2,15 @@
 
 Public Class Settings
 
+#Region "Variables"
     '*-----------------*'
     '*----Variables----*'
     '*-----------------*'
-
     Dim defaultSourcePath As String
     Dim defaultBackupPath As String
     Dim tempSourcePath As String
     Dim tempBackupPath As String
+#End Region
 
     '*-----------------*'
     '*----Main Code----*'
@@ -101,6 +102,7 @@ Public Class Settings
 
             .Close()
         End With
+        writerSettings.Close()
 
         ' Read XML File to check if it was written
         Dim xmlReader As XmlReader = New XmlTextReader("default.xml")
@@ -122,7 +124,8 @@ Public Class Settings
             End If
 
         End While
-        
+        xmlReader.Close()
+
         If (defaultSourcePath = tempSourcePath) And (defaultBackupPath = tempBackupPath) Then
             MessageBox.Show("Paths saved!")
         Else
