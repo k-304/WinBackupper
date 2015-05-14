@@ -130,7 +130,7 @@ Partial Class home
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(81, 13)
         Me.l_version.TabIndex = 9
-        Me.l_version.Text = "Version: 0.0.0.1"
+        Me.l_version.Text = "Version: 0.0.0.2"
         '
         'fbd_searchSource
         '
