@@ -86,9 +86,9 @@ Partial Class home
         'b_searchSource
         '
         Me.b_searchSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_searchSource.Location = New System.Drawing.Point(366, 80)
+        Me.b_searchSource.Location = New System.Drawing.Point(366, 77)
         Me.b_searchSource.Name = "b_searchSource"
-        Me.b_searchSource.Size = New System.Drawing.Size(75, 23)
+        Me.b_searchSource.Size = New System.Drawing.Size(75, 26)
         Me.b_searchSource.TabIndex = 5
         Me.b_searchSource.Text = "Search"
         Me.b_searchSource.UseVisualStyleBackColor = True
@@ -96,9 +96,9 @@ Partial Class home
         'b_searchBackup
         '
         Me.b_searchBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_searchBackup.Location = New System.Drawing.Point(366, 143)
+        Me.b_searchBackup.Location = New System.Drawing.Point(366, 140)
         Me.b_searchBackup.Name = "b_searchBackup"
-        Me.b_searchBackup.Size = New System.Drawing.Size(76, 23)
+        Me.b_searchBackup.Size = New System.Drawing.Size(76, 26)
         Me.b_searchBackup.TabIndex = 6
         Me.b_searchBackup.Text = "Search"
         Me.b_searchBackup.UseVisualStyleBackColor = True
@@ -116,9 +116,9 @@ Partial Class home
         'b_settings
         '
         Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_settings.Location = New System.Drawing.Point(12, 274)
+        Me.b_settings.Location = New System.Drawing.Point(15, 271)
         Me.b_settings.Name = "b_settings"
-        Me.b_settings.Size = New System.Drawing.Size(118, 23)
+        Me.b_settings.Size = New System.Drawing.Size(118, 26)
         Me.b_settings.TabIndex = 8
         Me.b_settings.Text = "Settings"
         Me.b_settings.UseVisualStyleBackColor = True
@@ -126,11 +126,11 @@ Partial Class home
         'l_version
         '
         Me.l_version.AutoSize = True
-        Me.l_version.Location = New System.Drawing.Point(363, 284)
+        Me.l_version.Location = New System.Drawing.Point(360, 278)
         Me.l_version.Name = "l_version"
-        Me.l_version.Size = New System.Drawing.Size(69, 13)
+        Me.l_version.Size = New System.Drawing.Size(81, 13)
         Me.l_version.TabIndex = 9
-        Me.l_version.Text = "Version: beta"
+        Me.l_version.Text = "Version: 0.0.0.2"
         '
         'fbd_searchSource
         '
@@ -141,9 +141,9 @@ Partial Class home
         'b_update
         '
         Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_update.Location = New System.Drawing.Point(137, 274)
+        Me.b_update.Location = New System.Drawing.Point(139, 271)
         Me.b_update.Name = "b_update"
-        Me.b_update.Size = New System.Drawing.Size(118, 23)
+        Me.b_update.Size = New System.Drawing.Size(118, 26)
         Me.b_update.TabIndex = 10
         Me.b_update.Text = "Update"
         Me.b_update.UseVisualStyleBackColor = True

@@ -23,11 +23,11 @@ Imports System.IO
 
 Public Class Update_Mainfrm
     'global var's
-    Public Domain As String = "THCode.ddns.net" 'your domainname - nslookup needs to be able to get the IP from it!
-    Public Domainprojectdir As String = "/Portable_Helper/" 'The Directory of the Webserver all Files are in, 
+    Public Domain As String = "cloud12.no-ip.org" 'your domainname - nslookup needs to be able to get the IP from it!
+    Public Domainprojectdir As String = "/dload/winbackupper/" 'The Directory of the Webserver all Files are in, 
     'Example Root/Application/UpdateInfo would look like =>  Public Domainprojectdir As String = "/Application/Portable_Helper/"
     'Dont forget ending "/" !!!
-    Public Deployname As String = "Portable_Helper_v" ' without version nr!
+    Public Deployname As String = "WinBackupper_v" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
     Public Deployfiletype As String = ".exe" 'Fileending
     Public DomainIP As String 'needed later to store IP 
@@ -97,9 +97,9 @@ Public Class Update_Mainfrm
             End Try
         End If
         'download new changelog
-        downloadfileoverhttp(("http://" & DomainIP & Domainprojectdir & Logfile), getexedir(), Logfolder & Logfile)
+            downloadfileoverhttp(("http://" & DomainIP & Domainprojectdir & Logfile), getexedir(), Logfolder & Logfile)
         'initialize changelog textbox
-        changelogtxtbox.Text = My.Computer.FileSystem.ReadAllText(getexedir() & Logfolder & Logfile)
+            changelogtxtbox.Text = My.Computer.FileSystem.ReadAllText(getexedir() & Logfolder & Logfile)
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Error while loading Update_Mainfrm class.", "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -183,14 +183,14 @@ Public Class Update_Mainfrm
                 'Newer version availavle, start download
                 '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
                 'download new exe
-                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & "/Portable_Helper_v" & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
+                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
                    Else
                 loglbl.Text = "up-to-date! repair?"
                 If MessageBox.Show("Want to repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
                     'user said yes, redownload
                     ' Dim NewFile As String = getexedir() & "\" & "portable_helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & "/Portable_Helper_v" & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
+                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
                 End If
             End If
         Catch ex As Exception

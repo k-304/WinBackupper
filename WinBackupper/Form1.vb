@@ -1,6 +1,8 @@
-﻿Public Class home
+﻿Imports System.Xml
 
-#Region "Variables"  'maybe wanted?
+Public Class home
+
+#Region "Variables"
     '*-----------------*'
     '*----Variables----*'
     '*-----------------*'
@@ -16,32 +18,38 @@
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Check if there is a "default.xml" File
+        If Not Dir("default.xml") = "" Then
+            ' Read XML File to load defaults
+            Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
 
+            ' Loop through XML File
+            While (xmlReader2.Read())
+                Dim type = xmlReader2.NodeType
+
+                ' Find selected Paths in XML File and write them into Var
+                If (type = XmlNodeType.Element) Then
+                    ' Looking for "Source" Path
+                    If (xmlReader2.Name = "Source") Then
+                        sourcePath = xmlReader2.ReadInnerXml.ToString
+                        tb_sourcePath.Text = sourcePath.ToString
+                    End If
+                    'Looking for "Backup" Path
+                    If (xmlReader2.Name = "Backup") Then
+                        backupPath = xmlReader2.ReadInnerXml.ToString
+                        tb_backupPath.Text = backupPath.ToString
+                    End If
+                End If
+
+            End While
+            xmlReader2.Close()
+        End If
     End Sub
 
     ' TextBox for Source Path
     Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs) Handles tb_sourcePath.TextChanged
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
     End Sub
-
-    'Button 'update' - executed on click
-    Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
-        'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
-        Try
-            'try to start the updater
-            Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    'Function to get Directory of current .exe-file
-    Private Function getexedir()
-        Dim path As String
-        path = System.IO.Path.GetDirectoryName( _
-           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
-        Return path.Substring(6, path.Length - 6)
-    End Function
 
     ' Button Search Source Path
     Private Sub b_searchSource_Click(sender As Object, e As EventArgs) Handles b_searchSource.Click
@@ -104,6 +112,25 @@
     Private Sub b_settings_Click(sender As Object, e As EventArgs) Handles b_settings.Click
         Settings.Show()
     End Sub
+
+    'Button Update - executed on click
+    Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
+        'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
+        Try
+            'try to start the updater
+            Diagnostics.Process.Start(getexedir() & "/THC_Updater.lnk") 'assumes that updater exe is in same path as calling exe
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    'Function to get Directory of current .exe-file
+    Private Function getexedir()
+        Dim path As String
+        path = System.IO.Path.GetDirectoryName( _
+           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
+        Return path.Substring(6, path.Length - 6)
+    End Function
 
     '*-----------------*'
     '*-----Workers-----*'
