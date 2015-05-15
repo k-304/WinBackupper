@@ -124,14 +124,6 @@ Public Class home
         End Try
     End Sub
 
-    Function GetDate() As String
-        Dim day = DateTime.Today.ToString("dd")
-        Dim month = DateTime.Today.ToString("MM")
-        Dim year = DateTime.Today.ToString("yyyy")
-        Return (year & month & day)
-    End Function
-
-
     'Function to get Directory of current .exe-file
     Private Function getexedir()
         Dim path As String
