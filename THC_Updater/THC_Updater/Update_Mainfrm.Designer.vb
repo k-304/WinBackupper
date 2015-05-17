@@ -33,6 +33,7 @@ Partial Class Update_Mainfrm
         Me.btn_closefrm = New System.Windows.Forms.Button()
         Me.lbl_Downloadrate = New System.Windows.Forms.Label()
         Me.lbl_alreadydownloaded = New System.Windows.Forms.Label()
+        Me.bw_getProgVersion = New System.ComponentModel.BackgroundWorker()
         Me.SuspendLayout()
         '
         'Label1
@@ -149,6 +150,9 @@ Partial Class Update_Mainfrm
         Me.lbl_alreadydownloaded.TabIndex = 17
         Me.lbl_alreadydownloaded.Text = "N/A"
         '
+        'bw_getProgVersion
+        '
+        '
         'Update_Mainfrm
         '
         Me.AcceptButton = Me.btn_closefrm
@@ -187,5 +191,6 @@ Partial Class Update_Mainfrm
     Friend WithEvents btn_closefrm As System.Windows.Forms.Button
     Friend WithEvents lbl_Downloadrate As System.Windows.Forms.Label
     Friend WithEvents lbl_alreadydownloaded As System.Windows.Forms.Label
+    Friend WithEvents bw_getProgVersion As System.ComponentModel.BackgroundWorker
 
 End Class

@@ -35,6 +35,7 @@ Partial Class home
         Me.fbd_searchBackup = New System.Windows.Forms.FolderBrowserDialog()
         Me.b_update = New System.Windows.Forms.Button()
         Me.l_version = New System.Windows.Forms.Label()
+        Me.bw_versionControll = New System.ComponentModel.BackgroundWorker()
         Me.SuspendLayout()
         '
         'l_title
@@ -148,6 +149,9 @@ Partial Class home
         Me.l_version.TabIndex = 11
         Me.l_version.Text = "Version: x.x.x.x"
         '
+        'bw_versionControll
+        '
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -184,5 +188,6 @@ Partial Class home
     Friend WithEvents fbd_searchBackup As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents b_update As System.Windows.Forms.Button
     Friend WithEvents l_version As System.Windows.Forms.Label
+    Friend WithEvents bw_versionControll As System.ComponentModel.BackgroundWorker
 
 End Class

@@ -11,6 +11,7 @@ Public Class home
     Dim backupPath As String
     Dim defaultSourcePath As String
     Dim defaultBackupPath As String
+    Dim version As String
 #End Region
 
 #Region "MainCode"
@@ -22,6 +23,8 @@ Public Class home
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
         l_version.Text = "Version: " + My.Application.Info.Version.ToString()
+        version = My.Application.Info.Version.ToString()
+        bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
 
         ' Check if there is a "default.xml" File
         If Not Dir("default.xml") = "" Then
@@ -214,7 +217,7 @@ Public Class home
     Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
         'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
         Try
-            'try to start the updater
+            'try to start the updater | Version informations: See bw_versionControll
             Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
         Catch ex As Exception
 
@@ -276,5 +279,25 @@ Public Class home
     '*-----------------*'
     '*-----Workers-----*'
     '*-----------------*'
+
+    ' Writes Version to XML File to get the actual Version in "THC_Updater.exe"
+    Private Sub bw_versionControll_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_versionControll.DoWork
+        ' Create XML Writer
+        Dim writerOption As New XmlWriterSettings
+        writerOption.Indent = True
+        Dim writerSettings As XmlWriter = XmlWriter.Create("version.xml", writerOption)
+
+        With writerSettings
+            .WriteStartDocument()
+            .WriteStartElement("Version")
+            .WriteString(version)
+            .WriteEndElement()
+
+            .WriteEndDocument()
+
+            .Close()
+        End With
+        writerSettings.Close()
+    End Sub
 #End Region
 End Class
