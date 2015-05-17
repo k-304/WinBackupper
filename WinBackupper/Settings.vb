@@ -74,7 +74,6 @@ Public Class Settings
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
         bw_writer.RunWorkerAsync()
     End Sub
-
 #End Region
 
 #Region "Workers"

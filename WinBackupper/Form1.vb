@@ -20,6 +20,9 @@ Public Class home
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
+        l_version.Text = "Version: " + My.Application.Info.Version.ToString()
+
         ' Check if there is a "default.xml" File
         If Not Dir("default.xml") = "" Then
             ' Read XML File to load defaults
@@ -87,7 +90,7 @@ Public Class home
 
         ' Show Path in TextBox
         Do
-            tb_backupPath.Text = backupPath
+            tb_backupPath.Text &= backupPath
         Loop While Not tb_backupPath.Text = backupPath
     End Sub
 
@@ -102,7 +105,6 @@ Public Class home
         Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         If startResult = Windows.Forms.DialogResult.Yes Then
             '  MessageBox.Show("Starting Backup!")
-
             ' Backup 
             ' Code
             ' here
@@ -147,7 +149,7 @@ Public Class home
                         'check with counter if for-each is checking last Exception 
 
                         ''''IMPORTANT''''
-                            Dim deskctr = 0
+                        Dim deskctr = 0
                         For Each exe As String In exelist
                             deskctr = deskctr + 1
                             If filepath.Contains(exe) Then
@@ -268,7 +270,6 @@ Public Class home
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
-
 #End Region
 
 #Region "Workers"
@@ -276,5 +277,4 @@ Public Class home
     '*-----Workers-----*'
     '*-----------------*'
 #End Region
-
 End Class

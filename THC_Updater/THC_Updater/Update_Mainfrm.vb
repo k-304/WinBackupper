@@ -29,7 +29,7 @@ Public Class Update_Mainfrm
     'Dont forget ending "/" !!!
     Public Deployname As String = "WinBackupper_v" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
-    Public Deployfiletype As String = ".exe" 'Fileending
+    Public Deployfiletype As String = ".zip" 'Fileending
     Public DomainIP As String = "" 'DONT MANIPULATE!  If you want to bypass see next Variable.
     Public DomainIPbypass As String = "94.247.218.142" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
     Shared fullpathofoldvers As String 'needed later to store IP of full path of old version
@@ -188,14 +188,14 @@ Public Class Update_Mainfrm
                 'Newer version availavle, start download
                 '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
                 'download new exe
-                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
-                   Else
+                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
+            Else
                 loglbl.Text = "up-to-date! repair?"
                 If MessageBox.Show("Want to repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
                     'user said yes, redownload
                     ' Dim NewFile As String = getexedir() & "\" & "portable_helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
+                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
                 End If
             End If
         Catch ex As Exception
