@@ -11,6 +11,7 @@ Public Class home
     Dim backupPath As String
     Dim defaultSourcePath As String
     Dim defaultBackupPath As String
+    Dim version As String
 #End Region
 
 #Region "MainCode"
@@ -20,6 +21,11 @@ Public Class home
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
+        l_version.Text = "Version: " + My.Application.Info.Version.ToString()
+        version = My.Application.Info.Version.ToString()
+        bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
+
         ' Check if there is a "default.xml" File
         If Not Dir("default.xml") = "" Then
             ' Read XML File to load defaults
@@ -87,7 +93,7 @@ Public Class home
 
         ' Show Path in TextBox
         Do
-            tb_backupPath.Text = backupPath
+            tb_backupPath.Text &= backupPath
         Loop While Not tb_backupPath.Text = backupPath
     End Sub
 
@@ -102,7 +108,6 @@ Public Class home
         Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         If startResult = Windows.Forms.DialogResult.Yes Then
             '  MessageBox.Show("Starting Backup!")
-
             ' Backup 
             ' Code
             ' here
@@ -147,7 +152,7 @@ Public Class home
                         'check with counter if for-each is checking last Exception 
 
                         ''''IMPORTANT''''
-                            Dim deskctr = 0
+                        Dim deskctr = 0
                         For Each exe As String In exelist
                             deskctr = deskctr + 1
                             If filepath.Contains(exe) Then
@@ -212,7 +217,7 @@ Public Class home
     Private Sub b_update_Click(sender As Object, e As EventArgs) Handles b_update.Click
         'enter "try" to stop application from breaking totaly if an error occurs. (most of the times)
         Try
-            'try to start the updater
+            'try to start the updater | Version informations: See bw_versionControll
             Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
         Catch ex As Exception
 
@@ -268,13 +273,31 @@ Public Class home
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
-
 #End Region
 
 #Region "Workers"
     '*-----------------*'
     '*-----Workers-----*'
     '*-----------------*'
-#End Region
 
+    ' Writes Version to XML File to get the actual Version in "THC_Updater.exe"
+    Private Sub bw_versionControll_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_versionControll.DoWork
+        ' Create XML Writer
+        Dim writerOption As New XmlWriterSettings
+        writerOption.Indent = True
+        Dim writerSettings As XmlWriter = XmlWriter.Create("version.xml", writerOption)
+
+        With writerSettings
+            .WriteStartDocument()
+            .WriteStartElement("Version")
+            .WriteString(version)
+            .WriteEndElement()
+
+            .WriteEndDocument()
+
+            .Close()
+        End With
+        writerSettings.Close()
+    End Sub
+#End Region
 End Class

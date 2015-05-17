@@ -31,10 +31,11 @@ Partial Class home
         Me.b_searchBackup = New System.Windows.Forms.Button()
         Me.b_start = New System.Windows.Forms.Button()
         Me.b_settings = New System.Windows.Forms.Button()
-        Me.l_version = New System.Windows.Forms.Label()
         Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_searchBackup = New System.Windows.Forms.FolderBrowserDialog()
         Me.b_update = New System.Windows.Forms.Button()
+        Me.l_version = New System.Windows.Forms.Label()
+        Me.bw_versionControll = New System.ComponentModel.BackgroundWorker()
         Me.SuspendLayout()
         '
         'l_title
@@ -123,15 +124,6 @@ Partial Class home
         Me.b_settings.Text = "Settings"
         Me.b_settings.UseVisualStyleBackColor = True
         '
-        'l_version
-        '
-        Me.l_version.AutoSize = True
-        Me.l_version.Location = New System.Drawing.Point(360, 278)
-        Me.l_version.Name = "l_version"
-        Me.l_version.Size = New System.Drawing.Size(81, 13)
-        Me.l_version.TabIndex = 9
-        Me.l_version.Text = "Version: 0.0.0.2"
-        '
         'fbd_searchSource
         '
         '
@@ -148,14 +140,26 @@ Partial Class home
         Me.b_update.Text = "Update"
         Me.b_update.UseVisualStyleBackColor = True
         '
+        'l_version
+        '
+        Me.l_version.AutoSize = True
+        Me.l_version.Location = New System.Drawing.Point(363, 278)
+        Me.l_version.Name = "l_version"
+        Me.l_version.Size = New System.Drawing.Size(77, 13)
+        Me.l_version.TabIndex = 11
+        Me.l_version.Text = "Version: x.x.x.x"
+        '
+        'bw_versionControll
+        '
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ClientSize = New System.Drawing.Size(454, 321)
-        Me.Controls.Add(Me.b_update)
         Me.Controls.Add(Me.l_version)
+        Me.Controls.Add(Me.b_update)
         Me.Controls.Add(Me.b_settings)
         Me.Controls.Add(Me.b_start)
         Me.Controls.Add(Me.b_searchBackup)
@@ -180,9 +184,10 @@ Partial Class home
     Friend WithEvents b_searchBackup As System.Windows.Forms.Button
     Friend WithEvents b_start As System.Windows.Forms.Button
     Friend WithEvents b_settings As System.Windows.Forms.Button
-    Friend WithEvents l_version As System.Windows.Forms.Label
     Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents fbd_searchBackup As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents b_update As System.Windows.Forms.Button
+    Friend WithEvents l_version As System.Windows.Forms.Label
+    Friend WithEvents bw_versionControll As System.ComponentModel.BackgroundWorker
 
 End Class

@@ -2,6 +2,7 @@
 Imports System.Object
 Imports System.Environment
 Imports System.IO
+Imports System.Xml
 
 ''' Internal Version: 0.0.0.4 (this Form)
 ''' 
@@ -29,7 +30,7 @@ Public Class Update_Mainfrm
     'Dont forget ending "/" !!!
     Public Deployname As String = "WinBackupper_v" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
-    Public Deployfiletype As String = ".exe" 'Fileending
+    Public Deployfiletype As String = ".zip" 'Fileending
     Public DomainIP As String = "" 'DONT MANIPULATE!  If you want to bypass see next Variable.
     Public DomainIPbypass As String = "94.247.218.142" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
     Shared fullpathofoldvers As String 'needed later to store IP of full path of old version
@@ -53,7 +54,12 @@ Public Class Update_Mainfrm
         Me.lbl_Downloadrate.Text = Speed
     End Sub
 
+    Public localversnr1 As String
+
     Private Sub Update_Mainfrm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' Start BW to to Read Verison XML File
+        bw_getProgVersion.RunWorkerAsync()
+
         ' check for cmdline arguments
         ' If 1 Element is passed (its always 1, the "start" command) ignore it
         ' if 2 arguments are passed, assume update.exe should delete a file (self destory?)
@@ -179,23 +185,28 @@ Public Class Update_Mainfrm
             loglbl.Text = "Checking for new version!"
             'get new Version Number
             downloadfileoverhttp("http://" & DomainIP & Domainprojectdir & "/NewVersion.txt", getexedir() & Logfolder, "NewVersion.txt")
-            Dim localversnr As String = readtxtfileline(getexedir() & Logfolder & "\LocalVersion.txt", 0)
+
+            ' Get "new" Version Number fom txt File
             Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "\NewVersion.txt", 0)
+            ' localversnr1 getting in BW_getProgVersion out of XML File
+
             'check if local version is equal to "new" version
-            If localversnr > versnr Then
+            If localversnr1 < versnr Then
                 'inform user
                 loglbl.Text = "newer version detected!"
-                'Newer version availavle, start download
-                '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
-                'download new exe
-                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
-                   Else
+                'Newer version availavle, start download?
+                If MessageBox.Show("A newer Version is detected. Start download now?", "New Version", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
+                    '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
+                    'download new exe
+                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
+                End If
+            Else
                 loglbl.Text = "up-to-date! repair?"
                 If MessageBox.Show("Want to repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
                     'user said yes, redownload
                     ' Dim NewFile As String = getexedir() & "\" & "portable_helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
+                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
                 End If
             End If
         Catch ex As Exception
@@ -265,5 +276,30 @@ Public Class Update_Mainfrm
 
     Private Sub btn_closefrm_Click(sender As Object, e As EventArgs) Handles btn_closefrm.Click
         Application.Exit()
+    End Sub
+
+    ' Read XML File to get WinBackupper.exe Version
+    Private Sub bw_getProgVersion_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_getProgVersion.DoWork
+        If Not Dir("version.xml") = "" Then
+            ' Read XML File to check if it was written
+            Dim xmlReader As XmlReader = New XmlTextReader("version.xml")
+
+            ' Loop through XML File
+            While (xmlReader.Read())
+                Dim type = xmlReader.NodeType
+
+                ' Find version in XML File and write them into Var
+                If (type = XmlNodeType.Element) Then
+                    ' Looking for "Version"
+                    If (xmlReader.Name = "Version") Then
+                        localversnr1 = xmlReader.ReadInnerXml.ToString
+                    End If
+                End If
+
+            End While
+            xmlReader.Close()
+        Else
+            MessageBox.Show("Can not find the version.xml File. Please restart WinBackupper.exe and try again", "Upps...")
+        End If
     End Sub
 End Class

@@ -74,7 +74,6 @@ Public Class Settings
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
         bw_writer.RunWorkerAsync()
     End Sub
-
 #End Region
 
 #Region "Workers"
@@ -108,32 +107,34 @@ Public Class Settings
         End With
         writerSettings.Close()
 
-        ' Read XML File to check if it was written
-        Dim xmlReader As XmlReader = New XmlTextReader("default.xml")
+        If Not Dir("default.xml") = "" Then
+            ' Read XML File to check if it was written
+            Dim xmlReader As XmlReader = New XmlTextReader("default.xml")
 
-        ' Loop through XML File
-        While (xmlReader.Read())
-            Dim type = xmlReader.NodeType
+            ' Loop through XML File
+            While (xmlReader.Read())
+                Dim type = xmlReader.NodeType
 
-            ' Find selected Paths in XML File and write them into Var
-            If (type = XmlNodeType.Element) Then
-                ' Looking for "Source" Path
-                If (xmlReader.Name = "Source") Then
-                    tempSourcePath = xmlReader.ReadInnerXml.ToString
+                ' Find selected Paths in XML File and write them into Var
+                If (type = XmlNodeType.Element) Then
+                    ' Looking for "Source" Path
+                    If (xmlReader.Name = "Source") Then
+                        tempSourcePath = xmlReader.ReadInnerXml.ToString
+                    End If
+                    'Looking for "Backup" Path
+                    If (xmlReader.Name = "Backup") Then
+                        tempBackupPath = xmlReader.ReadInnerXml.ToString
+                    End If
                 End If
-                'Looking for "Backup" Path
-                If (xmlReader.Name = "Backup") Then
-                    tempBackupPath = xmlReader.ReadInnerXml.ToString
-                End If
+
+            End While
+            xmlReader.Close()
+
+            If (defaultSourcePath = tempSourcePath) And (defaultBackupPath = tempBackupPath) Then
+                MessageBox.Show("Paths saved!")
+            Else
+                MessageBox.Show("Unable to save Paths!", "Error")
             End If
-
-        End While
-        xmlReader.Close()
-
-        If (defaultSourcePath = tempSourcePath) And (defaultBackupPath = tempBackupPath) Then
-            MessageBox.Show("Paths saved!")
-        Else
-            MessageBox.Show("Unable to save Paths!", "Error")
         End If
     End Sub
 #End Region
