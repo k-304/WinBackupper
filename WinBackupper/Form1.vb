@@ -226,6 +226,41 @@ Public Class home
         Return (year & month & day)
     End Function
 
+    'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
+    'use like "  dim array nrarray = stringtoarray("nr1;nr2;nr3",";")     "
+    Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
+        'reset returnarray if it s not null (redim it with 0 members)
+        Dim returnarray As New ArrayList
+        '  ReDim returnarray(-1)
+        ' ReDim returnarray(0)
+        'set counter
+        Dim Charsalreadyscanned = 0
+        'make temp var to not change original input var
+        Dim tempstring = seperatedmultistring
+
+        Dim foundwords = 0
+        For i = 0 To seperatedmultistring.ToString.Length Step 1
+            If (seperatedmultistring.ToString.Length = 0) Then
+                'empty string was given, reutrn null
+                Throw New ArgumentException("Array is null (not set yet)")
+            End If
+            If (i = seperatedmultistring.ToString.Length) Then
+                Exit For
+            End If
+
+            'check if current char is ";"
+            If (seperatedmultistring.ToString.Substring(i, 1) = seperator) Then
+                'seperator sign found
+                Dim scannedtext = tempstring.ToString.Substring(Charsalreadyscanned, i - Charsalreadyscanned)
+                Dim temparraymember = scannedtext.Substring(0, scannedtext.Length)
+                Charsalreadyscanned = Charsalreadyscanned + scannedtext.Length + 1
+                returnarray.Add(temparraymember)
+                foundwords = foundwords + 1
+            End If
+        Next
+        Return returnarray
+    End Function
+
     'Function to get Directory of current .exe-file
     Private Function getexedir()
         Dim path As String
