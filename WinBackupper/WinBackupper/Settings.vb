@@ -12,7 +12,6 @@ Public Class Settings
     Dim tempBackupPath As String
 #End Region
 
-#Region "MainCode"
     '*-----------------*'
     '*----Main Code----*'
     '*-----------------*'
@@ -75,9 +74,6 @@ Public Class Settings
         bw_writer.RunWorkerAsync()
     End Sub
 
-#End Region
-
-#Region "Workers"
     '*-----------------*'
     '*-----Workers-----*'
     '*-----------------*'
@@ -136,6 +132,4 @@ Public Class Settings
             MessageBox.Show("Unable to save Paths!", "Error")
         End If
     End Sub
-#End Region
-
 End Class

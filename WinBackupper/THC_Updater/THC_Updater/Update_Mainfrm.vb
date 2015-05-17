@@ -30,8 +30,7 @@ Public Class Update_Mainfrm
     Public Deployname As String = "WinBackupper_v" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
     Public Deployfiletype As String = ".exe" 'Fileending
-    Public DomainIP As String = "" 'DONT MANIPULATE!  If you want to bypass see next Variable.
-    Public DomainIPbypass As String = "94.247.218.142" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
+    Public DomainIP As String 'needed later to store IP 
     Shared fullpathofoldvers As String 'needed later to store IP of full path of old version
     Public lastdownloadstatupdate As DateTime 'date of last check
     Public Logfile As String = "Changelog.log"
@@ -62,48 +61,44 @@ Public Class Update_Mainfrm
         ' 3 arguments will delete the target file (second argument passed) and rename the first one to the second one. 
 
         Try
-            'get IP for Domain (Bypass Proxies)
-            If DomainIPbypass = "" Then
-                DomainIP = resolveFQDN(Domain)
-            Else
-                DomainIP = DomainIPbypass
+        'get IP for Domain (Bypass Proxies)
+        DomainIP = resolveFQDN(Domain)
+
+        Dim renamesrcfile As String
+        Dim targetfile As String
+        'attention! "count" gives a locigal "human" value, but info is stored in an array which begins from 0
+        If Environment.GetCommandLineArgs.Count <> 1 Then
+
+            If Environment.GetCommandLineArgs.Count = 2 Then
+                '1 second timeout so i can access the exe which has called this program
+                System.Threading.Thread.Sleep(1000)
+                fullpathofoldvers = Environment.GetCommandLineArgs(1)
             End If
-
-            Dim renamesrcfile As String
-            Dim targetfile As String
-            'attention! "count" gives a locigal "human" value, but info is stored in an array which begins from 0
-            If Environment.GetCommandLineArgs.Count <> 1 Then
-
-                If Environment.GetCommandLineArgs.Count = 2 Then
-                    '1 second timeout so i can access the exe which has called this program
-                    System.Threading.Thread.Sleep(1000)
-                    fullpathofoldvers = Environment.GetCommandLineArgs(1)
+            If Environment.GetCommandLineArgs.Count = 3 Then
+                '1 second timeout so i can access the exe which has called this program
+                System.Threading.Thread.Sleep(1000)
+                renamesrcfile = Environment.GetCommandLineArgs(1)
+                targetfile = Environment.GetCommandLineArgs(2)
+                'check if targetfile exists already (prevent exeptions)
+                If System.IO.File.Exists(targetfile) = True Then
+                    System.IO.File.Delete(targetfile)
                 End If
-                If Environment.GetCommandLineArgs.Count = 3 Then
-                    '1 second timeout so i can access the exe which has called this program
-                    System.Threading.Thread.Sleep(1000)
-                    renamesrcfile = Environment.GetCommandLineArgs(1)
-                    targetfile = Environment.GetCommandLineArgs(2)
-                    'check if targetfile exists already (prevent exeptions)
-                    If System.IO.File.Exists(targetfile) = True Then
-                        System.IO.File.Delete(targetfile)
-                    End If
-                    Rename(renamesrcfile, targetfile)
-                    Application.Exit()
-                End If
+                Rename(renamesrcfile, targetfile)
+                Application.Exit()
             End If
+        End If
 
-            'delete old changelog if exists
-            If File.Exists(Logfolder & Logfile) Then
-                Try
-                    File.Delete(Logfolder & Logfile)
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message & vbNewLine & "Error while deleting the old changelog - is the file open?", "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
-            'download new changelog
-            downloadfileoverhttp(("http://" & DomainIP & Domainprojectdir & Logfile), getexedir() & Logfolder, Logfile)
-            'initialize changelog textbox
+        'delete old changelog if exists
+        If File.Exists(Logfolder & Logfile) Then
+            Try
+                File.Delete(Logfolder & Logfile)
+            Catch ex As Exception
+                MessageBox.Show(ex.Message & vbNewLine & "Error while deleting the old changelog - is the file open?", "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+        'download new changelog
+            downloadfileoverhttp(("http://" & DomainIP & Domainprojectdir & Logfile), getexedir(), Logfolder & Logfile)
+        'initialize changelog textbox
             changelogtxtbox.Text = My.Computer.FileSystem.ReadAllText(getexedir() & Logfolder & Logfile)
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Error while loading Update_Mainfrm class.", "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -178,9 +173,9 @@ Public Class Update_Mainfrm
             'inform user
             loglbl.Text = "Checking for new version!"
             'get new Version Number
-            downloadfileoverhttp("http://" & DomainIP & Domainprojectdir & "/NewVersion.txt", getexedir() & Logfolder, "NewVersion.txt")
-            Dim localversnr As String = readtxtfileline(getexedir() & Logfolder & "\LocalVersion.txt", 0)
-            Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "\NewVersion.txt", 0)
+            downloadfileoverhttp("http://" & DomainIP & Domainprojectdir & "/NewVersion.txt", getexedir(), "NewVersion.txt")
+            Dim localversnr As String = readtxtfileline(getexedir() & "\LocalVersion.txt", 0)
+            Dim versnr As String = readtxtfileline(getexedir() & "\NewVersion.txt", 0)
             'check if local version is equal to "new" version
             If localversnr > versnr Then
                 'inform user
@@ -188,14 +183,14 @@ Public Class Update_Mainfrm
                 'Newer version availavle, start download
                 '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
                 'download new exe
-                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
+                downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
                    Else
                 loglbl.Text = "up-to-date! repair?"
                 If MessageBox.Show("Want to repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
                     'user said yes, redownload
                     ' Dim NewFile As String = getexedir() & "\" & "portable_helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\" & Deployname & versnr & ".exe")
+                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & ".exe"), getexedir() & "\Portable_Helper_v" & versnr & ".exe")
                 End If
             End If
         Catch ex As Exception
@@ -231,13 +226,13 @@ Public Class Update_Mainfrm
         Dim totalBytes As Double = Double.Parse(e.TotalBytesToReceive.ToString())
         Dim percentage As Double = bytesIn / totalBytes * 100
         ProgressBar.Value = Int32.Parse(Math.Truncate(percentage).ToString())
-        Dim alreadydownloadedinMB = Math.Round((bytesIn / 1024 / 1024), 3)
+        Dim alreadydownloadedinMB = bytesIn / 1024 / 1024
         Dim now As DateTime = DateTime.Now
         Dim timesincelastdownloadstateupdate = now - lastdownloadstatupdate
         Dim timesincelastdownloadstateupdateinseconds = timesincelastdownloadstateupdate.Seconds
-        Dim downloadspeed = Math.Round(alreadydownloadedinMB / timesincelastdownloadstateupdateinseconds, 3)
-        Dim downloadspeedHR = downloadspeed & " MB/s"
-        alreadydownloadedHR = alreadydownloadedinMB & " MB"
+        Dim downloadspeed = alreadydownloadedinMB / timesincelastdownloadstateupdateinseconds
+        Dim downloadspeedHR = downloadspeed & "MB/s"
+        alreadydownloadedHR = alreadydownloadedinMB & "MB"
         'delegate stuff to update UI in async thread
         Dim del As UpdateDelegate = AddressOf UpdatedownloadStatus
         Me.Invoke(del, alreadydownloadedHR, downloadspeedHR)
@@ -253,7 +248,7 @@ Public Class Update_Mainfrm
             End If
         End If
         'start SW if user wished so
-        Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "\NewVersion.txt", 0)
+        Dim versnr As String = readtxtfileline(getexedir() & "\NewVersion.txt", 0)
         Dim NewFile As String = getexedir() & "\" & Deployname & versnr & Deployfiletype
         Dim startswafterwards = MessageBox.Show("Update finished! Start Software now?", "Update finished!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If startswafterwards = Windows.Forms.DialogResult.Yes Then

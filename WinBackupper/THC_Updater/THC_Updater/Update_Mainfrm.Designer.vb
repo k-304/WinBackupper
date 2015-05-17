@@ -49,7 +49,7 @@ Partial Class Update_Mainfrm
         '
         'ProgressBar
         '
-        Me.ProgressBar.Location = New System.Drawing.Point(23, 515)
+        Me.ProgressBar.Location = New System.Drawing.Point(23, 532)
         Me.ProgressBar.Name = "ProgressBar"
         Me.ProgressBar.Size = New System.Drawing.Size(537, 36)
         Me.ProgressBar.Step = 1
@@ -60,11 +60,11 @@ Partial Class Update_Mainfrm
         '
         Me.speedlbl.AutoSize = True
         Me.speedlbl.BackColor = System.Drawing.Color.Transparent
-        Me.speedlbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.speedlbl.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.speedlbl.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.speedlbl.Location = New System.Drawing.Point(19, 490)
+        Me.speedlbl.Location = New System.Drawing.Point(19, 496)
         Me.speedlbl.Name = "speedlbl"
-        Me.speedlbl.Size = New System.Drawing.Size(167, 22)
+        Me.speedlbl.Size = New System.Drawing.Size(174, 24)
         Me.speedlbl.TabIndex = 3
         Me.speedlbl.Text = "Downloading Rate: "
         '
@@ -72,11 +72,11 @@ Partial Class Update_Mainfrm
         '
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.Label2.Location = New System.Drawing.Point(281, 490)
+        Me.Label2.Location = New System.Drawing.Point(273, 496)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(187, 22)
+        Me.Label2.Size = New System.Drawing.Size(198, 24)
         Me.Label2.TabIndex = 4
         Me.Label2.Text = "Allready downloaded: "
         '
@@ -118,9 +118,9 @@ Partial Class Update_Mainfrm
         Me.btn_closefrm.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_closefrm.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_closefrm.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.btn_closefrm.Location = New System.Drawing.Point(23, 557)
+        Me.btn_closefrm.Location = New System.Drawing.Point(180, 574)
         Me.btn_closefrm.Name = "btn_closefrm"
-        Me.btn_closefrm.Size = New System.Drawing.Size(537, 38)
+        Me.btn_closefrm.Size = New System.Drawing.Size(218, 49)
         Me.btn_closefrm.TabIndex = 15
         Me.btn_closefrm.Text = "Close Updater"
         Me.btn_closefrm.UseVisualStyleBackColor = False
@@ -129,11 +129,11 @@ Partial Class Update_Mainfrm
         '
         Me.lbl_Downloadrate.AutoSize = True
         Me.lbl_Downloadrate.BackColor = System.Drawing.Color.Transparent
-        Me.lbl_Downloadrate.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Downloadrate.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Downloadrate.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.lbl_Downloadrate.Location = New System.Drawing.Point(185, 490)
+        Me.lbl_Downloadrate.Location = New System.Drawing.Point(199, 496)
         Me.lbl_Downloadrate.Name = "lbl_Downloadrate"
-        Me.lbl_Downloadrate.Size = New System.Drawing.Size(40, 22)
+        Me.lbl_Downloadrate.Size = New System.Drawing.Size(42, 24)
         Me.lbl_Downloadrate.TabIndex = 16
         Me.lbl_Downloadrate.Text = "N/A"
         '
@@ -141,11 +141,11 @@ Partial Class Update_Mainfrm
         '
         Me.lbl_alreadydownloaded.AutoSize = True
         Me.lbl_alreadydownloaded.BackColor = System.Drawing.Color.Transparent
-        Me.lbl_alreadydownloaded.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_alreadydownloaded.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_alreadydownloaded.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.lbl_alreadydownloaded.Location = New System.Drawing.Point(475, 490)
+        Me.lbl_alreadydownloaded.Location = New System.Drawing.Point(477, 496)
         Me.lbl_alreadydownloaded.Name = "lbl_alreadydownloaded"
-        Me.lbl_alreadydownloaded.Size = New System.Drawing.Size(40, 22)
+        Me.lbl_alreadydownloaded.Size = New System.Drawing.Size(42, 24)
         Me.lbl_alreadydownloaded.TabIndex = 17
         Me.lbl_alreadydownloaded.Text = "N/A"
         '
@@ -156,7 +156,7 @@ Partial Class Update_Mainfrm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.THC_Updater.My.Resources.Resources.gray_background_3
         Me.CancelButton = Me.btn_closefrm
-        Me.ClientSize = New System.Drawing.Size(580, 607)
+        Me.ClientSize = New System.Drawing.Size(580, 631)
         Me.Controls.Add(Me.lbl_alreadydownloaded)
         Me.Controls.Add(Me.lbl_Downloadrate)
         Me.Controls.Add(Me.btn_closefrm)
