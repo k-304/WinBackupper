@@ -5,13 +5,13 @@ Public Class home
 
 #Region "Variables"
     '*-----------------*'
-    '*----Variables----*'
+    '*----Global Variables----*'
     '*-----------------*'
-    Dim sourcePath As String
-    Dim backupPath As String
-    Dim defaultSourcePath As String
-    Dim defaultBackupPath As String
+    Public sourcepatharray As New ArrayList 'public array so other form can access it too
+    Public backupPatharray As New ArrayList 'public array so other form can access it too
     Dim version As String
+    Public GlobalSeperator As String = ";" 'used to seperate strings if ever needed
+
 #End Region
 
 #Region "MainCode"
@@ -30,7 +30,6 @@ Public Class home
         If Not Dir("default.xml") = "" Then
             ' Read XML File to load defaults
             Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
-
             ' Loop through XML File
             While (xmlReader2.Read())
                 Dim type = xmlReader2.NodeType
@@ -39,38 +38,31 @@ Public Class home
                 If (type = XmlNodeType.Element) Then
                     ' Looking for "Source" Path
                     If (xmlReader2.Name = "Source") Then
-                        sourcePath = xmlReader2.ReadInnerXml.ToString
-                        tb_sourcePath.Text = sourcePath.ToString
+                        sourcepatharray.Add(xmlReader2.ReadInnerXml.ToString)
                     End If
                     'Looking for "Backup" Path
                     If (xmlReader2.Name = "Backup") Then
-                        backupPath = xmlReader2.ReadInnerXml.ToString
-                        tb_backupPath.Text = backupPath.ToString
+                        backupPatharray.Add(xmlReader2.ReadInnerXml.ToString)
                     End If
                 End If
 
             End While
+            'loop through all source/dest. path's (Display in form Richtextbox)
+            For i = 0 To sourcepatharray.Count Step 1
+                'also fill RTB_Source! (richtextbox)
+                RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+                'also fill RTB_Backup! (richtextbox)
+                RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+            Next
+            'close reader to prevent file IO Exceptions
             xmlReader2.Close()
+            xmlReader2.Dispose()
         End If
     End Sub
 
     ' TextBox for Source Path
-    Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs) Handles tb_sourcePath.TextChanged
+    Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs)
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
-    End Sub
-
-    ' Button Search Source Path
-    Private Sub b_searchSource_Click(sender As Object, e As EventArgs) Handles b_searchSource.Click
-        ' Dialog to select Backup Path
-        fbd_searchSource.Description = "Select Folder"
-        fbd_searchSource.RootFolder = Environment.SpecialFolder.LocalizedResources 'maybe start in "computers" directly, so user can choose partitions directly (1 click less)
-        DialogResult = fbd_searchSource.ShowDialog
-        sourcePath = fbd_searchSource.SelectedPath.ToString
-
-        ' Show Path in TextBox
-        Do
-            tb_sourcePath.Text = sourcePath
-        Loop While Not tb_sourcePath.Text = sourcePath
     End Sub
 
     ' FolderBrowserDialog to select Source Path
@@ -79,22 +71,8 @@ Public Class home
     End Sub
 
     ' TextBox for Backup Path
-    Private Sub tb_backupPath_TextChanged(sender As Object, e As EventArgs) Handles tb_backupPath.TextChanged
+    Private Sub tb_backupPath_TextChanged(sender As Object, e As EventArgs)
 
-    End Sub
-
-    ' Button Search Backup Path
-    Private Sub b_searchBackup_Click(sender As Object, e As EventArgs) Handles b_searchBackup.Click
-        ' Dialog to select Backup Path
-        fbd_searchBackup.Description = "Select Folder"
-        fbd_searchBackup.RootFolder = Environment.SpecialFolder.LocalizedResources
-        DialogResult = fbd_searchBackup.ShowDialog
-        backupPath = fbd_searchBackup.SelectedPath.ToString
-
-        ' Show Path in TextBox
-        Do
-            tb_backupPath.Text &= backupPath
-        Loop While Not tb_backupPath.Text = backupPath
     End Sub
 
     ' FolderBrowserDialog to select Backup Path
@@ -105,21 +83,29 @@ Public Class home
     ' Button Start Backup
     Private Sub b_start_Click(sender As Object, e As EventArgs) Handles b_start.Click
         'Confirm & Start Backup-Progress
-        Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
+        ' Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
+        'think it's better to keep such msg in loop...
+        Dim startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
         If startResult = Windows.Forms.DialogResult.Yes Then
-            '  MessageBox.Show("Starting Backup!")
-            ' Backup 
-            ' Code
-            ' here
-            BackupDirectory("Sourcepath", "targetpath", False) 'more arguments can be added like incremental/not etc...
+            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
+            For i = 0 To sourcepatharray.Count - 1 Step 1
+                'define current directories if needed/wanted (will unecessaraly need calc power)
+                Dim currsourcepath As String = sourcepatharray(i)
+                Dim currbackuppath As String = backupPatharray(i)
+                Dim tempstartResult = MessageBox.Show("Backingup from " + currsourcepath + " to " + currbackuppath + " ? ", "Continue?", MessageBoxButtons.YesNo)
+                If tempstartResult = Windows.Forms.DialogResult.Yes Then
+                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False) 'more arguments can be added like incremental/not etc...
+                End If
+            Next
 
         ElseIf startResult = Windows.Forms.DialogResult.No Then
-            '  MessageBox.Show("Cancled Backup!")
+            MessageBox.Show("Cancled Backup!")
         End If
     End Sub
 
     'backup function - accepting different arguments - called in "backup start button"
-    Private Function BackupDirectory(sourcepath As String, targetpath As String, simulate_mode_active As Boolean)
+    'If 'simulate_mode' is true it will not backup anything! can be used to only log.
+    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True)
         'check if "path" is contained in exeptions, if so abort!
         '(Subdirs will be deleted with the same function, so this check will include them!)
 
@@ -196,15 +182,20 @@ Public Class home
                             'Copy/Backup the current file here!
                             '
                             For Each filepath As String In Directory.GetFiles(dir)
+                                Dim filename As String = Path.GetFileName(filepath)
                                 'copy to "targetpath & relpath" => to keep folder structure
+                                MessageBox.Show("supposed targetpath of: " & filepath & " is :" & targetpath & relpath & "/" & filename)
                             Next
                         End If
                     Next
                 End If
 
             End If
+
+            Return (0) 'return code "0" if everything went ok - without breaking code anywhere
         Catch ex As Exception
             MessageBox.Show("WARNING: Critical error while 'BackupDirectory'-function")
+            Return (-1) 'return code "-1" to indicate an unknown/unhandlet error 
         End Try
     End Function
 
@@ -232,17 +223,14 @@ Public Class home
     End Function
 
     'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
-    'use like "  dim array nrarray = stringtoarray("nr1;nr2;nr3",";")     "
+    'use like "  dim array1  as arraylist = stringtoarray("nr1;nr2;nr3",";")     "
     Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
         'reset returnarray if it s not null (redim it with 0 members)
         Dim returnarray As New ArrayList
-        '  ReDim returnarray(-1)
-        ' ReDim returnarray(0)
         'set counter
         Dim Charsalreadyscanned = 0
         'make temp var to not change original input var
         Dim tempstring = seperatedmultistring
-
         Dim foundwords = 0
         For i = 0 To seperatedmultistring.ToString.Length Step 1
             If (seperatedmultistring.ToString.Length = 0) Then
@@ -252,8 +240,7 @@ Public Class home
             If (i = seperatedmultistring.ToString.Length) Then
                 Exit For
             End If
-
-            'check if current char is ";"
+            'check if current char is the seperator sign
             If (seperatedmultistring.ToString.Substring(i, 1) = seperator) Then
                 'seperator sign found
                 Dim scannedtext = tempstring.ToString.Substring(Charsalreadyscanned, i - Charsalreadyscanned)
@@ -298,6 +285,9 @@ Public Class home
             .Close()
         End With
         writerSettings.Close()
+        writerSettings.Dispose()
     End Sub
 #End Region
+
+
 End Class
