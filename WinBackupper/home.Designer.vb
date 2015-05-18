@@ -25,10 +25,6 @@ Partial Class home
         Me.l_title = New System.Windows.Forms.Label()
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.l_backupPath = New System.Windows.Forms.Label()
-        Me.tb_sourcePath = New System.Windows.Forms.TextBox()
-        Me.tb_backupPath = New System.Windows.Forms.TextBox()
-        Me.b_searchSource = New System.Windows.Forms.Button()
-        Me.b_searchBackup = New System.Windows.Forms.Button()
         Me.b_start = New System.Windows.Forms.Button()
         Me.b_settings = New System.Windows.Forms.Button()
         Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
@@ -36,12 +32,16 @@ Partial Class home
         Me.b_update = New System.Windows.Forms.Button()
         Me.l_version = New System.Windows.Forms.Label()
         Me.bw_versionControll = New System.ComponentModel.BackgroundWorker()
+        Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
+        Me.RTB_Backuppath = New System.Windows.Forms.RichTextBox()
         Me.SuspendLayout()
         '
         'l_title
         '
         Me.l_title.AutoSize = True
+        Me.l_title.BackColor = System.Drawing.Color.Transparent
         Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_title.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_title.Location = New System.Drawing.Point(132, 23)
         Me.l_title.Name = "l_title"
         Me.l_title.Size = New System.Drawing.Size(208, 25)
@@ -51,65 +51,33 @@ Partial Class home
         'l_sourcePath
         '
         Me.l_sourcePath.AutoSize = True
-        Me.l_sourcePath.Location = New System.Drawing.Point(12, 66)
+        Me.l_sourcePath.BackColor = System.Drawing.Color.Transparent
+        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_sourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_sourcePath.Location = New System.Drawing.Point(71, 62)
         Me.l_sourcePath.Name = "l_sourcePath"
-        Me.l_sourcePath.Size = New System.Drawing.Size(69, 13)
+        Me.l_sourcePath.Size = New System.Drawing.Size(90, 17)
         Me.l_sourcePath.TabIndex = 1
         Me.l_sourcePath.Text = "Source Path:"
         '
         'l_backupPath
         '
         Me.l_backupPath.AutoSize = True
-        Me.l_backupPath.Location = New System.Drawing.Point(12, 130)
+        Me.l_backupPath.BackColor = System.Drawing.Color.Transparent
+        Me.l_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_backupPath.Location = New System.Drawing.Point(294, 62)
         Me.l_backupPath.Name = "l_backupPath"
-        Me.l_backupPath.Size = New System.Drawing.Size(72, 13)
+        Me.l_backupPath.Size = New System.Drawing.Size(92, 17)
         Me.l_backupPath.TabIndex = 2
         Me.l_backupPath.Text = "Backup Path:"
-        '
-        'tb_sourcePath
-        '
-        Me.tb_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_sourcePath.Location = New System.Drawing.Point(15, 80)
-        Me.tb_sourcePath.Name = "tb_sourcePath"
-        Me.tb_sourcePath.ReadOnly = True
-        Me.tb_sourcePath.Size = New System.Drawing.Size(325, 23)
-        Me.tb_sourcePath.TabIndex = 3
-        '
-        'tb_backupPath
-        '
-        Me.tb_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_backupPath.Location = New System.Drawing.Point(15, 143)
-        Me.tb_backupPath.Name = "tb_backupPath"
-        Me.tb_backupPath.ReadOnly = True
-        Me.tb_backupPath.Size = New System.Drawing.Size(325, 23)
-        Me.tb_backupPath.TabIndex = 4
-        '
-        'b_searchSource
-        '
-        Me.b_searchSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_searchSource.Location = New System.Drawing.Point(366, 77)
-        Me.b_searchSource.Name = "b_searchSource"
-        Me.b_searchSource.Size = New System.Drawing.Size(75, 26)
-        Me.b_searchSource.TabIndex = 5
-        Me.b_searchSource.Text = "Search"
-        Me.b_searchSource.UseVisualStyleBackColor = True
-        '
-        'b_searchBackup
-        '
-        Me.b_searchBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_searchBackup.Location = New System.Drawing.Point(366, 140)
-        Me.b_searchBackup.Name = "b_searchBackup"
-        Me.b_searchBackup.Size = New System.Drawing.Size(76, 26)
-        Me.b_searchBackup.TabIndex = 6
-        Me.b_searchBackup.Text = "Search"
-        Me.b_searchBackup.UseVisualStyleBackColor = True
         '
         'b_start
         '
         Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_start.Location = New System.Drawing.Point(15, 192)
+        Me.b_start.Location = New System.Drawing.Point(12, 230)
         Me.b_start.Name = "b_start"
-        Me.b_start.Size = New System.Drawing.Size(426, 35)
+        Me.b_start.Size = New System.Drawing.Size(430, 35)
         Me.b_start.TabIndex = 7
         Me.b_start.Text = "Start Backup"
         Me.b_start.UseVisualStyleBackColor = True
@@ -117,9 +85,9 @@ Partial Class home
         'b_settings
         '
         Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_settings.Location = New System.Drawing.Point(15, 271)
+        Me.b_settings.Location = New System.Drawing.Point(12, 267)
         Me.b_settings.Name = "b_settings"
-        Me.b_settings.Size = New System.Drawing.Size(118, 26)
+        Me.b_settings.Size = New System.Drawing.Size(135, 35)
         Me.b_settings.TabIndex = 8
         Me.b_settings.Text = "Settings"
         Me.b_settings.UseVisualStyleBackColor = True
@@ -133,9 +101,9 @@ Partial Class home
         'b_update
         '
         Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_update.Location = New System.Drawing.Point(139, 271)
+        Me.b_update.Location = New System.Drawing.Point(153, 267)
         Me.b_update.Name = "b_update"
-        Me.b_update.Size = New System.Drawing.Size(118, 26)
+        Me.b_update.Size = New System.Drawing.Size(136, 35)
         Me.b_update.TabIndex = 10
         Me.b_update.Text = "Update"
         Me.b_update.UseVisualStyleBackColor = True
@@ -143,6 +111,8 @@ Partial Class home
         'l_version
         '
         Me.l_version.AutoSize = True
+        Me.l_version.BackColor = System.Drawing.Color.Transparent
+        Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_version.Location = New System.Drawing.Point(363, 278)
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(77, 13)
@@ -152,20 +122,35 @@ Partial Class home
         'bw_versionControll
         '
         '
+        'RTB_Sourcepath
+        '
+        Me.RTB_Sourcepath.Location = New System.Drawing.Point(15, 82)
+        Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
+        Me.RTB_Sourcepath.Size = New System.Drawing.Size(198, 142)
+        Me.RTB_Sourcepath.TabIndex = 12
+        Me.RTB_Sourcepath.Text = ""
+        '
+        'RTB_Backuppath
+        '
+        Me.RTB_Backuppath.Location = New System.Drawing.Point(228, 82)
+        Me.RTB_Backuppath.Name = "RTB_Backuppath"
+        Me.RTB_Backuppath.Size = New System.Drawing.Size(214, 142)
+        Me.RTB_Backuppath.TabIndex = 13
+        Me.RTB_Backuppath.Text = ""
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(454, 321)
+        Me.Controls.Add(Me.RTB_Backuppath)
+        Me.Controls.Add(Me.RTB_Sourcepath)
         Me.Controls.Add(Me.l_version)
         Me.Controls.Add(Me.b_update)
         Me.Controls.Add(Me.b_settings)
         Me.Controls.Add(Me.b_start)
-        Me.Controls.Add(Me.b_searchBackup)
-        Me.Controls.Add(Me.b_searchSource)
-        Me.Controls.Add(Me.tb_backupPath)
-        Me.Controls.Add(Me.tb_sourcePath)
         Me.Controls.Add(Me.l_backupPath)
         Me.Controls.Add(Me.l_sourcePath)
         Me.Controls.Add(Me.l_title)
@@ -178,10 +163,6 @@ Partial Class home
     Friend WithEvents l_title As System.Windows.Forms.Label
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
     Friend WithEvents l_backupPath As System.Windows.Forms.Label
-    Friend WithEvents tb_sourcePath As System.Windows.Forms.TextBox
-    Friend WithEvents tb_backupPath As System.Windows.Forms.TextBox
-    Friend WithEvents b_searchSource As System.Windows.Forms.Button
-    Friend WithEvents b_searchBackup As System.Windows.Forms.Button
     Friend WithEvents b_start As System.Windows.Forms.Button
     Friend WithEvents b_settings As System.Windows.Forms.Button
     Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
@@ -189,5 +170,7 @@ Partial Class home
     Friend WithEvents b_update As System.Windows.Forms.Button
     Friend WithEvents l_version As System.Windows.Forms.Label
     Friend WithEvents bw_versionControll As System.ComponentModel.BackgroundWorker
+    Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
+    Friend WithEvents RTB_Backuppath As System.Windows.Forms.RichTextBox
 
 End Class
