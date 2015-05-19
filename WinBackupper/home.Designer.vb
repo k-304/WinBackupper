@@ -22,6 +22,7 @@ Partial Class home
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(home))
         Me.l_title = New System.Windows.Forms.Label()
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.l_backupPath = New System.Windows.Forms.Label()
@@ -154,6 +155,7 @@ Partial Class home
         Me.Controls.Add(Me.l_backupPath)
         Me.Controls.Add(Me.l_sourcePath)
         Me.Controls.Add(Me.l_title)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "home"
         Me.Text = "WinBackupper"
         Me.ResumeLayout(False)

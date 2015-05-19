@@ -22,6 +22,7 @@ Partial Class Settings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Settings))
         Me.l_BackupPath = New System.Windows.Forms.Label()
         Me.l_SourcePath = New System.Windows.Forms.Label()
         Me.b_save = New System.Windows.Forms.Button()
@@ -153,6 +154,7 @@ Partial Class Settings
         Me.Controls.Add(Me.l_SourcePath)
         Me.Controls.Add(Me.l_settings)
         Me.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Settings"
         Me.Text = "Settings"
         Me.ResumeLayout(False)
