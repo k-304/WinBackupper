@@ -108,6 +108,12 @@ Public Class Settings
 
     ' Button Save defaults to own XML File
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
+        'delete default.xml if it exists already
+        If System.IO.File.Exists(getexedir() & "\default.xml") Then
+            'delete it 
+            System.IO.File.Delete(getexedir() & "\default.xml")
+        End If
+        'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
     End Sub
 
@@ -181,11 +187,6 @@ Public Class Settings
         ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
         writerOption.Indent = True
-        'before creating - check if already existing
-        If System.IO.File.Exists(getexedir() & "\default.xml") Then
-            'delete it 
-            System.IO.File.Delete(getexedir() & "\default.xml")
-        End If
         Dim writerSettings As XmlWriter = XmlWriter.Create("default.xml", writerOption)
         'check if array's have unequal nr of members
         'maybe user closed box to choose backup path or didnt open it 
@@ -229,6 +230,7 @@ Public Class Settings
             .WriteEndElement()
             .WriteEndDocument()
             .Close()
+            .Dispose()
         End With
         'close file again - prevent file IO exceptions
         writerSettings.Close()
@@ -250,26 +252,39 @@ Public Class Settings
                 If (type = XmlNodeType.Element) Then
                     ' Looking for "Source" Path
                     If (xmlReader.Name = "Source") Then
+                        'add current string (read from xml) to the array
                         Savedsourcedata.Add(xmlReader.ReadInnerXml.ToString)
                     End If
                     'Looking for "Backup" Path
                     If (xmlReader.Name = "Backup") Then
+                        'add current string (read from xml) to the array
                         Savedbackupdata.Add(xmlReader.ReadInnerXml.ToString)
                     End If
                 End If
 
             End While
-            xmlReader.Close()
-            xmlReader.Dispose()
+            'the first if part seems to fail- real check is within the loop
             If (sourcetargetdata.Equals(Savedsourcedata)) And (backuptargetdata.Equals(Savedbackupdata)) Then
                 MessageBox.Show("Paths saved!")
             Else
-                If Not (sourcetargetdata.Equals(Savedsourcedata)) Then
-                    MessageBox.Show("Unable to save Paths!" & vbNewLine & "Error in Sourcepathdata", "Error in Sourcepathdata")
-                ElseIf Not (backuptargetdata.Equals(Savedbackupdata)) Then
-                    MessageBox.Show("Unable to save Paths!" & vbNewLine & "Error in Backuppathdata", "Error in Backuppathdata")
+                Dim mismatches As Integer = 0
+                For i = 0 To sourcepatharray.Count Step 1
+                    If i = sourcepatharray.Count Then
+                        Exit For
+                    End If
+                    If Not (sourcetargetdata(i).ToString = Savedsourcedata(i).ToString) Then
+                        mismatches += 1
+                    End If
+                Next
+                If mismatches > 0 Then 'if there are no mismatches the array's are equal!
+                    MessageBox.Show("Unable to save Paths!", "Error while saving", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
             End If
+
+            'close reader again
+            xmlReader.Close()
+            xmlReader.Dispose()
+
         End If
     End Sub
 
