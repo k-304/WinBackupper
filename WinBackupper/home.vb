@@ -47,6 +47,9 @@ Public Class home
                 End If
 
             End While
+            'close reader to prevent file IO Exceptions
+            xmlReader2.Close()
+            xmlReader2.Dispose()
             'loop through all source/dest. path's (Display in form Richtextbox)
             For i = 0 To sourcepatharray.Count Step 1
                 'also fill RTB_Source! (richtextbox)
@@ -54,9 +57,7 @@ Public Class home
                 'also fill RTB_Backup! (richtextbox)
                 RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
             Next
-            'close reader to prevent file IO Exceptions
-            xmlReader2.Close()
-            xmlReader2.Dispose()
+
         End If
     End Sub
 
