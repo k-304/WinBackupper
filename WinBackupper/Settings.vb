@@ -29,14 +29,27 @@ Public Class Settings
         'get Values from "home"-class (form1.vb) to get already loaded settings (to display/manipulate)
         backupPatharray = WinBackupper.home.backupPatharray
         sourcepatharray = WinBackupper.home.sourcepatharray
-        'loop through all source/dest. path's (Display in form Richtextbox)
-        For i = 0 To sourcepatharray.Count Step 1
-            'also fill RTB_Source! (richtextbox)
-            RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
-            'also fill RTB_Backup! (richtextbox)
-            RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
-        Next
+        'after getting current values - update displayed settings 
+        Settings_Reload()
     End Sub
+
+    'function to reload all settings displayed in the form. Only use this one!
+    Public Function Settings_Reload()
+        Try
+            'run through Array and get needed Values
+            For i = 0 To sourcepatharray.Count Step 1
+                'also fill RTB_Source! (richtextbox)
+                RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+                'also fill RTB_Backup! (richtextbox)
+                RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+                'to get the time, fill a richtextbox with all starttimes FOR THE SELECTED ENTRY! (no idea how to display it otherwise currently)
+            Next
+
+        Catch ex As Exception
+            Return ex.InnerException
+        End Try
+
+    End Function
 
     ' TextBox for default Source Path
     Private Sub tb_defaultSourcePath_TextChanged(sender As Object, e As EventArgs)
@@ -115,11 +128,165 @@ Public Class Settings
         End If
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
+
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
-        'delete xml file - reset arrays
-        MsgBox("Not Coded yet")
+        Dim resetchoice = MessageBox.Show("Do you really want to reset ALL your configurations?", "Reset EVERYTHING?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If resetchoice = vbYes Then
+            'delete xml file - reset arrays
+            If System.IO.File.Exists(getexedir() & "\default.xml") Then
+                'delete it 
+                System.IO.File.Delete(getexedir() & "\default.xml")
+            End If
+            sourcepatharray.Clear()
+            backupPatharray.Clear()
+        Else
+            'user aborted - maybe misclicked 
+            MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+
+
+    End Sub
+
+    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
+    Private Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Sourcepath.MouseDown
+        Try
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
+            Dim backuppathrtb = DirectCast(Me.RTB_Backuppath, RichTextBox)
+            'repeat above steps for other rtbox...
+            Dim backupline = backuppathrtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim backuplineStart = backuppathrtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim backuplineEnd = backuppathrtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            backuppathrtb.SelectionStart = backuplineStart
+            'define the length of it
+            backuppathrtb.SelectionLength = backuplineEnd - backuplineStart
+            If (backuppathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(backuppathrtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(backuppathrtb.SelectionFont, FontStyle.Regular)
+            End If
+            backuppathrtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
+    Private Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+        Try
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
+            Dim sourcepathrtb = DirectCast(Me.RTB_Sourcepath, RichTextBox)
+            'repeat above steps for other rtbox...
+            Dim sourceline = sourcepathrtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim sourcelineStart = sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
+            'define the last one
+            Dim sourcelineEnd = sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
+            'now try to make it bold - maybe it0s enough
+            sourcepathrtb.SelectionStart = sourcelineStart
+            'define the length of it
+            sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
+            'define color to set
+            If (sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Regular)
+            End If
+            sourcepathrtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
+    Private Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles rtb_backupstarttimes.MouseDown
+        Try
+            'this time - only select entry of timebox - to delete entries in future or edit them one for one.
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
@@ -277,17 +444,19 @@ Public Class Settings
                     End If
                 Next
                 If mismatches > 0 Then 'if there are no mismatches the array's are equal!
-                    MessageBox.Show("Unable to save Paths!", "Error while saving", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show("Unable to save Configuration!", "Error while saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Else
+                    MessageBox.Show("Configuration Saved succesfully!", "Configuration Saved!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
             End If
 
             'close reader again
             xmlReader.Close()
             xmlReader.Dispose()
-
         End If
     End Sub
 
 #End Region
 
+   
 End Class
