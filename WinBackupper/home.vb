@@ -1,5 +1,6 @@
-﻿Imports System.Xml
-Imports System.IO
+﻿Imports System.IO
+Imports System.IO.Compression
+Imports System.Xml
 
 Public Class home
 
@@ -179,13 +180,23 @@ Public Class home
                             BackupDirectory(dir, targetpath & relpath, False)
                         End If
                         If simulate_mode_active = False Then
-                            '
-                            'Copy/Backup the current file here!
-                            '
                             For Each filepath As String In Directory.GetFiles(dir)
                                 Dim filename As String = Path.GetFileName(filepath)
                                 'copy to "targetpath & relpath" => to keep folder structure
                                 MessageBox.Show("supposed targetpath of: " & filepath & " is :" & targetpath & relpath & "/" & filename)
+                                'for zipping see https://msdn.microsoft.com/en-us/library/ms404280(v=vs.100).aspx
+                                'without .net 4.5/6 a damn pain in the arse >.<
+
+                                'check if target dir exists
+                                If Directory.Exists(targetpath & relpath) Then
+                                    Directory.CreateDirectory(targetpath & relpath)
+                                End If
+                                Try
+                                    'copy file in seperate try/catch to log errors per file?
+                                    File.Copy(filepath, targetpath & relpath & "/" & filename)
+                                Catch ex As Exception
+                                    'log if error?
+                                End Try
                             Next
                         End If
                     Next

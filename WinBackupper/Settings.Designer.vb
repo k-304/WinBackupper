@@ -35,6 +35,9 @@ Partial Class Settings
         Me.RTB_Backuppath = New System.Windows.Forms.RichTextBox()
         Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
         Me.b_reset = New System.Windows.Forms.Button()
+        Me.b_editfolderpair = New System.Windows.Forms.Button()
+        Me.rtb_backupstarttimes = New System.Windows.Forms.RichTextBox()
+        Me.l_backuptimes = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'l_BackupPath
@@ -43,7 +46,7 @@ Partial Class Settings
         Me.l_BackupPath.BackColor = System.Drawing.Color.Transparent
         Me.l_BackupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_BackupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_BackupPath.Location = New System.Drawing.Point(277, 69)
+        Me.l_BackupPath.Location = New System.Drawing.Point(277, 59)
         Me.l_BackupPath.Name = "l_BackupPath"
         Me.l_BackupPath.Size = New System.Drawing.Size(92, 17)
         Me.l_BackupPath.TabIndex = 12
@@ -55,7 +58,7 @@ Partial Class Settings
         Me.l_SourcePath.BackColor = System.Drawing.Color.Transparent
         Me.l_SourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_SourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_SourcePath.Location = New System.Drawing.Point(63, 69)
+        Me.l_SourcePath.Location = New System.Drawing.Point(63, 59)
         Me.l_SourcePath.Name = "l_SourcePath"
         Me.l_SourcePath.Size = New System.Drawing.Size(90, 17)
         Me.l_SourcePath.TabIndex = 11
@@ -64,9 +67,9 @@ Partial Class Settings
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(12, 269)
+        Me.b_save.Location = New System.Drawing.Point(11, 353)
         Me.b_save.Name = "b_save"
-        Me.b_save.Size = New System.Drawing.Size(430, 35)
+        Me.b_save.Size = New System.Drawing.Size(431, 35)
         Me.b_save.TabIndex = 18
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
@@ -83,9 +86,9 @@ Partial Class Settings
         'b_addfolderpair
         '
         Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_addfolderpair.Location = New System.Drawing.Point(11, 237)
+        Me.b_addfolderpair.Location = New System.Drawing.Point(11, 320)
         Me.b_addfolderpair.Name = "b_addfolderpair"
-        Me.b_addfolderpair.Size = New System.Drawing.Size(431, 35)
+        Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_addfolderpair.TabIndex = 19
         Me.b_addfolderpair.Text = "Add new Entry"
         Me.b_addfolderpair.UseVisualStyleBackColor = True
@@ -104,7 +107,7 @@ Partial Class Settings
         '
         'RichTextBox1
         '
-        Me.RichTextBox1.Location = New System.Drawing.Point(293, 126)
+        Me.RichTextBox1.Location = New System.Drawing.Point(293, 116)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.Size = New System.Drawing.Size(8, 8)
         Me.RichTextBox1.TabIndex = 20
@@ -112,16 +115,18 @@ Partial Class Settings
         '
         'RTB_Backuppath
         '
-        Me.RTB_Backuppath.Location = New System.Drawing.Point(225, 89)
+        Me.RTB_Backuppath.Location = New System.Drawing.Point(225, 79)
         Me.RTB_Backuppath.Name = "RTB_Backuppath"
+        Me.RTB_Backuppath.ShowSelectionMargin = True
         Me.RTB_Backuppath.Size = New System.Drawing.Size(214, 142)
         Me.RTB_Backuppath.TabIndex = 22
         Me.RTB_Backuppath.Text = ""
         '
         'RTB_Sourcepath
         '
-        Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 89)
+        Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 79)
         Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
+        Me.RTB_Sourcepath.ShowSelectionMargin = True
         Me.RTB_Sourcepath.Size = New System.Drawing.Size(198, 142)
         Me.RTB_Sourcepath.TabIndex = 21
         Me.RTB_Sourcepath.Text = ""
@@ -137,13 +142,47 @@ Partial Class Settings
         Me.b_reset.Text = "Reset!"
         Me.b_reset.UseVisualStyleBackColor = False
         '
+        'b_editfolderpair
+        '
+        Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_editfolderpair.Location = New System.Drawing.Point(228, 320)
+        Me.b_editfolderpair.Name = "b_editfolderpair"
+        Me.b_editfolderpair.Size = New System.Drawing.Size(214, 35)
+        Me.b_editfolderpair.TabIndex = 24
+        Me.b_editfolderpair.Text = "Edit Entry"
+        Me.b_editfolderpair.UseVisualStyleBackColor = True
+        '
+        'rtb_backupstarttimes
+        '
+        Me.rtb_backupstarttimes.Location = New System.Drawing.Point(11, 255)
+        Me.rtb_backupstarttimes.Name = "rtb_backupstarttimes"
+        Me.rtb_backupstarttimes.ShowSelectionMargin = True
+        Me.rtb_backupstarttimes.Size = New System.Drawing.Size(427, 59)
+        Me.rtb_backupstarttimes.TabIndex = 25
+        Me.rtb_backupstarttimes.Text = ""
+        '
+        'l_backuptimes
+        '
+        Me.l_backuptimes.AutoSize = True
+        Me.l_backuptimes.BackColor = System.Drawing.Color.Transparent
+        Me.l_backuptimes.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backuptimes.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_backuptimes.Location = New System.Drawing.Point(107, 235)
+        Me.l_backuptimes.Name = "l_backuptimes"
+        Me.l_backuptimes.Size = New System.Drawing.Size(238, 17)
+        Me.l_backuptimes.TabIndex = 26
+        Me.l_backuptimes.Text = "Backup start times of selected Entry:"
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 311)
+        Me.ClientSize = New System.Drawing.Size(454, 395)
+        Me.Controls.Add(Me.l_backuptimes)
+        Me.Controls.Add(Me.rtb_backupstarttimes)
+        Me.Controls.Add(Me.b_editfolderpair)
         Me.Controls.Add(Me.b_reset)
         Me.Controls.Add(Me.RTB_Backuppath)
         Me.Controls.Add(Me.RTB_Sourcepath)
@@ -173,4 +212,7 @@ Partial Class Settings
     Friend WithEvents RTB_Backuppath As System.Windows.Forms.RichTextBox
     Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
+    Friend WithEvents b_editfolderpair As System.Windows.Forms.Button
+    Friend WithEvents rtb_backupstarttimes As System.Windows.Forms.RichTextBox
+    Friend WithEvents l_backuptimes As System.Windows.Forms.Label
 End Class
