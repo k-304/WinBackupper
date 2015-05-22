@@ -37,6 +37,7 @@ Partial Class Settings
         Me.b_editfolderpair = New System.Windows.Forms.Button()
         Me.rtb_backupstarttimes = New System.Windows.Forms.RichTextBox()
         Me.l_backuptimes = New System.Windows.Forms.Label()
+        Me.cb_Autostart = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'l_BackupPath
@@ -66,9 +67,9 @@ Partial Class Settings
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(11, 353)
+        Me.b_save.Location = New System.Drawing.Point(8, 377)
         Me.b_save.Name = "b_save"
-        Me.b_save.Size = New System.Drawing.Size(431, 35)
+        Me.b_save.Size = New System.Drawing.Size(434, 35)
         Me.b_save.TabIndex = 18
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
@@ -85,7 +86,7 @@ Partial Class Settings
         'b_addfolderpair
         '
         Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_addfolderpair.Location = New System.Drawing.Point(11, 320)
+        Me.b_addfolderpair.Location = New System.Drawing.Point(8, 344)
         Me.b_addfolderpair.Name = "b_addfolderpair"
         Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_addfolderpair.TabIndex = 19
@@ -144,9 +145,9 @@ Partial Class Settings
         'b_editfolderpair
         '
         Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editfolderpair.Location = New System.Drawing.Point(228, 320)
+        Me.b_editfolderpair.Location = New System.Drawing.Point(225, 344)
         Me.b_editfolderpair.Name = "b_editfolderpair"
-        Me.b_editfolderpair.Size = New System.Drawing.Size(214, 35)
+        Me.b_editfolderpair.Size = New System.Drawing.Size(217, 35)
         Me.b_editfolderpair.TabIndex = 24
         Me.b_editfolderpair.Text = "Edit Entry"
         Me.b_editfolderpair.UseVisualStyleBackColor = True
@@ -172,13 +173,27 @@ Partial Class Settings
         Me.l_backuptimes.TabIndex = 26
         Me.l_backuptimes.Text = "Backup start times of selected Entry:"
         '
+        'cb_Autostart
+        '
+        Me.cb_Autostart.AutoSize = True
+        Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
+        Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.cb_Autostart.Location = New System.Drawing.Point(14, 317)
+        Me.cb_Autostart.Name = "cb_Autostart"
+        Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
+        Me.cb_Autostart.TabIndex = 27
+        Me.cb_Autostart.Text = "Start Application on Startup (only this user!) ?"
+        Me.cb_Autostart.UseVisualStyleBackColor = False
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 395)
+        Me.ClientSize = New System.Drawing.Size(454, 420)
+        Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)
         Me.Controls.Add(Me.rtb_backupstarttimes)
         Me.Controls.Add(Me.b_editfolderpair)
@@ -213,4 +228,5 @@ Partial Class Settings
     Friend WithEvents b_editfolderpair As System.Windows.Forms.Button
     Friend WithEvents rtb_backupstarttimes As System.Windows.Forms.RichTextBox
     Friend WithEvents l_backuptimes As System.Windows.Forms.Label
+    Friend WithEvents cb_Autostart As System.Windows.Forms.CheckBox
 End Class

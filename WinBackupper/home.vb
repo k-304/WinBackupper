@@ -22,6 +22,21 @@ Public Class home
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'attention! "count" gives a locigal "human" value, but info is stored in an array which begins from 0
+        If Environment.GetCommandLineArgs.Count <> 1 Then
+            If Environment.GetCommandLineArgs.Count = 2 Then
+                'check if second argument is "-silent" "/silent", "/s" or "-s"
+                'if argument is supplied -hide forms!
+                Dim var = Environment.GetCommandLineArgs(1)
+                If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
+                    'not sure how to hide correctly yet - just testing. (this is to run silent at each startup - so user is not annoyed by he form popping up all the time
+                    MsgBox("SIlent command noticed")
+                    Me.Visible = False
+                    Settings.Visible = False
+                End If
+            End If
+        End If
+
         ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
         l_version.Text = "Version: " + My.Application.Info.Version.ToString()
         version = My.Application.Info.Version.ToString()
@@ -266,12 +281,15 @@ Public Class home
     End Function
 
     'Function to get Directory of current .exe-file
-    Private Function getexedir()
+    Private Function getexedir() As String
         Dim path As String
         path = System.IO.Path.GetDirectoryName( _
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
+
+   
+
 #End Region
 
 #Region "Workers"

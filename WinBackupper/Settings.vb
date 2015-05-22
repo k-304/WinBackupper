@@ -16,6 +16,7 @@ Public Class Settings
     Dim GlobalSeperator As String = WinBackupper.home.GlobalSeperator ' seperatir used to combine/cut strings (like allsourcepaths)
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
+    Dim formfullyloaded As Boolean = False
 
 #End Region
 
@@ -33,20 +34,59 @@ Public Class Settings
         Settings_Reload()
     End Sub
 
+    'function to set autostart
+    Function Application_Autostart(enable As Boolean, Optional startupparameters As String = "")
+        Try
+            If enable = True Then
+                'Create value in the "Run" key within the current user hive
+                'set name "Winbackupper" witht he full path to the exe file which should be called after startup
+                'first check the startupparameters argument - if not supplied dont do anything, if supplied - check how parameters were entered:
+                If Not startupparameters = "" Then
+                    'some kind of parameter was specified - check it
+                    If startupparameters.Substring(0, 1) = " " Then
+                        'the entered parameter starts with a space - no need to manipulate it!
+                    ElseIf startupparameters.Substring(0, 1) = "-" Then
+                        'no space in begining - add it (otherwise it will produce errors since the string would be written incorrectly into the registry
+                        startupparameters = " " & startupparameters
+                    End If
+                End If
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", getexedir() & "\WinBackupper.exe" & startupparameters)
+            Else
+                'define the run key
+                Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
+                'delete the value 
+                runkey.DeleteValue("Winbackupper_Autostart")
+                'DeleteValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\Winbackupper_Autostart")
+            End If
+            'function didn't return a excpected value - return -1 as error code 
+            Return -1
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
+
+
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
             'run through Array and get needed Values
-            For i = 0 To sourcepatharray.Count Step 1
+            For i = 0 To sourcepatharray.Count - 1 Step 1
                 'also fill RTB_Source! (richtextbox)
                 RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
                 'also fill RTB_Backup! (richtextbox)
                 RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
                 'to get the time, fill a richtextbox with all starttimes FOR THE SELECTED ENTRY! (no idea how to display it otherwise currently)
             Next
-
+            'check if registry key for autostart exists -also set in the settings form
+            Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run")
+            'checks if our valuename is within the run key
+            If (runkey.GetValueNames.Contains("Winbackupper_Autostart")) Then
+                'reg key exists - enable the autostart checkbox
+                cb_Autostart.Checked = True
+            End If
         Catch ex As Exception
-            Return ex.InnerException
+            MsgBox(ex.Message)
+            Return -1
         End Try
 
     End Function
@@ -334,6 +374,45 @@ Public Class Settings
         End If
     End Sub
 
+    'executed when settingsform is fully loaded (and therefore shown to the user)
+    Private Sub Settings_Shown(sender As Object, e As EventArgs) _
+         Handles Me.Shown
+        formfullyloaded = True
+    End Sub
+
+    'executed when the cb_autostart is clicked- will write/delete autostart reg key depending on arguments supplied
+    Private Sub cb_Autostart_CheckedChanged(sender As Object, e As EventArgs) Handles cb_Autostart.CheckedChanged
+        If formfullyloaded Then
+        If cb_Autostart.Checked = True Then
+            'ask user if he want to start silently ....
+                Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine & _
+                                             "This will hide all forms and do all work in the background!", _
+                                             "Startup Silently in the Future?", _
+                                             MessageBoxButtons.YesNoCancel, _
+                                             MessageBoxIcon.Question)
+
+            'Application_Autostart sets autostart - accepts arguments "enabled" which is a boolean
+            'and accepts a second argument "Startupparameters" as a string like "- silent"
+            If startsilent = vbYes Then
+                'if user wants to start silent - add parameter
+                Application_Autostart(True, " -s")
+                ElseIf startsilent = vbNo Then
+                    'start normally
+                    Application_Autostart(True)
+                Else
+                    'if canceled, cancel the whole sub - nothing has changed (and reset the checkbox)
+                    cb_Autostart.Checked = False
+                    Exit Sub
+                End If
+        Else
+            'start normally (delete reg key )
+            Application_Autostart(False)
+            End If
+        Else
+            'don't execute the code since the checkbox is changen on the LOAD event! This would execute this code too - and we don't want that!
+        End If
+    End Sub
+
     'Function to get Directory of current .exe-file
     Private Function getexedir()
         Dim path As String
@@ -403,6 +482,9 @@ Public Class Settings
         writerSettings.Close()
         writerSettings.Dispose()
 
+
+
+        'start checking if settings are saved correctly!
         If Not Dir("default.xml") = "" Then
             ' Read XML File to check if it was written
             Dim xmlReader As XmlReader = New XmlTextReader("default.xml")
@@ -458,5 +540,4 @@ Public Class Settings
 
 #End Region
 
-   
 End Class

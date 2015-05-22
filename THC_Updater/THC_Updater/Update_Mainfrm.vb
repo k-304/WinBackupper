@@ -128,6 +128,7 @@ Public Class Update_Mainfrm
             Return resolvedIP
         Catch ex As Exception
             MessageBox.Show(ex.Message, "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
         End Try
     End Function
 
@@ -230,9 +231,7 @@ Public Class Update_Mainfrm
             End While
             Return 0
         Catch ex As Exception
-            If ex.Message IsNot "" Then
                 Return -1
-            End If
         End Try
     End Function
 
