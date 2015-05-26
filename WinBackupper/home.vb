@@ -183,7 +183,8 @@ Public Class home
 
                     Next 'for each filepath end
 
-                    'BAckup all child Directories
+                    'get all filepaths including source
+
                     For Each dir As String In Directory.GetDirectories(sourcepath)
                         'calculate the relative path
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
@@ -193,25 +194,23 @@ Public Class home
                             BackupDirectory(dir, targetpath & relpath, True)
                         Else
                             BackupDirectory(dir, targetpath & relpath, False)
-                        End If
-                        If simulate_mode_active = False Then
                             For Each filepath As String In Directory.GetFiles(dir)
                                 Dim filename As String = Path.GetFileName(filepath)
                                 'copy to "targetpath & relpath" => to keep folder structure
-                                MessageBox.Show("supposed targetpath of: " & filepath & " is :" & targetpath & relpath & "/" & filename)
+                                MessageBox.Show("supposed targetpath of: " & filepath & " is :" & targetpath & relpath & "\" & filename)
                                 'for zipping see https://msdn.microsoft.com/en-us/library/ms404280(v=vs.100).aspx
                                 'without .net 4.5/6 a damn pain in the arse >.<
 
                                 'check if target dir exists
-                                If Directory.Exists(targetpath & relpath) Then
+                                If Not Directory.Exists(targetpath & relpath) Then
                                     Directory.CreateDirectory(targetpath & relpath)
                                 End If
-                                Try
-                                    'copy file in seperate try/catch to log errors per file?
-                                    File.Copy(filepath, targetpath & relpath & "/" & filename)
-                                Catch ex As Exception
-                                    'log if error?
-                                End Try
+                                ' Try
+                                'copy file in seperate try/catch to log errors per file?
+                                File.Copy(filepath, targetpath & relpath & "\" & filename)
+                                'Catch ex As Exception
+                                'log if error?
+                                '  End Try
                             Next
                         End If
                     Next
@@ -221,7 +220,7 @@ Public Class home
 
             Return (0) 'return code "0" if everything went ok - without breaking code anywhere
         Catch ex As Exception
-            MessageBox.Show("WARNING: Critical error while 'BackupDirectory'-function")
+            MessageBox.Show("WARNING: Critical error while 'BackupDirectory'-function" & vbNewLine & ex.Message)
             Return (-1) 'return code "-1" to indicate an unknown/unhandlet error 
         End Try
     End Function
