@@ -65,6 +65,37 @@ Public Class Settings
         End Try
     End Function
 
+Function Check_Application_Autostart()
+     Try 
+    'read value of key and check if it's correct for the current exe file
+    'define the rune (by opening it)
+    Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True) 
+    'read the value of our key
+    dim currrunkeyvalue = My.Computer.Registry.GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart") 
+    dim supposedrunkeyvalue =getexedir() & system.assembly.GetEntryAssembly() 'getentryassembly gets exe name
+    dim parameters
+    if currrunkeyvalue.contains("/s") or currrunkeyvalue.contains("-s") or currrunkeyvalue.contains(/Silent) or currrunkeyvalue.contains()
+        parameters = "-s"
+    else 
+        parameters = ""
+    end if
+
+If Not currrunkeyvalue.contains(supposedrunkeyvalue) Then 
+        'Value seems to be wrong - rewrite it (Consider to keep the startup argument!)
+ 		'delete the value
+        runkey.DeleteValue("Winbackupper_Autostart")
+        My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", getexedir() & system.assembly.GetEntryAssembly() & parameters
+return 0           
+    Else 
+'the value is already correct - exe name/location didn't change.               
+    End If 
+             'function didn't return a excpected value - return -1 as error code  
+             Return -1 
+         Catch ex As Exception 
+             Return -1 
+    End Try 
+End Function 
+
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
