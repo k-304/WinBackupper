@@ -144,42 +144,22 @@ Public Class home
                 ' End If
                 If Directory.Exists(sourcepath) Then
 
-                    'Delete all files from the Directory
+                    'Backup all files of the source dir, and then recursively call itself to backup others (subdirs - could check with var if wanted)
                     For Each filepath As String In Directory.GetFiles(sourcepath)
-
-                        'implemented a counter to fix Bug ->
-                        'Files got deleted on root folder, but not on excluded subfolders.
-                        'they even got deleted, if excluded because of this bug!
-                        'yeah... this happens when you code late at night, i should have seen this in the beggining
-                        '
-                        'check with counter if for-each is checking last Exception 
-
-                        ''''IMPORTANT''''
-                        Dim deskctr = 0
-                        For Each exe As String In exelist
-                            deskctr = deskctr + 1
-                            If filepath.Contains(exe) Then
-                                'File is within excluded folder DONT DELETE!
-                                '  If Loginfocheckbox.Checked = True Then
-                                'LogRichTextBox.AppendText("INFO: File: " & filepath & " wasnot deleted because of exeption list" & vbNewLine)
-                                ' End If
-                            Else
-                                'file is not in excluded folder, delete!
-                                ' If Logdetailedinfocheckbox.Checked = True Then
-                                'LogRichTextBox.AppendText("DETINFO: File: " & filepath & " is being processed..." & vbNewLine)
+                        Try
+                            'get relative path to file
+                            Dim relpath As String = filepath.Substring(sourcepath.Length, filepath.Length - sourcepath.Length)
+                            MsgBox("DEBUG: (relpath of filepath loop)" & relpath & vbNewLine & " Source: " & sourcepath)
+                            'get current filename - needed for saving 
+                            Dim filename As String = Path.GetFileName(filepath)
+                            If simulate_mode_active = False Then
+                                'simulate mode is off - copy files
+                                File.Copy(filepath, targetpath & relpath & "\" & filename)
                             End If
-                            Try
-                                If (deskctr = execount) Then
-                                    If simulate_mode_active = False Then
-                                        'if simulate mode is on, only log!!! Dont copy!
-                                       File.Copy(filepath, targetpath & relpath & "\" & filename)
-                                    End If
-                                End If
-                            Catch ex As Exception
-                                'if single files fail - maybe make a list? How do we log?
-                            End Try
+                        Catch ex As Exception
+                            'if single files fail - maybe make a list? How do we log?
 
-                        Next 'Desk clean "for each" end
+                        End Try
 
                     Next 'for each filepath end
 
@@ -188,7 +168,7 @@ Public Class home
                     For Each dir As String In Directory.GetDirectories(sourcepath)
                         'calculate the relative path
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
-                        MessageBox.Show("DEBUG relpath:" & relpath)
+                        'Maybe use a cmdline switch to enable debugging? (for future) MessageBox.Show("DEBUG relpath:" & relpath)
                         'call routine to delete subfiles
                         If simulate_mode_active = True Then
                             BackupDirectory(dir, targetpath & relpath, True)
@@ -250,7 +230,7 @@ Public Class home
 
     'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
     'use like "  dim array1  as arraylist = stringtoarray("nr1;nr2;nr3",";")     "
-    Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
+    Public Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
         'reset returnarray if it s not null (redim it with 0 members)
         Dim returnarray As New ArrayList
         'set counter

@@ -65,10 +65,82 @@ Public Class Settings
         End Try
     End Function
 
+    'function to check if autostart is correctly written into registry
+    'needs to be public so it can be called from startform (home.vb)
+    Public Function Check_Autostart()
+        Try
+            'for the moment just rewrite it - for the future chekc it and if it's a bit corrupted recreate it for the user
+            'check if no reg key is there - and exit sub if so
+            If (My.Computer.Registry.GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", Nothing)) Is Nothing Then
+                'there is no such value - meaybe a wrong key? (exit - nothing to compare)
+                Return -2
+            Else
+                'there is some value
+
+                'delete it
+                Application_Autostart(False)
+                'rewrite it (currently without parameters
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", _
+                                             getexedir().ToString & System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.ToString)
+            End If
+
+
+
+
+            Return 0
+            Exit Function
+            'the code down won't fire - because of the "return" statement
+            'temporarily disable checking while developing it  - simply rewrite it if existing
+
+
+
+            'define the "RUN" key of windows in the CU hive
+            Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
+            'get our valuename is within the run key
+            Dim Autostartvalue = runkey.GetValue("Winbackupper_Autostart").ToString
+
+            Dim writtenpath = "not used yet"
+
+            ' checks if our valuename is within the run key
+            If writtenpath = vbNull Or writtenpath = "" Then
+                'there is no suck value - meaybe a wrong key? (exit - nothing to compare)
+                Return -1
+            Else
+                Dim OK As Boolean = True
+                Dim params As Boolean = False
+                Dim paramsstring As String 'used if there are some to store them
+
+                If Not (Autostartvalue.Contains(writtenpath)) Then : OK = False : End If
+
+                'there are some params
+                'now there is only 1 - so it s easy to check (for future check if temparray.contains(param) )
+                '  paramsstring = temparray(1)
+                If paramsstring = "-s" Or paramsstring = "-silent" Or paramsstring = "/s" Or paramsstring = "/silent" Then
+                    params = True
+                End If
+                If Not OK = True Then
+                    'recreate the settings
+                    'delete the value 
+                    '   runkey.DeleteValue("Winbackupper_Autostart")
+                Else
+                    'return 0 to indicate success
+                    Return 0
+                End If
+
+            End If
+            'function didn't return a excpected value - return -1 as error code 
+            Return -1
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            Return -1
+        End Try
+    End Function
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
+            'temp test
+            Check_Autostart()
             'run through Array and get needed Values
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'also fill RTB_Source! (richtextbox)
