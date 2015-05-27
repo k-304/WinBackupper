@@ -171,8 +171,8 @@ Public Class home
                             Try
                                 If (deskctr = execount) Then
                                     If simulate_mode_active = False Then
-                                        'if simulate mode is on, only log!!! DONT DELETE!
-                                        File.Delete(filepath)
+                                        'if simulate mode is on, only log!!! Dont copy!
+                                       File.Copy(filepath, targetpath & relpath & "\" & filename)
                                     End If
                                 End If
                             Catch ex As Exception
