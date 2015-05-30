@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 Imports System.Threading
+Imports System.Reflection
 
 Public Class Settings
 
@@ -65,36 +66,39 @@ Public Class Settings
         End Try
     End Function
 
-Function Check_Application_Autostart()
-     Try 
-    'read value of key and check if it's correct for the current exe file
-    'define the rune (by opening it)
-    Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True) 
-    'read the value of our key
-    dim currrunkeyvalue = My.Computer.Registry.GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart") 
-    dim supposedrunkeyvalue =getexedir() & system.assembly.GetEntryAssembly() 'getentryassembly gets exe name
-    dim parameters
-    if currrunkeyvalue.contains("/s") or currrunkeyvalue.contains("-s") or currrunkeyvalue.contains(/Silent) or currrunkeyvalue.contains()
-        parameters = "-s"
-    else 
-        parameters = ""
-    end if
+    Function Check_Application_Autostart()
+        Try
+            'read value of key and check if it's correct for the current exe file
+            'define the rune (by opening it)
+            Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
+            'read the value of our key
+            Dim currrunkeyvalue = My.Computer.Registry.GetValue _
+                                  ("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", Nothing)
+            Dim supposedrunkeyvalue = getexedir() & Assembly.GetEntryAssembly() 'getentryassembly gets exe name
+            Dim parameters
+            If currrunkeyvalue.contains("/s") Or currrunkeyvalue.contains("-s") Or currrunkeyvalue.contains("/silent") _
+                Or currrunkeyvalue.contains("-silent") Then
+                parameters = " -s"
+            Else
+                parameters = ""
+            End If
 
-If Not currrunkeyvalue.contains(supposedrunkeyvalue) Then 
-        'Value seems to be wrong - rewrite it (Consider to keep the startup argument!)
- 		'delete the value
-        runkey.DeleteValue("Winbackupper_Autostart")
-        My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", getexedir() & system.assembly.GetEntryAssembly() & parameters
-return 0           
-    Else 
-'the value is already correct - exe name/location didn't change.               
-    End If 
-             'function didn't return a excpected value - return -1 as error code  
-             Return -1 
-         Catch ex As Exception 
-             Return -1 
-    End Try 
-End Function 
+            If Not currrunkeyvalue.contains(supposedrunkeyvalue) Then
+                'Value seems to be wrong - rewrite it (Consider to keep the startup argument!)
+                'delete the value
+                runkey.DeleteValue("Winbackupper_Autostart")
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", _
+                                              "Winbackupper_Autostart", getexedir() & Assembly.GetEntryAssembly() & parameters)
+                Return 0
+            Else
+                'the value is already correct - exe name/location didn't change.               
+            End If
+            'function didn't return a excpected value - return -1 as error code  
+            Return -1
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
 
 
     'function to reload all settings displayed in the form. Only use this one!
@@ -115,6 +119,8 @@ End Function
                 'reg key exists - enable the autostart checkbox
                 cb_Autostart.Checked = True
             End If
+            'return 0 if succesfull
+            Return 0
         Catch ex As Exception
             MsgBox(ex.Message)
             Return -1
@@ -414,19 +420,19 @@ End Function
     'executed when the cb_autostart is clicked- will write/delete autostart reg key depending on arguments supplied
     Private Sub cb_Autostart_CheckedChanged(sender As Object, e As EventArgs) Handles cb_Autostart.CheckedChanged
         If formfullyloaded Then
-        If cb_Autostart.Checked = True Then
-            'ask user if he want to start silently ....
+            If cb_Autostart.Checked = True Then
+                'ask user if he want to start silently ....
                 Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine & _
                                              "This will hide all forms and do all work in the background!", _
                                              "Startup Silently in the Future?", _
                                              MessageBoxButtons.YesNoCancel, _
                                              MessageBoxIcon.Question)
 
-            'Application_Autostart sets autostart - accepts arguments "enabled" which is a boolean
-            'and accepts a second argument "Startupparameters" as a string like "- silent"
-            If startsilent = vbYes Then
-                'if user wants to start silent - add parameter
-                Application_Autostart(True, " -s")
+                'Application_Autostart sets autostart - accepts arguments "enabled" which is a boolean
+                'and accepts a second argument "Startupparameters" as a string like "- silent"
+                If startsilent = vbYes Then
+                    'if user wants to start silent - add parameter
+                    Application_Autostart(True, " -s")
                 ElseIf startsilent = vbNo Then
                     'start normally
                     Application_Autostart(True)
@@ -435,9 +441,9 @@ End Function
                     cb_Autostart.Checked = False
                     Exit Sub
                 End If
-        Else
-            'start normally (delete reg key )
-            Application_Autostart(False)
+            Else
+                'start normally (delete reg key )
+                Application_Autostart(False)
             End If
         Else
             'don't execute the code since the checkbox is changen on the LOAD event! This would execute this code too - and we don't want that!

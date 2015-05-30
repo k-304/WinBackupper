@@ -12,6 +12,7 @@ Public Class home
     Public backupPatharray As New ArrayList 'public array so other form can access it too
     Dim version As String
     Public GlobalSeperator As String = ";" 'used to seperate strings if ever needed
+    Public starttime As String 'used later to store datetime of start event (currently in the click function - if automated we 
 
 #End Region
 
@@ -104,7 +105,10 @@ Public Class home
         'think it's better to keep such msg in loop...
         Dim startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
         If startResult = Windows.Forms.DialogResult.Yes Then
-            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
+            'start backup processes
+            'first define the starttime - and therefore the subfolder name for the backup
+            starttime = GetDate() & GetTime()
+                'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'define current directories if needed/wanted (will unecessaraly need calc power)
                 Dim currsourcepath As String = sourcepatharray(i)
@@ -114,7 +118,6 @@ Public Class home
                     BackupDirectory(sourcepatharray(i), backupPatharray(i), False) 'more arguments can be added like incremental/not etc...
                 End If
             Next
-
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
         End If
@@ -123,8 +126,16 @@ Public Class home
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
     Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True)
-        'check if "path" is contained in exeptions, if so abort!
-        '(Subdirs will be deleted with the same function, so this check will include them!)
+           'check if targetpath already contains date information . if not add it
+        If Not targetpath.Contains(starttime) Then
+            'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
+            targetpath = targetpath & "\" & starttime
+        End If
+
+        'check if Source dir exists
+        If Not Directory.Exists(targetpath) Then
+            Directory.CreateDirectory(targetpath)
+        End If
 
         'get exeption lists
         Dim exelist As New ArrayList
@@ -135,7 +146,7 @@ Public Class home
             If (exelist.Contains(sourcepath)) Then
                 'LOGGING file is on exe list!
                 'If Loginfocheckbox.Checked = True Then
-                'LogRichTextBox.AppendText("INFO: Directory: " & path & " wasnot deleted because of exeption list" & vbNewLine)
+                'LogRichTextBox.AppendText("INFO: Directory: " & path & " wasnot saved because of exeption list" & vbNewLine)
                 ' End If
             Else
                 'LOGGIGN file is processed
@@ -143,79 +154,41 @@ Public Class home
                 'LogRichTextBox.AppendText("DETINFO: Directory: " & path & " is being processed..." & vbNewLine)
                 ' End If
                 If Directory.Exists(sourcepath) Then
-
-                    'Delete all files from the Directory
+                    'backup all files from the Directory      
+                    'for zipping see https://msdn.microsoft.com/en-us/library/ms404280(v=vs.100).aspx
+                    'without .net 4.5/6 a damn pain in the arse >.<
                     For Each filepath As String In Directory.GetFiles(sourcepath)
+                        ' Try
+                        If simulate_mode_active = False Then
+                            'define name of file
+                            Dim filename As String = Path.GetFileName(filepath)
 
-                        'implemented a counter to fix Bug ->
-                        'Files got deleted on root folder, but not on excluded subfolders.
-                        'they even got deleted, if excluded because of this bug!
-                        'yeah... this happens when you code late at night, i should have seen this in the beggining
-                        '
-                        'check with counter if for-each is checking last Exception 
-
-                        ''''IMPORTANT''''
-                        Dim deskctr = 0
-                        For Each exe As String In exelist
-                            deskctr = deskctr + 1
-                            If filepath.Contains(exe) Then
-                                'File is within excluded folder DONT DELETE!
-                                '  If Loginfocheckbox.Checked = True Then
-                                'LogRichTextBox.AppendText("INFO: File: " & filepath & " wasnot deleted because of exeption list" & vbNewLine)
-                                ' End If
+                            'if simulate mode is on, only log!!! Dont copy!
+                            'check if targetfile already exists
+                            If Not File.Exists(targetpath & "\" & filename) Then
+                                File.Copy(filepath, targetpath & "\" & filename)
                             Else
-                                'file is not in excluded folder, delete!
-                                ' If Logdetailedinfocheckbox.Checked = True Then
-                                'LogRichTextBox.AppendText("DETINFO: File: " & filepath & " is being processed..." & vbNewLine)
+                                'log it already exists or overwrite if timestamp changed
                             End If
-                            Try
-                                If (deskctr = execount) Then
-                                    If simulate_mode_active = False Then
-                                        'if simulate mode is on, only log!!! Dont copy!
-                                       File.Copy(filepath, targetpath & relpath & "\" & filename)
-                                    End If
-                                End If
-                            Catch ex As Exception
-                                'if single files fail - maybe make a list? How do we log?
-                            End Try
-
-                        Next 'Desk clean "for each" end
-
+                        End If
+                        '  Catch ex As Exception
+                        'if single files fail - maybe make a list? How do we log?
+                        'MsgBox(ex.Message)
+                        '  End Try
                     Next 'for each filepath end
 
-                    'get all filepaths including source
-
+                    'get Subdirectories and repeat process
                     For Each dir As String In Directory.GetDirectories(sourcepath)
                         'calculate the relative path
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
-                        MessageBox.Show("DEBUG relpath:" & relpath)
                         'call routine to delete subfiles
                         If simulate_mode_active = True Then
                             BackupDirectory(dir, targetpath & relpath, True)
                         Else
                             BackupDirectory(dir, targetpath & relpath, False)
-                            For Each filepath As String In Directory.GetFiles(dir)
-                                Dim filename As String = Path.GetFileName(filepath)
-                                'copy to "targetpath & relpath" => to keep folder structure
-                                MessageBox.Show("supposed targetpath of: " & filepath & " is :" & targetpath & relpath & "\" & filename)
-                                'for zipping see https://msdn.microsoft.com/en-us/library/ms404280(v=vs.100).aspx
-                                'without .net 4.5/6 a damn pain in the arse >.<
-
-                                'check if target dir exists
-                                If Not Directory.Exists(targetpath & relpath) Then
-                                    Directory.CreateDirectory(targetpath & relpath)
-                                End If
-                                ' Try
-                                'copy file in seperate try/catch to log errors per file?
-                                File.Copy(filepath, targetpath & relpath & "\" & filename)
-                                'Catch ex As Exception
-                                'log if error?
-                                '  End Try
-                            Next
                         End If
                     Next
                 End If
-
             End If
 
             Return (0) 'return code "0" if everything went ok - without breaking code anywhere
@@ -242,12 +215,16 @@ Public Class home
     End Sub
 
     Function GetDate() As String
-        Dim day = DateTime.Today.ToString("dd")
-        Dim month = DateTime.Today.ToString("MM")
-        Dim year = DateTime.Today.ToString("yyyy")
+        Dim day = DateTime.Now.ToString("dd")
+        Dim month = DateTime.Now.ToString("MM")
+        Dim year = DateTime.Now.ToString("yyyy")
         Return (year & month & day)
     End Function
-
+    Function GetTime() As String
+        Dim hour = DateTime.Now.ToString("HH")
+        Dim min = DateTime.Now.ToString("mm")
+        Return (hour & min)
+    End Function
     'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
     'use like "  dim array1  as arraylist = stringtoarray("nr1;nr2;nr3",";")     "
     Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
