@@ -24,58 +24,62 @@ Public Class home
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'attention! "count" gives a locigal "human" value, but info is stored in an array which begins from 0
-        If Environment.GetCommandLineArgs.Count <> 1 Then
-            If Environment.GetCommandLineArgs.Count = 2 Then
-                'check if second argument is "-silent" "/silent", "/s" or "-s"
-                'if argument is supplied -hide forms!
-                Dim var = Environment.GetCommandLineArgs(1)
-                If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
-                    'not sure how to hide correctly yet - just testing. (this is to run silent at each startup - so user is not annoyed by he form popping up all the time
-                    MsgBox("SIlent command noticed")
-                    Me.Visible = False
-                    Settings.Visible = False
+        Try
+            If Environment.GetCommandLineArgs.Count <> 1 Then
+                If Environment.GetCommandLineArgs.Count = 2 Then
+                    'check if second argument is "-silent" "/silent", "/s" or "-s"
+                    'if argument is supplied -hide forms!
+                    Dim var = Environment.GetCommandLineArgs(1)
+                    If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
+                        'not sure how to hide correctly yet - just testing. (this is to run silent at each startup - so user is not annoyed by he form popping up all the time
+                        MsgBox("SIlent command noticed")
+                        Me.Visible = False
+                        Settings.Visible = False
+                    End If
                 End If
             End If
-        End If
 
-        ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
-        l_version.Text = "Version: " + My.Application.Info.Version.ToString()
-        version = My.Application.Info.Version.ToString()
-        bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
+            ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
+            l_version.Text = "Version: " + My.Application.Info.Version.ToString()
+            version = My.Application.Info.Version.ToString()
+            bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
 
-        ' Check if there is a "default.xml" File
-        If Not Dir("default.xml") = "" Then
-            ' Read XML File to load defaults
-            Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
-            ' Loop through XML File
-            While (xmlReader2.Read())
-                Dim type = xmlReader2.NodeType
+            ' Check if there is a "default.xml" File
+            If Not Dir("default.xml") = "" Then
+                ' Read XML File to load defaults
+                Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
+                ' Loop through XML File
+                While (xmlReader2.Read())
+                    Dim type = xmlReader2.NodeType
 
-                ' Find selected Paths in XML File and write them into Var
-                If (type = XmlNodeType.Element) Then
-                    ' Looking for "Source" Path
-                    If (xmlReader2.Name = "Source") Then
-                        sourcepatharray.Add(xmlReader2.ReadInnerXml.ToString)
+                    ' Find selected Paths in XML File and write them into Var
+                    If (type = XmlNodeType.Element) Then
+                        ' Looking for "Source" Path
+                        If (xmlReader2.Name = "Source") Then
+                            sourcepatharray.Add(xmlReader2.ReadInnerXml.ToString)
+                        End If
+                        'Looking for "Backup" Path
+                        If (xmlReader2.Name = "Backup") Then
+                            backupPatharray.Add(xmlReader2.ReadInnerXml.ToString)
+                        End If
                     End If
-                    'Looking for "Backup" Path
-                    If (xmlReader2.Name = "Backup") Then
-                        backupPatharray.Add(xmlReader2.ReadInnerXml.ToString)
-                    End If
-                End If
 
-            End While
-            'close reader to prevent file IO Exceptions
-            xmlReader2.Close()
-            xmlReader2.Dispose()
-            'loop through all source/dest. path's (Display in form Richtextbox)
-            For i = 0 To sourcepatharray.Count Step 1
-                'also fill RTB_Source! (richtextbox)
-                RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
-                'also fill RTB_Backup! (richtextbox)
-                RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
-            Next
+                End While
+                'close reader to prevent file IO Exceptions
+                xmlReader2.Close()
+                xmlReader2.Dispose()
+                'loop through all source/dest. path's (Display in form Richtextbox)
+                For i = 0 To sourcepatharray.Count - 1 Step 1
+                    'also fill RTB_Source! (richtextbox)
+                    RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+                    'also fill RTB_Backup! (richtextbox)
+                    RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+                Next
 
-        End If
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
     End Sub
 
     ' TextBox for Source Path
