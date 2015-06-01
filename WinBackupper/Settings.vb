@@ -389,6 +389,9 @@ Public Class Settings
             'sane string ...add it
             'write value into Array!
             sourcepatharray.Add(SourcePathtresult)
+
+            'Refresh Richtextbox to display selected Path instantly
+            RTB_Sourcepath.AppendText(SourcePathtresult & vbNewLine)
         End If
 
         ' Dialog to select Backup Path
@@ -410,6 +413,9 @@ Public Class Settings
             'sane string ...add it
             'write value into Array!
             backupPatharray.Add(BackupPathresult)
+
+            'Refresh Richtextbox to display selected Path instantly
+            RTB_Backuppath.AppendText(BackupPathresult & vbNewLine)
         End If
     End Sub
 
