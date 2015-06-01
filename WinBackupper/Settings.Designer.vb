@@ -68,9 +68,9 @@ Partial Class Settings
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(8, 377)
+        Me.b_save.Location = New System.Drawing.Point(121, 419)
         Me.b_save.Name = "b_save"
-        Me.b_save.Size = New System.Drawing.Size(434, 35)
+        Me.b_save.Size = New System.Drawing.Size(321, 35)
         Me.b_save.TabIndex = 18
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
@@ -87,7 +87,7 @@ Partial Class Settings
         'b_addfolderpair
         '
         Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_addfolderpair.Location = New System.Drawing.Point(8, 344)
+        Me.b_addfolderpair.Location = New System.Drawing.Point(12, 378)
         Me.b_addfolderpair.Name = "b_addfolderpair"
         Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_addfolderpair.TabIndex = 19
@@ -100,7 +100,7 @@ Partial Class Settings
         Me.l_settings.BackColor = System.Drawing.Color.Transparent
         Me.l_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_settings.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_settings.Location = New System.Drawing.Point(168, 23)
+        Me.l_settings.Location = New System.Drawing.Point(184, 24)
         Me.l_settings.Name = "l_settings"
         Me.l_settings.Size = New System.Drawing.Size(90, 25)
         Me.l_settings.TabIndex = 10
@@ -116,10 +116,10 @@ Partial Class Settings
         '
         'RTB_Backuppath
         '
-        Me.RTB_Backuppath.Location = New System.Drawing.Point(225, 79)
+        Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 79)
         Me.RTB_Backuppath.Name = "RTB_Backuppath"
         Me.RTB_Backuppath.ShowSelectionMargin = True
-        Me.RTB_Backuppath.Size = New System.Drawing.Size(214, 142)
+        Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)
         Me.RTB_Backuppath.TabIndex = 22
         Me.RTB_Backuppath.Text = ""
         '
@@ -128,7 +128,7 @@ Partial Class Settings
         Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 79)
         Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
         Me.RTB_Sourcepath.ShowSelectionMargin = True
-        Me.RTB_Sourcepath.Size = New System.Drawing.Size(198, 142)
+        Me.RTB_Sourcepath.Size = New System.Drawing.Size(202, 142)
         Me.RTB_Sourcepath.TabIndex = 21
         Me.RTB_Sourcepath.Text = ""
         '
@@ -136,9 +136,9 @@ Partial Class Settings
         '
         Me.b_reset.BackColor = System.Drawing.Color.LightCoral
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(11, 19)
+        Me.b_reset.Location = New System.Drawing.Point(12, 418)
         Me.b_reset.Name = "b_reset"
-        Me.b_reset.Size = New System.Drawing.Size(100, 36)
+        Me.b_reset.Size = New System.Drawing.Size(103, 36)
         Me.b_reset.TabIndex = 23
         Me.b_reset.Text = "Reset!"
         Me.b_reset.UseVisualStyleBackColor = False
@@ -146,19 +146,19 @@ Partial Class Settings
         'b_editfolderpair
         '
         Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editfolderpair.Location = New System.Drawing.Point(225, 344)
+        Me.b_editfolderpair.Location = New System.Drawing.Point(240, 378)
         Me.b_editfolderpair.Name = "b_editfolderpair"
-        Me.b_editfolderpair.Size = New System.Drawing.Size(217, 35)
+        Me.b_editfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_editfolderpair.TabIndex = 24
         Me.b_editfolderpair.Text = "Edit Entry"
         Me.b_editfolderpair.UseVisualStyleBackColor = True
         '
         'rtb_backupstarttimes
         '
-        Me.rtb_backupstarttimes.Location = New System.Drawing.Point(11, 255)
+        Me.rtb_backupstarttimes.Location = New System.Drawing.Point(12, 255)
         Me.rtb_backupstarttimes.Name = "rtb_backupstarttimes"
         Me.rtb_backupstarttimes.ShowSelectionMargin = True
-        Me.rtb_backupstarttimes.Size = New System.Drawing.Size(427, 59)
+        Me.rtb_backupstarttimes.Size = New System.Drawing.Size(430, 59)
         Me.rtb_backupstarttimes.TabIndex = 25
         Me.rtb_backupstarttimes.Text = ""
         '
@@ -180,7 +180,7 @@ Partial Class Settings
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
         Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_Autostart.Location = New System.Drawing.Point(14, 317)
+        Me.cb_Autostart.Location = New System.Drawing.Point(12, 320)
         Me.cb_Autostart.Name = "cb_Autostart"
         Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
         Me.cb_Autostart.TabIndex = 27
@@ -193,7 +193,7 @@ Partial Class Settings
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 420)
+        Me.ClientSize = New System.Drawing.Size(454, 466)
         Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)
         Me.Controls.Add(Me.rtb_backupstarttimes)
