@@ -90,7 +90,7 @@ Partial Class home
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(135, 35)
         Me.b_settings.TabIndex = 8
-        Me.b_settings.Text = "Settings"
+        Me.b_settings.Text = "Configuration"
         Me.b_settings.UseVisualStyleBackColor = True
         '
         'fbd_searchSource

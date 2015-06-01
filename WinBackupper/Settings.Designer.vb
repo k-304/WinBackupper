@@ -39,6 +39,7 @@ Partial Class Settings
         Me.rtb_backupstarttimes = New System.Windows.Forms.RichTextBox()
         Me.l_backuptimes = New System.Windows.Forms.Label()
         Me.cb_Autostart = New System.Windows.Forms.CheckBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'l_BackupPath
@@ -68,9 +69,9 @@ Partial Class Settings
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(8, 377)
+        Me.b_save.Location = New System.Drawing.Point(11, 376)
         Me.b_save.Name = "b_save"
-        Me.b_save.Size = New System.Drawing.Size(434, 35)
+        Me.b_save.Size = New System.Drawing.Size(428, 35)
         Me.b_save.TabIndex = 18
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
@@ -87,9 +88,9 @@ Partial Class Settings
         'b_addfolderpair
         '
         Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_addfolderpair.Location = New System.Drawing.Point(8, 344)
+        Me.b_addfolderpair.Location = New System.Drawing.Point(11, 344)
         Me.b_addfolderpair.Name = "b_addfolderpair"
-        Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
+        Me.b_addfolderpair.Size = New System.Drawing.Size(213, 35)
         Me.b_addfolderpair.TabIndex = 19
         Me.b_addfolderpair.Text = "Add new Entry"
         Me.b_addfolderpair.UseVisualStyleBackColor = True
@@ -146,11 +147,11 @@ Partial Class Settings
         'b_editfolderpair
         '
         Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editfolderpair.Location = New System.Drawing.Point(225, 344)
+        Me.b_editfolderpair.Location = New System.Drawing.Point(216, 344)
         Me.b_editfolderpair.Name = "b_editfolderpair"
-        Me.b_editfolderpair.Size = New System.Drawing.Size(217, 35)
+        Me.b_editfolderpair.Size = New System.Drawing.Size(222, 35)
         Me.b_editfolderpair.TabIndex = 24
-        Me.b_editfolderpair.Text = "Edit Entry"
+        Me.b_editfolderpair.Text = "Edit Entry Paths"
         Me.b_editfolderpair.UseVisualStyleBackColor = True
         '
         'rtb_backupstarttimes
@@ -180,12 +181,22 @@ Partial Class Settings
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
         Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_Autostart.Location = New System.Drawing.Point(14, 317)
+        Me.cb_Autostart.Location = New System.Drawing.Point(11, 417)
         Me.cb_Autostart.Name = "cb_Autostart"
         Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
         Me.cb_Autostart.TabIndex = 27
         Me.cb_Autostart.Text = "Start Application on Startup (only this user!) ?"
         Me.cb_Autostart.UseVisualStyleBackColor = False
+        '
+        'Button1
+        '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(11, 311)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(427, 35)
+        Me.Button1.TabIndex = 28
+        Me.Button1.Text = "Edit Automatic Backup Configuration"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Settings
         '
@@ -193,7 +204,8 @@ Partial Class Settings
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 420)
+        Me.ClientSize = New System.Drawing.Size(454, 448)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)
         Me.Controls.Add(Me.rtb_backupstarttimes)
@@ -231,4 +243,5 @@ Partial Class Settings
     Friend WithEvents rtb_backupstarttimes As System.Windows.Forms.RichTextBox
     Friend WithEvents l_backuptimes As System.Windows.Forms.Label
     Friend WithEvents cb_Autostart As System.Windows.Forms.CheckBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class
