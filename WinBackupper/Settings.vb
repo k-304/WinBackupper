@@ -205,7 +205,6 @@ Public Class Settings
         End If
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
-
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
@@ -217,13 +216,16 @@ Public Class Settings
                 'delete it 
                 System.IO.File.Delete(getexedir() & "\default.xml")
             End If
+            'Clear Array
             sourcepatharray.Clear()
             backupPatharray.Clear()
+            'Refresh Richtextbox
+            RTB_Sourcepath.Clear()
+            RTB_Backuppath.Clear()
         Else
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
 
     End Sub
 
