@@ -86,7 +86,7 @@ Partial Class home
         'b_settings
         '
         Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_settings.Location = New System.Drawing.Point(12, 267)
+        Me.b_settings.Location = New System.Drawing.Point(12, 271)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(135, 35)
         Me.b_settings.TabIndex = 8
@@ -102,7 +102,7 @@ Partial Class home
         'b_update
         '
         Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_update.Location = New System.Drawing.Point(153, 267)
+        Me.b_update.Location = New System.Drawing.Point(153, 271)
         Me.b_update.Name = "b_update"
         Me.b_update.Size = New System.Drawing.Size(136, 35)
         Me.b_update.TabIndex = 10
@@ -114,7 +114,7 @@ Partial Class home
         Me.l_version.AutoSize = True
         Me.l_version.BackColor = System.Drawing.Color.Transparent
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_version.Location = New System.Drawing.Point(363, 278)
+        Me.l_version.Location = New System.Drawing.Point(365, 282)
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(77, 13)
         Me.l_version.TabIndex = 11
@@ -125,17 +125,17 @@ Partial Class home
         '
         'RTB_Sourcepath
         '
-        Me.RTB_Sourcepath.Location = New System.Drawing.Point(15, 82)
+        Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 82)
         Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
-        Me.RTB_Sourcepath.Size = New System.Drawing.Size(198, 142)
+        Me.RTB_Sourcepath.Size = New System.Drawing.Size(202, 142)
         Me.RTB_Sourcepath.TabIndex = 12
         Me.RTB_Sourcepath.Text = ""
         '
         'RTB_Backuppath
         '
-        Me.RTB_Backuppath.Location = New System.Drawing.Point(228, 82)
+        Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 82)
         Me.RTB_Backuppath.Name = "RTB_Backuppath"
-        Me.RTB_Backuppath.Size = New System.Drawing.Size(214, 142)
+        Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)
         Me.RTB_Backuppath.TabIndex = 13
         Me.RTB_Backuppath.Text = ""
         '
@@ -145,7 +145,7 @@ Partial Class home
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 321)
+        Me.ClientSize = New System.Drawing.Size(454, 318)
         Me.Controls.Add(Me.RTB_Backuppath)
         Me.Controls.Add(Me.RTB_Sourcepath)
         Me.Controls.Add(Me.l_version)
