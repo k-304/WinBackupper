@@ -345,25 +345,25 @@ Public Class Settings
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim Backuppathrtb = DirectCast(RTB_Backuppath, RichTextBox)
+            Dim Sourcepathrtb = DirectCast(RTB_Sourcepath, RichTextBox)
             'repeat above steps for other rtbox...
-            Dim sourceline = Backuppathrtb.GetLineFromCharIndex(index)
+            Dim sourceline = Sourcepathrtb.GetLineFromCharIndex(index)
             'define the first char of line
-            Dim sourcelineStart = Backuppathrtb.GetFirstCharIndexFromLine(sourceline)
+            Dim sourcelineStart = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
             'define the last one
-            Dim sourcelineEnd = Backuppathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            Dim sourcelineEnd = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
             'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
             'now try to make it bold - maybe it0s enough
-            Backuppathrtb.SelectionStart = sourcelineStart
+            Sourcepathrtb.SelectionStart = sourcelineStart
             'define the length of it
-            Backuppathrtb.SelectionLength = sourcelineEnd - sourcelineStart
+            Sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
             'define color to set
-            If (Backuppathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Bold)
+            If (Sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Bold)
             Else
-                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Regular)
+                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Regular)
             End If
-            Backuppathrtb.SelectionFont = tempselectionfont
+            Sourcepathrtb.SelectionFont = tempselectionfont
             'after setting bold font in both boxes, select "nothing" so no text is blue.
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
