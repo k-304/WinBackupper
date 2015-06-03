@@ -11,6 +11,8 @@
     Public RTB_Lines_Sat() As String
     Public RTB_Lines_Sun() As String
     Dim lastcomboboxindex As Integer
+    Dim finalstring As String = ""
+
 
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Day.SelectedIndexChanged
 
@@ -65,7 +67,7 @@
 
     End Sub
 
-    Public Function settings_of_dayn(day As Integer, settingsstringserialized As String)
+    Public Function settings_of_dayn(day As Integer, settingsstringserialized As String) As String
         'get a settings string - and deserialize it and return settings for a specific day.
         'built like => MON::%time%;%time%TUE::%time%;%Time%WED::  etc
         Dim lastchar As Char
@@ -95,15 +97,16 @@
 
                 'check if there is any data left to extract? (maybe only 1 day is filled)
                 If Not contentextracted + 35 = settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
+                    '35 is the nr of chars needed for all Day seperators (MON:: = 5 chars * 7 days = 35 chars)
                     If Not Daysalreadyscanned = 0 Then 'fires when i is not 0 => the first loop (i=0) will contain "MON::"
                         Dim currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
                         Dim currendpoint = endpoints(Daysalreadyscanned - 1)
                         daystring(Daysalreadyscanned - 1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
                         contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
-                        ' MsgBox(settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1))
-                        MsgBox(daystring(Daysalreadyscanned - 1))
-                        ' MsgBox("days scanned : " & Daysalreadyscanned)
-                        MsgBox("Real Day : " & Daysalreadyscanned - 1) '-1because the seperator comes first (MON::%DATA%)
+                        ''msgboxes only for debugging...
+                        '  MsgBox(daystring(Daysalreadyscanned - 1)) => returns the string from the array (daystring array)
+                        ' MsgBox("Real Day : " & Daysalreadyscanned - 1) '-1because the seperator comes first (MON::%DATA%) => returns ht eactual day (0 = monday)
+
                     End If
 
                 End If
@@ -122,8 +125,10 @@
             'set the last char variable for next loop
             lastchar = currchar
         Next
-
-        Select Case daystring(Daysalreadyscanned - 1)
+        If daystring(day) Is Nothing Then
+            Return "Nothing Configured"
+        End If
+        Select Case day
             Case 0 'monday
                 Return daystring(0)
             Case 1 'tuesday
@@ -139,7 +144,7 @@
             Case 6
                 Return daystring(6)
         End Select
-
+        Return -1
     End Function
 
     Private Sub b_add_Click(sender As Object, e As EventArgs) Handles b_add.Click
@@ -150,8 +155,8 @@
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
     
-        Dim finalstring As String = ""
-
+        'reset finalstring if executed before (var is public)
+        finalstring = ""
         ' save the current field too - if edited it will be saved in the Variable, since it only saves when the combox (day) is changed . 
         'this might not happen the last time, so save it here (too) 
 
@@ -183,7 +188,6 @@
                 ' wrtie current line =>
                 finalstring = finalstring & RTB_Lines_Mon(ii).ToString & seperator
             Next
-
         End If
 
         'set Tuesday
@@ -252,17 +256,27 @@
             Next
         End If
 
-
-        ''''  Next
-
-        'debug => print the string to check the values => 
-        'MsgBox(finalstring)
-        settings_of_dayn(0, finalstring)
+        'write value into timesettingsarray of homeform 
+        home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        'close form when finished
+        Me.Close()
     End Sub
 
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
       'call function settings_of_dayn() with argument for current day to get the part of data 
         ''''''''''''''''''''''''' settings_of_dayn(selectedday, "Timesettings part read out from XML")
+    End Sub
+
+    'sub executed when form is closed
+    Private Sub Timetable_FormClosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
+        'asume the user aborted => Fill timesettgins var with normal value 
+        'write the timesetting values into "home.vb" to store the data (currently all ar's are there - should be in settings though)
+        Dim tsa = home.timesettingsarray 'define TimeSettingsArray (tsa)
+        If tsa.Count = 0 Then 'if 0 cant use %var%.count -1 (it would result in -1)
+            home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        Else
+            home.timesettingsarray(tsa.Count - 1) = finalstring 'settings timesettingsarray over direct call cause I think it otherwise won't change the home.timesettingsarray variable (dim creates a new var I guess -so it would change the local one?)
+        End If
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click

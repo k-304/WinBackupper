@@ -8,8 +8,10 @@ Public Class home
     '*-----------------*'
     '*----Global Variables----*'
     '*-----------------*'
-    Public sourcepatharray As New ArrayList 'public array so other form can access it too
-    Public backupPatharray As New ArrayList 'public array so other form can access it too
+    Public Shared sourcepatharray As New ArrayList 'public array so other form can access it too
+    Public Shared backupPatharray As New ArrayList 'public array so other form can access it too
+    Public Shared timesettingsarray As New ArrayList 'public array filled by timetable.vb on formclosed event...
+    ' use this (timesettingsarray) to save the data or use it. (also populate in in the home form in the load event)
     Dim version As String
     Public GlobalSeperator As String = ";" 'used to seperate strings if ever needed
     Public starttime As String 'used later to store datetime of start event (currently in the click function - if automated we 
@@ -62,6 +64,9 @@ Public Class home
                         If (xmlReader2.Name = "Backup") Then
                             backupPatharray.Add(xmlReader2.ReadInnerXml.ToString)
                         End If
+                        If (xmlReader2.Name = "StartTimes") Then
+                            home.timesettingsarray.Add(xmlReader2.ReadInnerXml.ToString)
+                        End If
                     End If
 
                 End While
@@ -82,6 +87,127 @@ Public Class home
         End Try
     End Sub
 
+    'copy of settings function - no way found to ference it =(
+    Public Function RTB_SP_Clicked(sender As Object, e As MouseEventArgs)
+        Try
+            If home.sourcepatharray.Count = 0 Then
+                Return -1
+            End If
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
+            Dim Backuppathrtb = DirectCast(RTB_Backuppath, RichTextBox)
+            'repeat above steps for other rtbox...
+            Dim sourceline = Backuppathrtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim sourcelineStart = Backuppathrtb.GetFirstCharIndexFromLine(sourceline)
+            'define the last one
+            Dim sourcelineEnd = Backuppathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
+            'now try to make it bold - maybe it0s enough
+            Backuppathrtb.SelectionStart = sourcelineStart
+            'define the length of it
+            Backuppathrtb.SelectionLength = sourcelineEnd - sourcelineStart
+            'define color to set
+            If (Backuppathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Regular)
+            End If
+            Backuppathrtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+            Return 0
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Function
+    'copy of settings function - no way ti just reference it yet =(
+    Public Function RTB_BP_Clicked(sender As Object, e As MouseEventArgs)
+        Try
+            If home.backupPatharray.Count = 0 Then
+                Return -1
+            End If
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
+            Dim sourcepathrtb = DirectCast(RTB_Sourcepath, RichTextBox)
+            'repeat above steps for other rtbox...
+            Dim sourceline = sourcepathrtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim sourcelineStart = sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
+            'define the last one
+            Dim sourcelineEnd = sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
+            'now try to make it bold - maybe it0s enough
+            sourcepathrtb.SelectionStart = sourcelineStart
+            'define the length of it
+            sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
+            'define color to set
+            If (sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Bold)
+            Else
+                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Regular)
+            End If
+            sourcepathrtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+            Return 0
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Function
+
+    '
+    Public Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+        RTB_BP_Clicked(sender, e)
+    End Sub
+
+    Public Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+        RTB_SP_Clicked(sender, e)
+    End Sub
     ' TextBox for Source Path
     Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs)
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
@@ -112,7 +238,7 @@ Public Class home
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
             starttime = GetDate() & GetTime()
-                'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
+            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'define current directories if needed/wanted (will unecessaraly need calc power)
                 Dim currsourcepath As String = sourcepatharray(i)
@@ -130,7 +256,7 @@ Public Class home
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
     Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True)
-           'check if targetpath already contains date information . if not add it
+        'check if targetpath already contains date information . if not add it
         If Not targetpath.Contains(starttime) Then
             'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
             targetpath = targetpath & "\" & starttime
@@ -268,7 +394,7 @@ Public Class home
         Return path.Substring(6, path.Length - 6)
     End Function
 
-   
+
 
 #End Region
 
