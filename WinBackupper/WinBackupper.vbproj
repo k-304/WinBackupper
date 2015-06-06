@@ -135,6 +135,12 @@
     <Compile Include="Settings.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Timetable.Designer.vb">
+      <DependentUpon>Timetable.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Timetable.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="home.resx">
@@ -148,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Timetable.resx">
+      <DependentUpon>Timetable.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

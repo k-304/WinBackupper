@@ -66,6 +66,12 @@ Public Class Settings
         End Try
     End Function
 
+
+    Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
+        'as a test - show the timetable form - should be called by code and not by a button?
+        Timetable.Show()
+    End Sub
+
     Function Check_Application_Autostart()
         Try
             'read value of key and check if it's correct for the current exe file
@@ -205,6 +211,8 @@ Public Class Settings
         End If
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
+        'close
+        Me.Close()
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
@@ -232,6 +240,9 @@ Public Class Settings
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
     Private Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Sourcepath.MouseDown
         Try
+            If home.sourcepatharray.Count = 0 Then
+                Exit Sub
+            End If
             'get mouseposition
             Dim rtb = DirectCast(sender, RichTextBox)
             'then get the char where the mouse is
@@ -275,14 +286,41 @@ Public Class Settings
             'after setting bold font in both boxes, select "nothing" so no text is blue.
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
+            'define current day
+            Dim now = DateTime.Now
+            Dim day As Integer = now.DayOfWeek
+            If day = 0 Then
+                'this is sunday for Microsoft - why the hell ever
+                'so convert the numbers, don t wanna rewrite everything
+                day = 6 'this set s sunday in my logic
+            Else
+                'if not it s f.E monday which is 1 => calc -1 so it's 0---
+                day -= 1
+            End If
+            'get time settings for currently selected folderpair only (Serialized string)
+            Dim TSSerialized As String
+            TSSerialized = Timetable.settings_of_dayn(day, home.timesettingsarray(line))
+            'since serialized string is seperated by ";" as a seperator,
+            ' use stringtoarray funtion to get array and loop through all it s member to add them
+            Dim TSArray As New ArrayList
+            TSArray = home.StringtoArray(TSSerialized, ";")
+            'reset current text
+            RTB_timesettings.Clear()
+            For Each TimeSetting In TSArray
+                RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+            Next
         Catch ex As Exception
 
         End Try
 
     End Sub
 
+
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
-    Private Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+    Public Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+        If home.backupPatharray.Count = 0 Then
+            Exit Sub
+        End If
         Try
             'get mouseposition
             Dim rtb = DirectCast(sender, RichTextBox)
@@ -307,37 +345,62 @@ Public Class Settings
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim sourcepathrtb = DirectCast(Me.RTB_Sourcepath, RichTextBox)
+            Dim Sourcepathrtb = DirectCast(RTB_Sourcepath, RichTextBox)
             'repeat above steps for other rtbox...
-            Dim sourceline = sourcepathrtb.GetLineFromCharIndex(index)
+            Dim sourceline = Sourcepathrtb.GetLineFromCharIndex(index)
             'define the first char of line
-            Dim sourcelineStart = sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
+            Dim sourcelineStart = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
             'define the last one
-            Dim sourcelineEnd = sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            Dim sourcelineEnd = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
             'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
             'now try to make it bold - maybe it0s enough
-            sourcepathrtb.SelectionStart = sourcelineStart
+            Sourcepathrtb.SelectionStart = sourcelineStart
             'define the length of it
-            sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
+            Sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
             'define color to set
-            If (sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Bold)
+            If (Sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
+                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Bold)
             Else
-                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Regular)
+                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Regular)
             End If
-            sourcepathrtb.SelectionFont = tempselectionfont
+            Sourcepathrtb.SelectionFont = tempselectionfont
             'after setting bold font in both boxes, select "nothing" so no text is blue.
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
+            'define current day
+            Dim now = DateTime.Now
+            Dim day As Integer = now.DayOfWeek
+            If day = 0 Then
+                'this is sunday for Microsoft - why the hell ever
+                'so convert the numbers, don t wanna rewrite everything
+                day = 6 'this set s sunday in my logic
+            Else
+                'if not it s f.E monday which is 1 => calc -1 so it's 0---
+                day -= 1
+            End If
+            'get time settings for currently selected folderpair only (Serialized string)
+            Dim TSSerialized As String
+            TSSerialized = Timetable.settings_of_dayn(day, home.timesettingsarray(sourceline))
+            'since serialized string is seperated by ";" as a seperator,
+            ' use stringtoarray funtion to get array and loop through all it s member to add them
+            Dim TSArray As New ArrayList
+            TSArray = home.StringtoArray(TSSerialized, ";")
+            'reset current text
+            RTB_timesettings.Clear()
+            For Each TimeSetting In TSArray
+                RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+            Next
         Catch ex As Exception
-
+            MsgBox(ex.Message)
         End Try
     End Sub
 
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
-    Private Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles rtb_backupstarttimes.MouseDown
+    Public Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_timesettings.MouseDown
         Try
-            'this time - only select entry of timebox - to delete entries in future or edit them one for one.
+            If home.timesettingsarray.Count = 0 Then
+                Exit Sub
+            End If
             'get mouseposition
             Dim rtb = DirectCast(sender, RichTextBox)
             'then get the char where the mouse is
@@ -364,8 +427,9 @@ Public Class Settings
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
         Catch ex As Exception
-
+            MsgBox(ex.Message)
         End Try
+       
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
@@ -474,8 +538,9 @@ Public Class Settings
     '*-----------------*'
 
     ' BackgroundWorker Writes settings into XML File
+    'This bw_writer is called by the save button directly (no "real" code in the save button sub!)
     Private Sub bw_writer_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_writer.DoWork
-        ' Create XML Writer
+         ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
         writerOption.Indent = True
         Dim writerSettings As XmlWriter = XmlWriter.Create("default.xml", writerOption)
@@ -505,7 +570,7 @@ Public Class Settings
                 'start writing each sourcepath of the array
                 .WriteStartElement("Source")
                 .WriteString(sourcepath)
-                'write ending "<Source>" tag
+                'write ending "</Source>" tag
                 .WriteEndElement()
 
             Next
@@ -514,9 +579,20 @@ Public Class Settings
                 'start writing each sourcepath of the array
                 .WriteStartElement("Backup")
                 .WriteString(backuppath)
-                'write ending "<Backup>" tag
+                'write ending "</Backup>" tag
                 .WriteEndElement()
             Next
+
+            ' MsgBox(home.timesettingsarray(0).ToString)
+            MsgBox(home.timesettingsarray.ToString)
+            For Each timesetting As String In home.timesettingsarray
+                'start writing each sourcepath of the array
+                .WriteStartElement("StartTimes")
+                .WriteString(timesetting)
+                'write ending "</StartTimes>" tag
+                .WriteEndElement()
+            Next
+
             'write ending "<default>" tag
             .WriteEndElement()
             .WriteEndDocument()
@@ -536,8 +612,10 @@ Public Class Settings
             'define var's used to compare saveddata to supposed data
             Dim sourcetargetdata As ArrayList = sourcepatharray
             Dim backuptargetdata As ArrayList = backupPatharray
+            Dim timetargetdata As ArrayList = home.timesettingsarray
             Dim Savedsourcedata As New ArrayList
             Dim Savedbackupdata As New ArrayList
+            Dim Savedtimedata As New ArrayList
             ' Loop through XML File
             While (xmlReader.Read())
                 Dim type = xmlReader.NodeType
@@ -553,6 +631,10 @@ Public Class Settings
                     If (xmlReader.Name = "Backup") Then
                         'add current string (read from xml) to the array
                         Savedbackupdata.Add(xmlReader.ReadInnerXml.ToString)
+                    End If
+                    If (xmlReader.Name = "StartTimes") Then
+                        'add current string (read from xml) to the array
+                        Savedtimedata.Add(xmlReader.ReadInnerXml.ToString)
                     End If
                 End If
 

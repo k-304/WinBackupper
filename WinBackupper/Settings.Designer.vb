@@ -1,27 +1,27 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Settings
-    Inherits System.Windows.Forms.Form
+Inherits System.Windows.Forms.Form
 
-    'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
-    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-        Try
-            If disposing AndAlso components IsNot Nothing Then
-                components.Dispose()
-            End If
-        Finally
-            MyBase.Dispose(disposing)
-        End Try
-    End Sub
+'Form overrides dispose to clean up the component list.
+<System.Diagnostics.DebuggerNonUserCode()> _
+Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+    Try
+        If disposing AndAlso components IsNot Nothing Then
+            components.Dispose()
+        End If
+    Finally
+        MyBase.Dispose(disposing)
+    End Try
+End Sub
 
-    'Required by the Windows Form Designer
-    Private components As System.ComponentModel.IContainer
+'Required by the Windows Form Designer
+Private components As System.ComponentModel.IContainer
 
-    'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
-    'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
-    Private Sub InitializeComponent()
+'NOTE: The following procedure is required by the Windows Form Designer
+'It can be modified using the Windows Form Designer.  
+'Do not modify it using the code editor.
+<System.Diagnostics.DebuggerStepThrough()> _
+Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Settings))
         Me.l_BackupPath = New System.Windows.Forms.Label()
         Me.l_SourcePath = New System.Windows.Forms.Label()
@@ -36,9 +36,10 @@ Partial Class Settings
         Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
         Me.b_reset = New System.Windows.Forms.Button()
         Me.b_editfolderpair = New System.Windows.Forms.Button()
-        Me.rtb_backupstarttimes = New System.Windows.Forms.RichTextBox()
+        Me.RTB_timesettings = New System.Windows.Forms.RichTextBox()
         Me.l_backuptimes = New System.Windows.Forms.Label()
         Me.cb_Autostart = New System.Windows.Forms.CheckBox()
+        Me.b_showtimetable = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'l_BackupPath
@@ -153,14 +154,14 @@ Partial Class Settings
         Me.b_editfolderpair.Text = "Edit Entry"
         Me.b_editfolderpair.UseVisualStyleBackColor = True
         '
-        'rtb_backupstarttimes
+        'RTB_timesettings
         '
-        Me.rtb_backupstarttimes.Location = New System.Drawing.Point(12, 255)
-        Me.rtb_backupstarttimes.Name = "rtb_backupstarttimes"
-        Me.rtb_backupstarttimes.ShowSelectionMargin = True
-        Me.rtb_backupstarttimes.Size = New System.Drawing.Size(430, 59)
-        Me.rtb_backupstarttimes.TabIndex = 25
-        Me.rtb_backupstarttimes.Text = ""
+        Me.RTB_timesettings.Location = New System.Drawing.Point(12, 255)
+        Me.RTB_timesettings.Name = "RTB_timesettings"
+        Me.RTB_timesettings.ShowSelectionMargin = True
+        Me.RTB_timesettings.Size = New System.Drawing.Size(430, 59)
+        Me.RTB_timesettings.TabIndex = 25
+        Me.RTB_timesettings.Text = ""
         '
         'l_backuptimes
         '
@@ -180,12 +181,22 @@ Partial Class Settings
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
         Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_Autostart.Location = New System.Drawing.Point(12, 320)
+        Me.cb_Autostart.Location = New System.Drawing.Point(12, 351)
         Me.cb_Autostart.Name = "cb_Autostart"
         Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
         Me.cb_Autostart.TabIndex = 27
         Me.cb_Autostart.Text = "Start Application on Startup (only this user!) ?"
         Me.cb_Autostart.UseVisualStyleBackColor = False
+        '
+        'b_showtimetable
+        '
+        Me.b_showtimetable.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_showtimetable.Location = New System.Drawing.Point(121, 320)
+        Me.b_showtimetable.Name = "b_showtimetable"
+        Me.b_showtimetable.Size = New System.Drawing.Size(202, 35)
+        Me.b_showtimetable.TabIndex = 28
+        Me.b_showtimetable.Text = "Edit Time Confgiuration"
+        Me.b_showtimetable.UseVisualStyleBackColor = True
         '
         'Settings
         '
@@ -194,9 +205,10 @@ Partial Class Settings
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(454, 466)
+        Me.Controls.Add(Me.b_showtimetable)
         Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)
-        Me.Controls.Add(Me.rtb_backupstarttimes)
+        Me.Controls.Add(Me.RTB_timesettings)
         Me.Controls.Add(Me.b_editfolderpair)
         Me.Controls.Add(Me.b_reset)
         Me.Controls.Add(Me.RTB_Backuppath)
@@ -228,7 +240,8 @@ Partial Class Settings
     Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
     Friend WithEvents b_editfolderpair As System.Windows.Forms.Button
-    Friend WithEvents rtb_backupstarttimes As System.Windows.Forms.RichTextBox
-    Friend WithEvents l_backuptimes As System.Windows.Forms.Label
+    Friend WithEvents RTB_timesettings As System.Windows.Forms.RichTextBox
+Friend WithEvents l_backuptimes As System.Windows.Forms.Label
     Friend WithEvents cb_Autostart As System.Windows.Forms.CheckBox
+    Friend WithEvents b_showtimetable As System.Windows.Forms.Button
 End Class
