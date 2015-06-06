@@ -48,7 +48,7 @@ Private Sub InitializeComponent()
         Me.l_BackupPath.BackColor = System.Drawing.Color.Transparent
         Me.l_BackupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_BackupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_BackupPath.Location = New System.Drawing.Point(277, 59)
+        Me.l_BackupPath.Location = New System.Drawing.Point(237, 59)
         Me.l_BackupPath.Name = "l_BackupPath"
         Me.l_BackupPath.Size = New System.Drawing.Size(92, 17)
         Me.l_BackupPath.TabIndex = 12
@@ -60,7 +60,7 @@ Private Sub InitializeComponent()
         Me.l_SourcePath.BackColor = System.Drawing.Color.Transparent
         Me.l_SourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_SourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_SourcePath.Location = New System.Drawing.Point(63, 59)
+        Me.l_SourcePath.Location = New System.Drawing.Point(9, 59)
         Me.l_SourcePath.Name = "l_SourcePath"
         Me.l_SourcePath.Size = New System.Drawing.Size(90, 17)
         Me.l_SourcePath.TabIndex = 11
@@ -69,7 +69,7 @@ Private Sub InitializeComponent()
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(121, 419)
+        Me.b_save.Location = New System.Drawing.Point(121, 442)
         Me.b_save.Name = "b_save"
         Me.b_save.Size = New System.Drawing.Size(321, 35)
         Me.b_save.TabIndex = 18
@@ -88,11 +88,11 @@ Private Sub InitializeComponent()
         'b_addfolderpair
         '
         Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_addfolderpair.Location = New System.Drawing.Point(12, 378)
+        Me.b_addfolderpair.Location = New System.Drawing.Point(12, 401)
         Me.b_addfolderpair.Name = "b_addfolderpair"
         Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_addfolderpair.TabIndex = 19
-        Me.b_addfolderpair.Text = "Add new Entry"
+        Me.b_addfolderpair.Text = "Add new Directory"
         Me.b_addfolderpair.UseVisualStyleBackColor = True
         '
         'l_settings
@@ -101,7 +101,7 @@ Private Sub InitializeComponent()
         Me.l_settings.BackColor = System.Drawing.Color.Transparent
         Me.l_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_settings.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_settings.Location = New System.Drawing.Point(184, 24)
+        Me.l_settings.Location = New System.Drawing.Point(184, 20)
         Me.l_settings.Name = "l_settings"
         Me.l_settings.Size = New System.Drawing.Size(90, 25)
         Me.l_settings.TabIndex = 10
@@ -137,7 +137,7 @@ Private Sub InitializeComponent()
         '
         Me.b_reset.BackColor = System.Drawing.Color.LightCoral
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(12, 418)
+        Me.b_reset.Location = New System.Drawing.Point(12, 441)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(103, 36)
         Me.b_reset.TabIndex = 23
@@ -147,16 +147,16 @@ Private Sub InitializeComponent()
         'b_editfolderpair
         '
         Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editfolderpair.Location = New System.Drawing.Point(240, 378)
+        Me.b_editfolderpair.Location = New System.Drawing.Point(240, 401)
         Me.b_editfolderpair.Name = "b_editfolderpair"
         Me.b_editfolderpair.Size = New System.Drawing.Size(202, 35)
         Me.b_editfolderpair.TabIndex = 24
-        Me.b_editfolderpair.Text = "Edit Entry"
+        Me.b_editfolderpair.Text = "Edit Directory"
         Me.b_editfolderpair.UseVisualStyleBackColor = True
         '
         'RTB_timesettings
         '
-        Me.RTB_timesettings.Location = New System.Drawing.Point(12, 255)
+        Me.RTB_timesettings.Location = New System.Drawing.Point(12, 253)
         Me.RTB_timesettings.Name = "RTB_timesettings"
         Me.RTB_timesettings.ShowSelectionMargin = True
         Me.RTB_timesettings.Size = New System.Drawing.Size(430, 59)
@@ -169,7 +169,7 @@ Private Sub InitializeComponent()
         Me.l_backuptimes.BackColor = System.Drawing.Color.Transparent
         Me.l_backuptimes.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_backuptimes.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_backuptimes.Location = New System.Drawing.Point(107, 235)
+        Me.l_backuptimes.Location = New System.Drawing.Point(103, 233)
         Me.l_backuptimes.Name = "l_backuptimes"
         Me.l_backuptimes.Size = New System.Drawing.Size(238, 17)
         Me.l_backuptimes.TabIndex = 26
@@ -181,7 +181,7 @@ Private Sub InitializeComponent()
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
         Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_Autostart.Location = New System.Drawing.Point(12, 351)
+        Me.cb_Autostart.Location = New System.Drawing.Point(12, 359)
         Me.cb_Autostart.Name = "cb_Autostart"
         Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
         Me.cb_Autostart.TabIndex = 27
@@ -191,7 +191,7 @@ Private Sub InitializeComponent()
         'b_showtimetable
         '
         Me.b_showtimetable.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_showtimetable.Location = New System.Drawing.Point(121, 320)
+        Me.b_showtimetable.Location = New System.Drawing.Point(121, 318)
         Me.b_showtimetable.Name = "b_showtimetable"
         Me.b_showtimetable.Size = New System.Drawing.Size(202, 35)
         Me.b_showtimetable.TabIndex = 28
@@ -204,7 +204,7 @@ Private Sub InitializeComponent()
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 466)
+        Me.ClientSize = New System.Drawing.Size(454, 489)
         Me.Controls.Add(Me.b_showtimetable)
         Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)

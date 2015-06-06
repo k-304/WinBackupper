@@ -47,7 +47,7 @@ Partial Class Timetable
         'b_add
         '
         Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_add.Location = New System.Drawing.Point(11, 320)
+        Me.b_add.Location = New System.Drawing.Point(11, 335)
         Me.b_add.Name = "b_add"
         Me.b_add.Size = New System.Drawing.Size(247, 36)
         Me.b_add.TabIndex = 20
@@ -65,7 +65,7 @@ Partial Class Timetable
         'b_stopediting
         '
         Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_stopediting.Location = New System.Drawing.Point(11, 350)
+        Me.b_stopediting.Location = New System.Drawing.Point(11, 377)
         Me.b_stopediting.Name = "b_stopediting"
         Me.b_stopediting.Size = New System.Drawing.Size(247, 36)
         Me.b_stopediting.TabIndex = 22
@@ -75,7 +75,7 @@ Partial Class Timetable
         'b_remove
         '
         Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_remove.Location = New System.Drawing.Point(11, 288)
+        Me.b_remove.Location = New System.Drawing.Point(12, 293)
         Me.b_remove.Name = "b_remove"
         Me.b_remove.Size = New System.Drawing.Size(112, 36)
         Me.b_remove.TabIndex = 23
@@ -139,7 +139,7 @@ Partial Class Timetable
         'b_reset
         '
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(133, 288)
+        Me.b_reset.Location = New System.Drawing.Point(133, 293)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(125, 36)
         Me.b_reset.TabIndex = 30
@@ -151,7 +151,7 @@ Partial Class Timetable
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(268, 394)
+        Me.ClientSize = New System.Drawing.Size(268, 426)
         Me.Controls.Add(Me.b_reset)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label2)
