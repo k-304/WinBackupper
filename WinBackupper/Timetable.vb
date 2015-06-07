@@ -190,7 +190,13 @@
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
-    
+        Dim indextoeditoradd = home.timesettingsarray.Count
+
+        'check if there is a entry to edit or not - set index accordingly
+        If Not Settings.linecurrentlyedited = Nothing Then
+            'we are editing a line set an index accordingly
+            indextoeditoradd = Settings.linecurrentlyedited
+        End If
         'reset finalstring if executed before (var is public)
         finalstring = ""
         ' save the current field too - if edited it will be saved in the Variable, since it only saves when the combox (day) is changed . 
@@ -293,7 +299,15 @@
         End If
 
         'write value into timesettingsarray of homeform 
-        home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        'check if we are adding an entry or aediting an xisting one
+        If indextoeditoradd = home.timesettingsarray.Count Then
+            'adding a new entry
+            home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        Else
+            home.timesettingsarray(indextoeditoradd) = finalstring
+            'editing an existing one
+        End If
+
         'close form when finished
         Me.Close()
     End Sub

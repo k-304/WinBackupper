@@ -19,7 +19,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public selectedpathlinesarray As New ArrayList
-    Public linecurrentlyedited As Integer
+    Public Shared linecurrentlyedited As Integer = 1000
 
 #End Region
 
@@ -79,7 +79,7 @@ Public Class Settings
                 'set variable of timetable form so it knows which folderpair to edit
                 'on load it will check this variable and load the appropriate settings - if the variable is emptyit will not load any
                 linecurrentlyedited = line
-                Timetable.Show() 'pass current line as argument
+                Timetable.ShowDialog() 'pass current line as argument
             Next
 
             'reset the currentlyeditedline variable (has to be nothing - will be checked like that in other form)
@@ -621,8 +621,6 @@ Public Class Settings
                 .WriteEndElement()
             Next
 
-            ' MsgBox(home.timesettingsarray(0).ToString)
-            MsgBox(home.timesettingsarray.ToString)
             For Each timesetting As String In home.timesettingsarray
                 'start writing each sourcepath of the array
                 .WriteStartElement("StartTimes")
@@ -693,7 +691,7 @@ Public Class Settings
                 If mismatches > 0 Then 'if there are no mismatches the array's are equal!
                     MessageBox.Show("Unable to save Configuration!", "Error while saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
-                    MessageBox.Show("Configuration Saved succesfully!", "Configuration Saved!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show("Configuration Saved succesfully!", "Configuration Saved!", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
             End If
 
