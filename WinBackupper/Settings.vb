@@ -18,6 +18,8 @@ Public Class Settings
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
+    Public selectedpathlinesarray As New ArrayList
+
 
 #End Region
 
@@ -260,9 +262,15 @@ Public Class Settings
             'define color to set
             Dim tempselectionfont
             If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                'set the font type to bold to mark that it s selcted
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+                'add to selcted line var
+                selectedpathlinesarray.Add(line)
             Else
+                'set font normal again
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+                'remove the entry of selected lines again
+                selectedpathlinesarray.Remove(line)
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
@@ -339,9 +347,15 @@ Public Class Settings
             'define color to set
             Dim tempselectionfont
             If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                'set line bold
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+                'add line to array of selected paths (there is only 1 because both change at the same time (even if only 1 is clicked) )
+                selectedpathlinesarray.Add(line)
             Else
+                'set line normal
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+                'remove line from selected lines array
+                selectedpathlinesarray.Remove(line)
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
