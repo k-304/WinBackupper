@@ -24,7 +24,7 @@ Imports System.Xml
 
 Public Class Update_Mainfrm
     'global var's
-    Public Domain As String = "cloud12.no-ip.org" 'your domainname - nslookup needs to be able to get the IP from it!
+    Public Domain As String = "xcvi.ch" 'your domainname - nslookup needs to be able to get the IP from it!
     Public Domainprojectdir As String = "/dload/winbackupper/" 'The Directory of the Webserver all Files are in, 
     'Example Root/Application/UpdateInfo would look like =>  Public Domainprojectdir As String = "/Application/Portable_Helper/"
     'Dont forget ending "/" !!!
@@ -32,7 +32,7 @@ Public Class Update_Mainfrm
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
     Public Deployfiletype As String = ".zip" 'Fileending
     Public DomainIP As String = "" 'DONT MANIPULATE!  If you want to bypass see next Variable.
-    Public DomainIPbypass As String = "94.247.218.142" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
+    Public DomainIPbypass As String = "80.242.195.230" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
     Shared fullpathofoldvers As String 'needed later to store IP of full path of old version
     Public lastdownloadstatupdate As DateTime 'date of last check
     Public Logfile As String = "Changelog.log"
