@@ -21,7 +21,6 @@
         'use this to reread all settings when user changes to another Day
         selectedday = ComboBox_Day.SelectedIndex
 
-
         'define Lines for lastly selected day (before changing index)
         'when it changes again, reload the data for the selected day
         Select Case lastcomboboxindex
@@ -300,9 +299,30 @@
     End Sub
 
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      'call function settings_of_dayn() with argument for current day to get the part of data 
-        ''''''''''''''''''''''''' settings_of_dayn(selectedday, "Timesettings part read out from XML")
+        Settings_Reload()
     End Sub
+
+
+    'function to reload all settings displayed in the form. Only use this one!
+    Public Function Settings_Reload()
+        Try
+            If Not Settings.linecurrentlyedited = Nothing Then
+                'get values of home class
+                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+                'call settings for dayn with 0 argument to get values for monday and load them appropriately.
+                Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
+                Dim mondaytimesarray As New ArrayList
+                mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In mondaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+            Else
+                'is nothing - dont  load settings => a new entry is created)
+            End If
+        Catch
+        End Try
+    End Function
 
     'sub executed when form is closed
     Private Sub Timetable_FormClosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed

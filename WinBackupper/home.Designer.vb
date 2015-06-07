@@ -53,11 +53,11 @@ Partial Class home
         '
         Me.l_sourcePath.AutoSize = True
         Me.l_sourcePath.BackColor = System.Drawing.Color.Transparent
-        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_sourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_sourcePath.Location = New System.Drawing.Point(71, 62)
+        Me.l_sourcePath.Location = New System.Drawing.Point(53, 48)
         Me.l_sourcePath.Name = "l_sourcePath"
-        Me.l_sourcePath.Size = New System.Drawing.Size(90, 17)
+        Me.l_sourcePath.Size = New System.Drawing.Size(118, 24)
         Me.l_sourcePath.TabIndex = 1
         Me.l_sourcePath.Text = "Source Path:"
         '
@@ -65,17 +65,17 @@ Partial Class home
         '
         Me.l_backupPath.AutoSize = True
         Me.l_backupPath.BackColor = System.Drawing.Color.Transparent
-        Me.l_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_backupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_backupPath.Location = New System.Drawing.Point(294, 62)
+        Me.l_backupPath.Location = New System.Drawing.Point(276, 48)
         Me.l_backupPath.Name = "l_backupPath"
-        Me.l_backupPath.Size = New System.Drawing.Size(92, 17)
+        Me.l_backupPath.Size = New System.Drawing.Size(120, 24)
         Me.l_backupPath.TabIndex = 2
         Me.l_backupPath.Text = "Backup Path:"
         '
         'b_start
         '
-        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_start.Location = New System.Drawing.Point(12, 230)
         Me.b_start.Name = "b_start"
         Me.b_start.Size = New System.Drawing.Size(430, 35)
@@ -85,7 +85,7 @@ Partial Class home
         '
         'b_settings
         '
-        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_settings.Location = New System.Drawing.Point(12, 271)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(135, 35)
@@ -101,7 +101,7 @@ Partial Class home
         '
         'b_update
         '
-        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_update.Location = New System.Drawing.Point(153, 271)
         Me.b_update.Name = "b_update"
         Me.b_update.Size = New System.Drawing.Size(136, 35)
@@ -125,6 +125,7 @@ Partial Class home
         '
         'RTB_Sourcepath
         '
+        Me.RTB_Sourcepath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 82)
         Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
         Me.RTB_Sourcepath.Size = New System.Drawing.Size(202, 142)
@@ -133,6 +134,7 @@ Partial Class home
         '
         'RTB_Backuppath
         '
+        Me.RTB_Backuppath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 82)
         Me.RTB_Backuppath.Name = "RTB_Backuppath"
         Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)

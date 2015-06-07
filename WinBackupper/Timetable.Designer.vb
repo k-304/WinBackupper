@@ -47,7 +47,7 @@ Partial Class Timetable
         '
         'b_add
         '
-        Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_add.Location = New System.Drawing.Point(10, 362)
         Me.b_add.Name = "b_add"
         Me.b_add.Size = New System.Drawing.Size(247, 36)
@@ -57,6 +57,7 @@ Partial Class Timetable
         '
         'RTB_Time
         '
+        Me.RTB_Time.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Time.Location = New System.Drawing.Point(11, 107)
         Me.RTB_Time.Name = "RTB_Time"
         Me.RTB_Time.Size = New System.Drawing.Size(247, 180)
@@ -65,7 +66,7 @@ Partial Class Timetable
         '
         'b_stopediting
         '
-        Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_stopediting.Location = New System.Drawing.Point(10, 404)
         Me.b_stopediting.Name = "b_stopediting"
         Me.b_stopediting.Size = New System.Drawing.Size(247, 36)
@@ -75,7 +76,7 @@ Partial Class Timetable
         '
         'b_remove
         '
-        Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_remove.Location = New System.Drawing.Point(11, 320)
         Me.b_remove.Name = "b_remove"
         Me.b_remove.Size = New System.Drawing.Size(112, 36)
@@ -139,7 +140,7 @@ Partial Class Timetable
         '
         'b_reset
         '
-        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_reset.Location = New System.Drawing.Point(132, 320)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(125, 36)

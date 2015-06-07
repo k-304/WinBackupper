@@ -19,7 +19,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public selectedpathlinesarray As New ArrayList
-
+    Public linecurrentlyedited As Integer
 
 #End Region
 
@@ -70,8 +70,24 @@ Public Class Settings
 
 
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
-        'as a test - show the timetable form - should be called by code and not by a button?
-        Timetable.Show()
+        'gives the user ability to edit a certain configuration for a folderpair
+        'check if any is selected-  if so continue
+        If Not selectedpathlinesarray.Count = 0 Then
+            'loop through all selected indexes to edit configuration of each one
+
+            For Each line In selectedpathlinesarray
+                'set variable of timetable form so it knows which folderpair to edit
+                'on load it will check this variable and load the appropriate settings - if the variable is emptyit will not load any
+                linecurrentlyedited = line
+                Timetable.Show() 'pass current line as argument
+            Next
+
+            'reset the currentlyeditedline variable (has to be nothing - will be checked like that in other form)
+            linecurrentlyedited = Nothing
+        Else
+            MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+
     End Sub
 
     Function Check_Application_Autostart()
@@ -401,9 +417,14 @@ Public Class Settings
             TSArray = home.StringtoArray(TSSerialized, ";")
             'reset current text
             RTB_timesettings.Clear()
-            For Each TimeSetting In TSArray
-                RTB_timesettings.AppendText(TimeSetting & vbNewLine)
-            Next
+            If TSArray.Count = 0 Then ' no members in array
+                RTB_timesettings.AppendText("Not defined for Today")
+            Else
+                For Each TimeSetting In TSArray
+                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+                Next
+            End If
+            
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
@@ -495,6 +516,9 @@ Public Class Settings
             'Refresh Richtextbox to display selected Path instantly
             RTB_Backuppath.AppendText(BackupPathresult & vbNewLine)
         End If
+
+        'ask user to edit the time settings for this folder pair
+        Timetable.Show()
     End Sub
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
