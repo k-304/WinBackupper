@@ -223,6 +223,7 @@ Private Sub InitializeComponent()
         Me.Controls.Add(Me.l_SourcePath)
         Me.Controls.Add(Me.l_settings)
         Me.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Settings"
         Me.Text = "Settings"

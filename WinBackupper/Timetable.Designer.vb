@@ -22,6 +22,7 @@ Partial Class Timetable
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
         Me.DTP = New System.Windows.Forms.DateTimePicker()
         Me.b_add = New System.Windows.Forms.Button()
         Me.RTB_Time = New System.Windows.Forms.RichTextBox()
@@ -179,6 +180,8 @@ Partial Class Timetable
         Me.Controls.Add(Me.RTB_Time)
         Me.Controls.Add(Me.b_add)
         Me.Controls.Add(Me.DTP)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Timetable"
         Me.Text = "Choose Backup Start Times!"
         Me.ResumeLayout(False)

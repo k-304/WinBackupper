@@ -157,6 +157,7 @@ Partial Class home
         Me.Controls.Add(Me.l_backupPath)
         Me.Controls.Add(Me.l_sourcePath)
         Me.Controls.Add(Me.l_title)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "home"
         Me.Text = "WinBackupper"

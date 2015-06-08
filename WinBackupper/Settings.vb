@@ -471,18 +471,20 @@ Public Class Settings
         'only execute once so user is forced to enter a backuppath too - old functions still exist so still changeable!
         ' Dialog to select Source Path
         fbd_searchDefaultSource.Description = "Select Source Folder!"
-        fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.LocalizedResources
+        fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultSource.ShowDialog
         Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
+        If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
         If sourcepatharray.Contains(SourcePathtresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
                 sourcepatharray.Add(SourcePathtresult)
-            Else
-                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -495,18 +497,20 @@ Public Class Settings
 
         ' Dialog to select Backup Path
         fbd_searchDefaultBackup.Description = "Select Destination Folder"
-        fbd_searchDefaultBackup.RootFolder = Environment.SpecialFolder.LocalizedResources
+        fbd_searchDefaultBackup.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultBackup.ShowDialog
         Dim BackupPathresult As String = fbd_searchDefaultBackup.SelectedPath.ToString
         'do sanity check before adding (check if already existing?)
-        If sourcepatharray.Contains(BackupPathresult) Then
+        If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
+        If sourcepatharray.Contains(BackupPathresult) And DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok"
             Dim userchoice = MessageBox.Show("You want to save into a Folder which is getting back-upped itself" & vbNewLine & "Do you want to continue?", "Destination getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if user is saving data into a directory which is getting backed-up
                 'write value into Array!
                 backupPatharray.Add(BackupPathresult)
-            Else
-                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -517,8 +521,12 @@ Public Class Settings
             RTB_Backuppath.AppendText(BackupPathresult & vbNewLine)
         End If
 
-        'ask user to edit the time settings for this folder pair
-        Timetable.Show()
+        'if added source and backup folder =>
+        If DialogResult = Windows.Forms.DialogResult.OK Then
+            'ask user to edit the time settings for this folder pair
+            Timetable.Show()
+        End If
+
     End Sub
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
