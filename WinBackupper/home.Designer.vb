@@ -22,6 +22,7 @@ Partial Class home
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(home))
         Me.l_title = New System.Windows.Forms.Label()
         Me.l_sourcePath = New System.Windows.Forms.Label()
@@ -35,6 +36,7 @@ Partial Class home
         Me.bw_versionControll = New System.ComponentModel.BackgroundWorker()
         Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
         Me.RTB_Backuppath = New System.Windows.Forms.RichTextBox()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.SuspendLayout()
         '
         'l_title
@@ -43,7 +45,7 @@ Partial Class home
         Me.l_title.BackColor = System.Drawing.Color.Transparent
         Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_title.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_title.Location = New System.Drawing.Point(132, 23)
+        Me.l_title.Location = New System.Drawing.Point(133, 9)
         Me.l_title.Name = "l_title"
         Me.l_title.Size = New System.Drawing.Size(208, 25)
         Me.l_title.TabIndex = 0
@@ -114,7 +116,7 @@ Partial Class home
         Me.l_version.AutoSize = True
         Me.l_version.BackColor = System.Drawing.Color.Transparent
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_version.Location = New System.Drawing.Point(365, 282)
+        Me.l_version.Location = New System.Drawing.Point(365, 284)
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(77, 13)
         Me.l_version.TabIndex = 11
@@ -140,6 +142,12 @@ Partial Class home
         Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)
         Me.RTB_Backuppath.TabIndex = 13
         Me.RTB_Backuppath.Text = ""
+        '
+        'NotifyIcon1
+        '
+        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
+        Me.NotifyIcon1.Text = "WinBackupper"
+        Me.NotifyIcon1.Visible = True
         '
         'home
         '
@@ -177,5 +185,6 @@ Partial Class home
     Friend WithEvents bw_versionControll As System.ComponentModel.BackgroundWorker
     Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
     Friend WithEvents RTB_Backuppath As System.Windows.Forms.RichTextBox
+    Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
 
 End Class
