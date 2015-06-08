@@ -424,7 +424,7 @@ Public Class Settings
                     RTB_timesettings.AppendText(TimeSetting & vbNewLine)
                 Next
             End If
-            
+
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
@@ -464,7 +464,7 @@ Public Class Settings
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-       
+
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
@@ -586,7 +586,7 @@ Public Class Settings
     ' BackgroundWorker Writes settings into XML File
     'This bw_writer is called by the save button directly (no "real" code in the save button sub!)
     Private Sub bw_writer_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_writer.DoWork
-         ' Create XML Writer
+        ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
         writerOption.Indent = True
         Dim writerSettings As XmlWriter = XmlWriter.Create("default.xml", writerOption)

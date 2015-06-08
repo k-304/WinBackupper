@@ -394,7 +394,29 @@ Public Class home
         Return path.Substring(6, path.Length - 6)
     End Function
 
-
+    'Minimize and Maximize Application
+    'Minimize to System-Tray
+    Private Sub home_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        Try
+            If Me.WindowState = FormWindowState.Minimized Then
+                Me.Visible = False
+                NotifyIcon1.Visible = True
+                NotifyIcon1.ShowBalloonTip(500, "WinBackupper", "Running in backgound", ToolTipIcon.Info)
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+    'Maximize from System-Tray
+    Private Sub NotifyIcon1_MouseClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseClick
+        Try
+            Me.Visible = True
+            Me.WindowState = FormWindowState.Normal
+            NotifyIcon1.Visible = False
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
 
 #End Region
 
@@ -424,6 +446,5 @@ Public Class home
         writerSettings.Dispose()
     End Sub
 #End Region
-
 
 End Class
