@@ -18,6 +18,8 @@ Public Class Settings
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
+    Public selectedpathlinesarray As New ArrayList
+    Public Shared linecurrentlyedited As Integer = 1000
 
 #End Region
 
@@ -68,8 +70,24 @@ Public Class Settings
 
 
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
-        'as a test - show the timetable form - should be called by code and not by a button?
-        Timetable.Show()
+        'gives the user ability to edit a certain configuration for a folderpair
+        'check if any is selected-  if so continue
+        If Not selectedpathlinesarray.Count = 0 Then
+            'loop through all selected indexes to edit configuration of each one
+
+            For Each line In selectedpathlinesarray
+                'set variable of timetable form so it knows which folderpair to edit
+                'on load it will check this variable and load the appropriate settings - if the variable is emptyit will not load any
+                linecurrentlyedited = line
+                Timetable.ShowDialog() 'pass current line as argument
+            Next
+
+            'reset the currentlyeditedline variable (has to be nothing - will be checked like that in other form)
+            linecurrentlyedited = Nothing
+        Else
+            MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+
     End Sub
 
     Function Check_Application_Autostart()
@@ -260,9 +278,15 @@ Public Class Settings
             'define color to set
             Dim tempselectionfont
             If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                'set the font type to bold to mark that it s selcted
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+                'add to selcted line var
+                selectedpathlinesarray.Add(line)
             Else
+                'set font normal again
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+                'remove the entry of selected lines again
+                selectedpathlinesarray.Remove(line)
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
@@ -339,9 +363,15 @@ Public Class Settings
             'define color to set
             Dim tempselectionfont
             If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                'set line bold
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+                'add line to array of selected paths (there is only 1 because both change at the same time (even if only 1 is clicked) )
+                selectedpathlinesarray.Add(line)
             Else
+                'set line normal
                 tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+                'remove line from selected lines array
+                selectedpathlinesarray.Remove(line)
             End If
             rtb.SelectionFont = tempselectionfont
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
@@ -387,9 +417,14 @@ Public Class Settings
             TSArray = home.StringtoArray(TSSerialized, ";")
             'reset current text
             RTB_timesettings.Clear()
-            For Each TimeSetting In TSArray
-                RTB_timesettings.AppendText(TimeSetting & vbNewLine)
-            Next
+            If TSArray.Count = 0 Then ' no members in array
+                RTB_timesettings.AppendText("Not defined for Today")
+            Else
+                For Each TimeSetting In TSArray
+                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+                Next
+            End If
+            
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
@@ -436,18 +471,20 @@ Public Class Settings
         'only execute once so user is forced to enter a backuppath too - old functions still exist so still changeable!
         ' Dialog to select Source Path
         fbd_searchDefaultSource.Description = "Select Source Folder!"
-        fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.LocalizedResources
+        fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultSource.ShowDialog
         Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
+        If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
         If sourcepatharray.Contains(SourcePathtresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
                 sourcepatharray.Add(SourcePathtresult)
-            Else
-                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -460,18 +497,20 @@ Public Class Settings
 
         ' Dialog to select Backup Path
         fbd_searchDefaultBackup.Description = "Select Destination Folder"
-        fbd_searchDefaultBackup.RootFolder = Environment.SpecialFolder.LocalizedResources
+        fbd_searchDefaultBackup.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultBackup.ShowDialog
         Dim BackupPathresult As String = fbd_searchDefaultBackup.SelectedPath.ToString
         'do sanity check before adding (check if already existing?)
-        If sourcepatharray.Contains(BackupPathresult) Then
+        If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
+        If sourcepatharray.Contains(BackupPathresult) And DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok"
             Dim userchoice = MessageBox.Show("You want to save into a Folder which is getting back-upped itself" & vbNewLine & "Do you want to continue?", "Destination getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if user is saving data into a directory which is getting backed-up
                 'write value into Array!
                 backupPatharray.Add(BackupPathresult)
-            Else
-                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -481,6 +520,13 @@ Public Class Settings
             'Refresh Richtextbox to display selected Path instantly
             RTB_Backuppath.AppendText(BackupPathresult & vbNewLine)
         End If
+
+        'if added source and backup folder =>
+        If DialogResult = Windows.Forms.DialogResult.OK Then
+            'ask user to edit the time settings for this folder pair
+            Timetable.Show()
+        End If
+
     End Sub
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
@@ -583,8 +629,6 @@ Public Class Settings
                 .WriteEndElement()
             Next
 
-            ' MsgBox(home.timesettingsarray(0).ToString)
-            MsgBox(home.timesettingsarray.ToString)
             For Each timesetting As String In home.timesettingsarray
                 'start writing each sourcepath of the array
                 .WriteStartElement("StartTimes")
@@ -655,7 +699,7 @@ Public Class Settings
                 If mismatches > 0 Then 'if there are no mismatches the array's are equal!
                     MessageBox.Show("Unable to save Configuration!", "Error while saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
-                    MessageBox.Show("Configuration Saved succesfully!", "Configuration Saved!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show("Configuration Saved succesfully!", "Configuration Saved!", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
             End If
 

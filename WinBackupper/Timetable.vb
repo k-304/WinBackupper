@@ -12,6 +12,7 @@
     Public RTB_Lines_Sun() As String
     Dim lastcomboboxindex As Integer
     Dim finalstring As String = ""
+    Public selectedtimesarray As New ArrayList
 
 
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Day.SelectedIndexChanged
@@ -19,7 +20,6 @@
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
         'use this to reread all settings when user changes to another Day
         selectedday = ComboBox_Day.SelectedIndex
-
 
         'define Lines for lastly selected day (before changing index)
         'when it changes again, reload the data for the selected day
@@ -148,13 +148,55 @@
     End Function
 
     Private Sub b_add_Click(sender As Object, e As EventArgs) Handles b_add.Click
-        'gt entered text and add to richtextbox (later also array)
-        RTB_Time.AppendText(DTP.ToString.Substring(DTP.ToString.Length - 8, 5) & vbNewLine)
+        'define target array
+        Dim finalarray As New ArrayList
+        'get selected time
+        Dim seltimehours As Integer = DTP.ToString.Substring(DTP.ToString.Length - 8, 2)
+        Dim seltimeminutes As String = DTP.ToString.Substring(DTP.ToString.Length - 5, 2)
+        Dim intervall As Integer = Me.txt_intervall.Text
+
+        'if checkbox is checked calculate others and add them (and check if intervall makes sense, if not just add currently selected time)
+        If cb_intervall.Checked = True And Not (intervall = 24 Or intervall = 0) Then
+            'loop through all times from selected 
+            For i As Integer = seltimehours To 0 Step -intervall
+                Dim resulthour As String = i.ToString
+                'i is an hour which should be added according to the intervall specified
+                'add it to target raray (it will be reversed, so on end revers all of it so it s sorted correctly to add it later
+                'check if hour is below 10 if so ad a 0 in front
+                If i < 10 Then
+                    resulthour = "0" & i.ToString
+                End If
+                finalarray.Add(resulthour)
+            Next
+            'reverse the orger of the array
+            finalarray.Reverse()
+            'loop thorugh all hours from the selcted hour to 24
+            For i As Integer = seltimehours + intervall To 24 Step intervall '+intervall in the i= declaration to prevent add the selected time 2 times. (prevents a "bug")
+                finalarray.Add(i)
+            Next
+
+            'add all members 
+            For Each hourentry As String In finalarray
+                'recreating time structure ( HH:MM )
+                Dim finalentry = hourentry & ":" & seltimeminutes
+                RTB_Time.AppendText(finalentry & vbNewLine)
+            Next
+        Else
+            'just add selected value
+            'gt entered text and add to richtextbox (later also array)
+            RTB_Time.AppendText(DTP.ToString.Substring(DTP.ToString.Length - 8, 5) & vbNewLine)
+        End If
 
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
-    
+        Dim indextoeditoradd = home.timesettingsarray.Count
+
+        'check if there is a entry to edit or not - set index accordingly
+        If Not Settings.linecurrentlyedited = Nothing Then
+            'we are editing a line set an index accordingly
+            indextoeditoradd = Settings.linecurrentlyedited
+        End If
         'reset finalstring if executed before (var is public)
         finalstring = ""
         ' save the current field too - if edited it will be saved in the Variable, since it only saves when the combox (day) is changed . 
@@ -257,15 +299,44 @@
         End If
 
         'write value into timesettingsarray of homeform 
-        home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        'check if we are adding an entry or aediting an xisting one
+        If indextoeditoradd = home.timesettingsarray.Count Then
+            'adding a new entry
+            home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        Else
+            home.timesettingsarray(indextoeditoradd) = finalstring
+            'editing an existing one
+        End If
+
         'close form when finished
         Me.Close()
     End Sub
 
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      'call function settings_of_dayn() with argument for current day to get the part of data 
-        ''''''''''''''''''''''''' settings_of_dayn(selectedday, "Timesettings part read out from XML")
+        Settings_Reload()
     End Sub
+
+
+    'function to reload all settings displayed in the form. Only use this one!
+    Public Function Settings_Reload()
+        Try
+            If Not Settings.linecurrentlyedited = Nothing Then
+                'get values of home class
+                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+                'call settings for dayn with 0 argument to get values for monday and load them appropriately.
+                Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
+                Dim mondaytimesarray As New ArrayList
+                mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In mondaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+            Else
+                'is nothing - dont  load settings => a new entry is created)
+            End If
+        Catch
+        End Try
+    End Function
 
     'sub executed when form is closed
     Private Sub Timetable_FormClosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
@@ -280,11 +351,80 @@
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
-        'cycle through all time data and reset it
-        For i = 0 To 6 Step 1
-            ComboBox_Day.SelectedIndex = i
-            RTB_Time.Clear()
-        Next
-        ComboBox_Day.SelectedIndex = 0
+        Dim resetchoice = MessageBox.Show("Do you really want to reset ALL your configurations?", "Reset EVERYTHING?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If resetchoice = vbYes Then
+            'cycle through all time data and reset it
+            For i = 0 To 6 Step 1
+                ComboBox_Day.SelectedIndex = i
+                RTB_Time.Clear()
+            Next
+            'select first day again
+            ComboBox_Day.SelectedIndex = 0
+        Else
+            'user aborted - maybe misclicked 
+            MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
+
+    'executed when remocve button is clicked
+    Private Sub b_remove_Click(sender As Object, e As EventArgs) Handles b_remove.Click
+        'loop through selected lines
+        For Each line As Integer In selectedtimesarray
+            'remove the selected line
+            Dim curentlist As List(Of String) = RTB_Time.Lines.ToList()
+            If curentlist.Count > 0 Then
+                curentlist.RemoveAt(line)
+                RTB_Time.Lines = curentlist.ToArray()
+                RTB_Time.Refresh()
+            End If
+        Next
+
+    End Sub
+
+
+    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
+    Private Sub RTB_Time_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Time.MouseDown
+        Try
+            If home.sourcepatharray.Count = 0 Then
+                Exit Sub
+            End If
+            'get mouseposition
+            Dim rtb = DirectCast(sender, RichTextBox)
+            'then get the char where the mouse is
+            Dim index = rtb.GetCharIndexFromPosition(e.Location)
+            'get the line where this char is (with it's index in the char array of the rtb)
+            Dim line = rtb.GetLineFromCharIndex(index)
+            'define the first char of line
+            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
+            'define the last one
+            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
+            'start selection
+            rtb.SelectionStart = lineStart
+            'define the length of it
+            rtb.SelectionLength = lineEnd - lineStart
+            'define color to set
+            Dim tempselectionfont
+            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
+                'set the font type to bold to mark that it s selcted
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
+                'add to selcted line var
+                selectedtimesarray.Add(line)
+            Else
+                'set font normal again
+                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
+                'remove the entry of selected lines again
+                selectedtimesarray.Remove(line)
+            End If
+            rtb.SelectionFont = tempselectionfont
+            'after setting bold font in both boxes, select "nothing" so no text is blue.
+            rtb.SelectionStart = 0
+            rtb.SelectionLength = 0
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+
 End Class

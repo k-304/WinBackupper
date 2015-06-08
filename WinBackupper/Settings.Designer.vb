@@ -46,11 +46,11 @@ Private Sub InitializeComponent()
         '
         Me.l_BackupPath.AutoSize = True
         Me.l_BackupPath.BackColor = System.Drawing.Color.Transparent
-        Me.l_BackupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_BackupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_BackupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_BackupPath.Location = New System.Drawing.Point(237, 59)
+        Me.l_BackupPath.Location = New System.Drawing.Point(240, 52)
         Me.l_BackupPath.Name = "l_BackupPath"
-        Me.l_BackupPath.Size = New System.Drawing.Size(92, 17)
+        Me.l_BackupPath.Size = New System.Drawing.Size(120, 24)
         Me.l_BackupPath.TabIndex = 12
         Me.l_BackupPath.Text = "Backup Path:"
         '
@@ -58,17 +58,17 @@ Private Sub InitializeComponent()
         '
         Me.l_SourcePath.AutoSize = True
         Me.l_SourcePath.BackColor = System.Drawing.Color.Transparent
-        Me.l_SourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_SourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_SourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_SourcePath.Location = New System.Drawing.Point(9, 59)
+        Me.l_SourcePath.Location = New System.Drawing.Point(12, 52)
         Me.l_SourcePath.Name = "l_SourcePath"
-        Me.l_SourcePath.Size = New System.Drawing.Size(90, 17)
+        Me.l_SourcePath.Size = New System.Drawing.Size(118, 24)
         Me.l_SourcePath.TabIndex = 11
         Me.l_SourcePath.Text = "Source Path:"
         '
         'b_save
         '
-        Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_save.Location = New System.Drawing.Point(121, 442)
         Me.b_save.Name = "b_save"
         Me.b_save.Size = New System.Drawing.Size(321, 35)
@@ -87,7 +87,7 @@ Private Sub InitializeComponent()
         '
         'b_addfolderpair
         '
-        Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_addfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_addfolderpair.Location = New System.Drawing.Point(12, 401)
         Me.b_addfolderpair.Name = "b_addfolderpair"
         Me.b_addfolderpair.Size = New System.Drawing.Size(202, 35)
@@ -99,11 +99,11 @@ Private Sub InitializeComponent()
         '
         Me.l_settings.AutoSize = True
         Me.l_settings.BackColor = System.Drawing.Color.Transparent
-        Me.l_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_settings.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_settings.Location = New System.Drawing.Point(184, 20)
+        Me.l_settings.Location = New System.Drawing.Point(160, 9)
         Me.l_settings.Name = "l_settings"
-        Me.l_settings.Size = New System.Drawing.Size(90, 25)
+        Me.l_settings.Size = New System.Drawing.Size(113, 31)
         Me.l_settings.TabIndex = 10
         Me.l_settings.Text = "Settings"
         '
@@ -117,6 +117,7 @@ Private Sub InitializeComponent()
         '
         'RTB_Backuppath
         '
+        Me.RTB_Backuppath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 79)
         Me.RTB_Backuppath.Name = "RTB_Backuppath"
         Me.RTB_Backuppath.ShowSelectionMargin = True
@@ -126,6 +127,7 @@ Private Sub InitializeComponent()
         '
         'RTB_Sourcepath
         '
+        Me.RTB_Sourcepath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 79)
         Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
         Me.RTB_Sourcepath.ShowSelectionMargin = True
@@ -136,7 +138,7 @@ Private Sub InitializeComponent()
         'b_reset
         '
         Me.b_reset.BackColor = System.Drawing.Color.LightCoral
-        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_reset.Location = New System.Drawing.Point(12, 441)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(103, 36)
@@ -146,7 +148,7 @@ Private Sub InitializeComponent()
         '
         'b_editfolderpair
         '
-        Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_editfolderpair.Location = New System.Drawing.Point(240, 401)
         Me.b_editfolderpair.Name = "b_editfolderpair"
         Me.b_editfolderpair.Size = New System.Drawing.Size(202, 35)
@@ -156,6 +158,7 @@ Private Sub InitializeComponent()
         '
         'RTB_timesettings
         '
+        Me.RTB_timesettings.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_timesettings.Location = New System.Drawing.Point(12, 253)
         Me.RTB_timesettings.Name = "RTB_timesettings"
         Me.RTB_timesettings.ShowSelectionMargin = True
@@ -167,33 +170,33 @@ Private Sub InitializeComponent()
         '
         Me.l_backuptimes.AutoSize = True
         Me.l_backuptimes.BackColor = System.Drawing.Color.Transparent
-        Me.l_backuptimes.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backuptimes.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_backuptimes.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_backuptimes.Location = New System.Drawing.Point(103, 233)
+        Me.l_backuptimes.Location = New System.Drawing.Point(45, 226)
         Me.l_backuptimes.Name = "l_backuptimes"
-        Me.l_backuptimes.Size = New System.Drawing.Size(238, 17)
+        Me.l_backuptimes.Size = New System.Drawing.Size(345, 24)
         Me.l_backuptimes.TabIndex = 26
-        Me.l_backuptimes.Text = "Backup start times of selected Entry:"
+        Me.l_backuptimes.Text = "Todays Startimes of selected Folderpair:"
         '
         'cb_Autostart
         '
         Me.cb_Autostart.AutoSize = True
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
-        Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.cb_Autostart.Location = New System.Drawing.Point(12, 359)
         Me.cb_Autostart.Name = "cb_Autostart"
-        Me.cb_Autostart.Size = New System.Drawing.Size(313, 21)
+        Me.cb_Autostart.Size = New System.Drawing.Size(400, 28)
         Me.cb_Autostart.TabIndex = 27
         Me.cb_Autostart.Text = "Start Application on Startup (only this user!) ?"
         Me.cb_Autostart.UseVisualStyleBackColor = False
         '
         'b_showtimetable
         '
-        Me.b_showtimetable.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_showtimetable.Location = New System.Drawing.Point(121, 318)
+        Me.b_showtimetable.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_showtimetable.Location = New System.Drawing.Point(95, 318)
         Me.b_showtimetable.Name = "b_showtimetable"
-        Me.b_showtimetable.Size = New System.Drawing.Size(202, 35)
+        Me.b_showtimetable.Size = New System.Drawing.Size(265, 35)
         Me.b_showtimetable.TabIndex = 28
         Me.b_showtimetable.Text = "Edit Time Confgiuration"
         Me.b_showtimetable.UseVisualStyleBackColor = True
@@ -220,6 +223,7 @@ Private Sub InitializeComponent()
         Me.Controls.Add(Me.l_SourcePath)
         Me.Controls.Add(Me.l_settings)
         Me.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Settings"
         Me.Text = "Settings"

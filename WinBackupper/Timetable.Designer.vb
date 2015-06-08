@@ -22,6 +22,7 @@ Partial Class Timetable
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
         Me.DTP = New System.Windows.Forms.DateTimePicker()
         Me.b_add = New System.Windows.Forms.Button()
         Me.RTB_Time = New System.Windows.Forms.RichTextBox()
@@ -31,8 +32,9 @@ Partial Class Timetable
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txt_intervall = New System.Windows.Forms.TextBox()
         Me.b_reset = New System.Windows.Forms.Button()
+        Me.cb_intervall = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'DTP
@@ -46,8 +48,8 @@ Partial Class Timetable
         '
         'b_add
         '
-        Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_add.Location = New System.Drawing.Point(11, 335)
+        Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_add.Location = New System.Drawing.Point(10, 362)
         Me.b_add.Name = "b_add"
         Me.b_add.Size = New System.Drawing.Size(247, 36)
         Me.b_add.TabIndex = 20
@@ -56,6 +58,7 @@ Partial Class Timetable
         '
         'RTB_Time
         '
+        Me.RTB_Time.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_Time.Location = New System.Drawing.Point(11, 107)
         Me.RTB_Time.Name = "RTB_Time"
         Me.RTB_Time.Size = New System.Drawing.Size(247, 180)
@@ -64,8 +67,8 @@ Partial Class Timetable
         '
         'b_stopediting
         '
-        Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_stopediting.Location = New System.Drawing.Point(11, 377)
+        Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_stopediting.Location = New System.Drawing.Point(10, 404)
         Me.b_stopediting.Name = "b_stopediting"
         Me.b_stopediting.Size = New System.Drawing.Size(247, 36)
         Me.b_stopediting.TabIndex = 22
@@ -74,8 +77,8 @@ Partial Class Timetable
         '
         'b_remove
         '
-        Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_remove.Location = New System.Drawing.Point(12, 293)
+        Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_remove.Location = New System.Drawing.Point(11, 320)
         Me.b_remove.Name = "b_remove"
         Me.b_remove.Size = New System.Drawing.Size(112, 36)
         Me.b_remove.TabIndex = 23
@@ -128,32 +131,46 @@ Partial Class Timetable
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Intervall (in h):"
         '
-        'TextBox1
+        'txt_intervall
         '
-        Me.TextBox1.Location = New System.Drawing.Point(132, 68)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(126, 20)
-        Me.TextBox1.TabIndex = 29
-        Me.TextBox1.Text = "24"
+        Me.txt_intervall.Location = New System.Drawing.Point(132, 68)
+        Me.txt_intervall.Name = "txt_intervall"
+        Me.txt_intervall.Size = New System.Drawing.Size(126, 20)
+        Me.txt_intervall.TabIndex = 29
+        Me.txt_intervall.Text = "24"
         '
         'b_reset
         '
-        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(133, 293)
+        Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_reset.Location = New System.Drawing.Point(132, 320)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(125, 36)
         Me.b_reset.TabIndex = 30
         Me.b_reset.Text = "Reset"
         Me.b_reset.UseVisualStyleBackColor = True
         '
+        'cb_intervall
+        '
+        Me.cb_intervall.AutoSize = True
+        Me.cb_intervall.BackColor = System.Drawing.Color.Transparent
+        Me.cb_intervall.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_intervall.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.cb_intervall.Location = New System.Drawing.Point(12, 293)
+        Me.cb_intervall.Name = "cb_intervall"
+        Me.cb_intervall.Size = New System.Drawing.Size(160, 21)
+        Me.cb_intervall.TabIndex = 31
+        Me.cb_intervall.Text = "Add intervall entries?"
+        Me.cb_intervall.UseVisualStyleBackColor = False
+        '
         'Timetable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(268, 426)
+        Me.ClientSize = New System.Drawing.Size(268, 445)
+        Me.Controls.Add(Me.cb_intervall)
         Me.Controls.Add(Me.b_reset)
-        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.txt_intervall)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.l_sourcePath)
@@ -163,6 +180,8 @@ Partial Class Timetable
         Me.Controls.Add(Me.RTB_Time)
         Me.Controls.Add(Me.b_add)
         Me.Controls.Add(Me.DTP)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Timetable"
         Me.Text = "Choose Backup Start Times!"
         Me.ResumeLayout(False)
@@ -178,6 +197,7 @@ Partial Class Timetable
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents txt_intervall As System.Windows.Forms.TextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
+    Friend WithEvents cb_intervall As System.Windows.Forms.CheckBox
 End Class

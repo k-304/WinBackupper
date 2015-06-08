@@ -118,11 +118,11 @@ Public Class home
             'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
             Dim Backuppathrtb = DirectCast(RTB_Backuppath, RichTextBox)
             'repeat above steps for other rtbox...
-            Dim sourceline = Backuppathrtb.GetLineFromCharIndex(index)
+            Dim backupline = Backuppathrtb.GetLineFromCharIndex(index)
             'define the first char of line
-            Dim sourcelineStart = Backuppathrtb.GetFirstCharIndexFromLine(sourceline)
+            Dim sourcelineStart = Backuppathrtb.GetFirstCharIndexFromLine(backupline)
             'define the last one
-            Dim sourcelineEnd = Backuppathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
+            Dim sourcelineEnd = Backuppathrtb.GetFirstCharIndexFromLine(backupline + 1) - 1
             'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
             'now try to make it bold - maybe it0s enough
             Backuppathrtb.SelectionStart = sourcelineStart
@@ -205,7 +205,7 @@ Public Class home
         RTB_BP_Clicked(sender, e)
     End Sub
 
-    Public Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
+    Public Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Sourcepath.MouseDown
         RTB_SP_Clicked(sender, e)
     End Sub
     ' TextBox for Source Path
