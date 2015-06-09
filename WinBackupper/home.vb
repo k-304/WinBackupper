@@ -330,7 +330,8 @@ Public Class home
 
     ' Button open Settings
     Private Sub b_settings_Click(sender As Object, e As EventArgs) Handles b_settings.Click
-        Settings.Show()
+        'Show Settings Form and block home Form
+        Settings.ShowDialog()
     End Sub
 
     'Button Update - executed on click
