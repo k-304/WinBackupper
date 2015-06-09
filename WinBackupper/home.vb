@@ -407,8 +407,9 @@ Public Class home
             MsgBox(ex.Message)
         End Try
     End Sub
-    'Maximize from System-Tray
-    Private Sub NotifyIcon1_MouseClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseClick
+    'Maximize from System-Tray on DoubleClick
+    'Maybe Notify_MouseDoubleClick could be removed
+    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
         Try
             Me.Visible = True
             Me.WindowState = FormWindowState.Normal
@@ -416,6 +417,21 @@ Public Class home
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+    End Sub
+    'Maximize from System-Tray menu -> Open
+    Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
+        Try
+            Me.Visible = True
+            Me.WindowState = FormWindowState.Normal
+            NotifyIcon1.Visible = False
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+    'Close Application from System-Tray menu -> Close
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        'Close
+        Me.Close()
     End Sub
 
 #End Region
