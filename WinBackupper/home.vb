@@ -393,6 +393,12 @@ Public Class home
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
+#End Region
+
+#Region "System-Tray"
+    '*-----------------*'
+    '*---System-Tray---*'
+    '*-----------------*'
 
     'Minimize and Maximize Application
     'Minimize to System-Tray
@@ -433,7 +439,6 @@ Public Class home
         'Close
         Me.Close()
     End Sub
-
 #End Region
 
 #Region "Workers"
