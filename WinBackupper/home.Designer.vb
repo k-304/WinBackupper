@@ -40,6 +40,9 @@ Partial Class home
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Timer_per_Minute = New System.Windows.Forms.Timer(Me.components)
+        Me.rtb_log = New System.Windows.Forms.RichTextBox()
+        Me.l_log = New System.Windows.Forms.Label()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -158,19 +161,45 @@ Partial Class home
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(153, 70)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(104, 48)
         '
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
+        '
+        'Timer_per_Minute
+        '
+        Me.Timer_per_Minute.Enabled = True
+        Me.Timer_per_Minute.Interval = 60000
+        Me.Timer_per_Minute.Tag = ""
+        '
+        'rtb_log
+        '
+        Me.rtb_log.Location = New System.Drawing.Point(13, 336)
+        Me.rtb_log.Name = "rtb_log"
+        Me.rtb_log.Size = New System.Drawing.Size(429, 55)
+        Me.rtb_log.TabIndex = 14
+        Me.rtb_log.Text = ""
+        '
+        'l_log
+        '
+        Me.l_log.AutoSize = True
+        Me.l_log.BackColor = System.Drawing.Color.Transparent
+        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_log.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_log.Location = New System.Drawing.Point(200, 309)
+        Me.l_log.Name = "l_log"
+        Me.l_log.Size = New System.Drawing.Size(47, 24)
+        Me.l_log.TabIndex = 15
+        Me.l_log.Text = "Log:"
         '
         'home
         '
@@ -178,7 +207,9 @@ Partial Class home
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 318)
+        Me.ClientSize = New System.Drawing.Size(454, 403)
+        Me.Controls.Add(Me.l_log)
+        Me.Controls.Add(Me.rtb_log)
         Me.Controls.Add(Me.RTB_Backuppath)
         Me.Controls.Add(Me.RTB_Sourcepath)
         Me.Controls.Add(Me.l_version)
@@ -213,5 +244,8 @@ Partial Class home
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents OpenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Timer_per_Minute As System.Windows.Forms.Timer
+    Friend WithEvents rtb_log As System.Windows.Forms.RichTextBox
+    Friend WithEvents l_log As System.Windows.Forms.Label
 
 End Class
