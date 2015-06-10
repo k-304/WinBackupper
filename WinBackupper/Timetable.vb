@@ -1,5 +1,9 @@
 ﻿Public Class Timetable
 
+#Region "Variables"
+    '*------------------------*'
+    '*----Global Variables----*'
+    '*------------------------*'
     Public selectedday As Integer
     Public ToplevelSeperator As String = "::" 'has to be 2 chars (should be)  if changed code needs to change too!
     Public seperator As String = ";"
@@ -14,7 +18,9 @@
     Dim finalstring As String = ""
     Public selectedtimesarray As New ArrayList
 
+#End Region
 
+#Region "MainCode"
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Day.SelectedIndexChanged
 
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
@@ -153,7 +159,7 @@
         'get selected time
         Dim seltimehours As Integer = DTP.ToString.Substring(DTP.ToString.Length - 8, 2)
         Dim seltimeminutes As String = DTP.ToString.Substring(DTP.ToString.Length - 5, 2)
-        Dim intervall As Integer = Me.txt_intervall.Text
+        Dim intervall As Integer = Me.tb_intervall.Text
 
         'if checkbox is checked calculate others and add them (and check if intervall makes sense, if not just add currently selected time)
         If cb_intervall.Checked = True And Not (intervall = 24 Or intervall = 0) Then
@@ -334,8 +340,11 @@
             Else
                 'is nothing - dont  load settings => a new entry is created)
             End If
-        Catch
+        Catch ex As Exception
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
         End Try
+        Return 0
     End Function
 
     'sub executed when form is closed
@@ -382,7 +391,6 @@
 
     End Sub
 
-
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
     Private Sub RTB_Time_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Time.MouseDown
         Try
@@ -425,6 +433,8 @@
         End Try
 
     End Sub
+
+#End Region
 
 
 End Class

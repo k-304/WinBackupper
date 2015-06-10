@@ -5,9 +5,9 @@ Imports System.Xml
 Public Class home
 
 #Region "Variables"
-    '*-----------------*'
+    '*------------------------*'
     '*----Global Variables----*'
-    '*-----------------*'
+    '*------------------------*'
     Public Shared sourcepatharray As New ArrayList 'public array so other form can access it too
     Public Shared backupPatharray As New ArrayList 'public array so other form can access it too
     Public Shared timesettingsarray As New ArrayList 'public array filled by timetable.vb on formclosed event...
@@ -15,7 +15,7 @@ Public Class home
     Dim version As String
     Public GlobalSeperator As String = ";" 'used to seperate strings if ever needed
     Public starttime As String 'used later to store datetime of start event (currently in the click function - if automated we 
-
+    Public silent As Boolean = False
 #End Region
 
 #Region "MainCode"
@@ -34,9 +34,9 @@ Public Class home
                     Dim var = Environment.GetCommandLineArgs(1)
                     If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
                         'not sure how to hide correctly yet - just testing. (this is to run silent at each startup - so user is not annoyed by he form popping up all the time
-                        MsgBox("SIlent command noticed")
-                        Me.Visible = False
-                        Settings.Visible = False
+                        silent = True
+                        ' Me.Visible = False
+                        'Settings.Visible = False
                     End If
                 End If
             End If
@@ -86,6 +86,7 @@ Public Class home
             MsgBox(ex.Message)
         End Try
     End Sub
+
 
     'copy of settings function - no way found to ference it =(
     Public Function RTB_SP_Clicked(sender As Object, e As MouseEventArgs)
@@ -138,10 +139,11 @@ Public Class home
             'after setting bold font in both boxes, select "nothing" so no text is blue.
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
-            Return 0
+
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+        Return 0
     End Function
     'copy of settings function - no way ti just reference it yet =(
     Public Function RTB_BP_Clicked(sender As Object, e As MouseEventArgs)
@@ -194,10 +196,11 @@ Public Class home
             'after setting bold font in both boxes, select "nothing" so no text is blue.
             rtb.SelectionStart = 0
             rtb.SelectionLength = 0
-            Return 0
+
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+        Return 0
     End Function
 
     '
@@ -233,24 +236,96 @@ Public Class home
         'Confirm & Start Backup-Progress
         ' Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         'think it's better to keep such msg in loop...
-        Dim startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
-        If startResult = Windows.Forms.DialogResult.Yes Then
+        Dim startResult
+        If silent Then 'if silent start directly - if not ask user
+            startResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
+        Else
+            startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
+        End If
+         If startResult = Windows.Forms.DialogResult.Yes Then
+            start_Backup()
+        ElseIf startResult = Windows.Forms.DialogResult.No Then
+            MessageBox.Show("Cancled Backup!")
+        End If
+    End Sub
+
+    'function to encapsulate the actual backup process
+    Function start_backup()
+        Try
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
             starttime = GetDate() & GetTime()
+            'log it
+            rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
             'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'define current directories if needed/wanted (will unecessaraly need calc power)
                 Dim currsourcepath As String = sourcepatharray(i)
                 Dim currbackuppath As String = backupPatharray(i)
-                Dim tempstartResult = MessageBox.Show("Backingup from " + currsourcepath + " to " + currbackuppath + " ? ", "Continue?", MessageBoxButtons.YesNo)
+                Dim tempstartResult
+                If silent Then 'if silent start directly - if not ask user
+                    tempstartResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
+                Else
+                    tempstartResult = MessageBox.Show("Backingup from " + currsourcepath + " to " + currbackuppath + " ? ", "Continue?", MessageBoxButtons.YesNo)
+                End If
                 If tempstartResult = Windows.Forms.DialogResult.Yes Then
+                    'log start of specific folderpair
+                    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine)
                     BackupDirectory(sourcepatharray(i), backupPatharray(i), False) 'more arguments can be added like incremental/not etc...
+                    'log success
+                    rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & vbNewLine)
                 End If
             Next
-        ElseIf startResult = Windows.Forms.DialogResult.No Then
-            MessageBox.Show("Cancled Backup!")
-        End If
+
+
+        Catch ex As Exception
+
+        End Try
+    End Function
+    'executed when the minutely timer ticks+
+    Private Sub Timer_per_Minute_Tick(sender As Object, e As EventArgs) Handles Timer_per_Minute.Tick
+        Try
+            'check if no folderpairs exist - if so abort
+            If sourcepatharray.Count = 0 Then
+                Exit Try
+            End If
+            'get current values
+            'get current day
+            Dim currday = GetDate()
+            'define current time in hours
+            Dim currhour = GetHour()
+            'define current time in minutes
+            Dim currmin = GetMinutes()
+
+            'start to test values of all folderpairs => loop through all folderpairs
+            For i = 0 To sourcepatharray.Count - 1
+                'now check the timesettingsarray for all timevalues for the current day =>
+                'define the member for current folderpair
+                Dim currpairsettings As String = timesettingsarray(i)
+                'get string out of the array 
+                Dim TSArraystring = Timetable.settings_of_dayn(getday, currpairsettings)
+                Dim TSArray As New ArrayList 'TS for Time Settings
+                TSArray = StringtoArray(TSArraystring, ";")
+                For Each time As String In timesettingsarray(i)
+                    'time is written like HH:MM
+                    'so get hours and minutes
+                    Dim checkhour = time.Substring(0, 2) 'gets first 2 chars so the HH
+                    Dim checkMinute = time.Substring(3, 2) 'get s the last two chars MM (: not needed)
+                    If checkhour = currhour Then
+                        If checkMinute = currmin Then
+                            'log the auto start
+                            rtb_log.AppendText("The Following Backup Process was autostarted:")
+                            'hours AND Minutes are the same - start backup 
+                            start_backup()
+                        End If
+                    End If
+
+                Next
+            Next
+
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     'backup function - accepting different arguments - called in "backup start button"
@@ -288,23 +363,23 @@ Public Class home
                     'for zipping see https://msdn.microsoft.com/en-us/library/ms404280(v=vs.100).aspx
                     'without .net 4.5/6 a damn pain in the arse >.<
                     For Each filepath As String In Directory.GetFiles(sourcepath)
-                        ' Try
-                        If simulate_mode_active = False Then
-                            'define name of file
-                            Dim filename As String = Path.GetFileName(filepath)
+                        Try
+                            If simulate_mode_active = False Then
+                                'define name of file
+                                Dim filename As String = Path.GetFileName(filepath)
 
-                            'if simulate mode is on, only log!!! Dont copy!
-                            'check if targetfile already exists
-                            If Not File.Exists(targetpath & "\" & filename) Then
-                                File.Copy(filepath, targetpath & "\" & filename)
-                            Else
-                                'log it already exists or overwrite if timestamp changed
+                                'if simulate mode is on, only log!!! Dont copy!
+                                'check if targetfile already exists
+                                If Not File.Exists(targetpath & "\" & filename) Then
+                                    File.Copy(filepath, targetpath & "\" & filename)
+                                Else
+                                    'log it already exists or overwrite if timestamp changed
+                                End If
                             End If
-                        End If
-                        '  Catch ex As Exception
-                        'if single files fail - maybe make a list? How do we log?
-                        'MsgBox(ex.Message)
-                        '  End Try
+                        Catch ex As Exception
+                            'if single files fail - maybe make a list? How do we log?
+                            rtb_log.AppendText("The following File could not be backed-up - is it opened?" & vbNewLine & filepath)
+                        End Try
                     Next 'for each filepath end
 
                     'get Subdirectories and repeat process
@@ -323,8 +398,8 @@ Public Class home
 
             Return (0) 'return code "0" if everything went ok - without breaking code anywhere
         Catch ex As Exception
-            MessageBox.Show("WARNING: Critical error while 'BackupDirectory'-function" & vbNewLine & ex.Message)
-            Return (-1) 'return code "-1" to indicate an unknown/unhandlet error 
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Backup_Directory Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1 'return code "-1" to indicate an unknown/unhandlet error 
         End Try
     End Function
 
@@ -341,20 +416,33 @@ Public Class home
             'try to start the updater | Version informations: See bw_versionControll
             Diagnostics.Process.Start(getexedir() & "/THC_Updater.exe") 'assumes that updater exe is in same path as calling exe
         Catch ex As Exception
-
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in b_update Sub", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Function GetDate() As String
-        Dim day = DateTime.Now.ToString("dd")
+        Dim day = getday()
         Dim month = DateTime.Now.ToString("MM")
         Dim year = DateTime.Now.ToString("yyyy")
-        Return (year & month & day)
+        Dim time = GetTime()
+        Return (year & month & day & time)
+    End Function
+    Function getday() As String
+        Dim day = DateTime.Now.ToString("dd")
+        Return day
     End Function
     Function GetTime() As String
-        Dim hour = DateTime.Now.ToString("HH")
-        Dim min = DateTime.Now.ToString("mm")
+        Dim hour = GetHour()
+        Dim min = GetMinutes()
         Return (hour & min)
+    End Function
+    Function GetHour() As String
+        Dim hour = DateTime.Now.ToString("HH")
+        Return hour
+    End Function
+    Function GetMinutes() As String
+        Dim min = DateTime.Now.ToString("mm")
+        Return min
     End Function
     'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
     'use like "  dim array1  as arraylist = stringtoarray("nr1;nr2;nr3",";")     "
@@ -411,7 +499,7 @@ Public Class home
                 NotifyIcon1.ShowBalloonTip(500, "WinBackupper", "Running in backgound", ToolTipIcon.Info)
             End If
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in home_Resize Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     'Maximize from System-Tray on DoubleClick
@@ -422,7 +510,7 @@ Public Class home
             Me.WindowState = FormWindowState.Normal
             NotifyIcon1.Visible = False
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Notify Icon Sub", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     'Maximize from System-Tray menu -> Open
@@ -432,7 +520,7 @@ Public Class home
             Me.WindowState = FormWindowState.Normal
             NotifyIcon1.Visible = False
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in OpenToolStripMenu Sub", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     'Close Application from System-Tray menu -> Close
@@ -469,4 +557,5 @@ Public Class home
     End Sub
 #End Region
 
+   
 End Class

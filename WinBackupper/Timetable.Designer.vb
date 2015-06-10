@@ -32,7 +32,7 @@ Partial Class Timetable
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.txt_intervall = New System.Windows.Forms.TextBox()
+        Me.tb_intervall = New System.Windows.Forms.TextBox()
         Me.b_reset = New System.Windows.Forms.Button()
         Me.cb_intervall = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
@@ -131,13 +131,13 @@ Partial Class Timetable
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Intervall (in h):"
         '
-        'txt_intervall
+        'tb_intervall
         '
-        Me.txt_intervall.Location = New System.Drawing.Point(132, 68)
-        Me.txt_intervall.Name = "txt_intervall"
-        Me.txt_intervall.Size = New System.Drawing.Size(126, 20)
-        Me.txt_intervall.TabIndex = 29
-        Me.txt_intervall.Text = "24"
+        Me.tb_intervall.Location = New System.Drawing.Point(132, 68)
+        Me.tb_intervall.Name = "tb_intervall"
+        Me.tb_intervall.Size = New System.Drawing.Size(126, 20)
+        Me.tb_intervall.TabIndex = 29
+        Me.tb_intervall.Text = "24"
         '
         'b_reset
         '
@@ -170,7 +170,7 @@ Partial Class Timetable
         Me.ClientSize = New System.Drawing.Size(268, 445)
         Me.Controls.Add(Me.cb_intervall)
         Me.Controls.Add(Me.b_reset)
-        Me.Controls.Add(Me.txt_intervall)
+        Me.Controls.Add(Me.tb_intervall)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.l_sourcePath)
@@ -197,7 +197,7 @@ Partial Class Timetable
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents txt_intervall As System.Windows.Forms.TextBox
+    Friend WithEvents tb_intervall As System.Windows.Forms.TextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
     Friend WithEvents cb_intervall As System.Windows.Forms.CheckBox
 End Class

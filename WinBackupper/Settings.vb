@@ -5,9 +5,9 @@ Imports System.Reflection
 Public Class Settings
 
 #Region "Variables"
-    '*-----------------*'
-    '*----Variables----*'
-    '*-----------------*'
+    '*------------------------*'
+    '*----Global Variables----*'
+    '*------------------------*'
     Dim defaultsourcePath As String 'set via code - read from settings and set like that.
     Public sourcepatharray As ArrayList = WinBackupper.home.sourcepatharray 'reference to form1.vb array. (which is loaded first)
     Dim defaultbackupPath As String 'set via code - read from settings and set like that.
