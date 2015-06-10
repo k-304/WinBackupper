@@ -330,7 +330,8 @@ Public Class home
 
     ' Button open Settings
     Private Sub b_settings_Click(sender As Object, e As EventArgs) Handles b_settings.Click
-        Settings.Show()
+        'Show Settings Form and block home Form
+        Settings.ShowDialog()
     End Sub
 
     'Button Update - executed on click
@@ -393,6 +394,12 @@ Public Class home
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
+#End Region
+
+#Region "System-Tray"
+    '*-----------------*'
+    '*---System-Tray---*'
+    '*-----------------*'
 
     'Minimize and Maximize Application
     'Minimize to System-Tray
@@ -407,8 +414,9 @@ Public Class home
             MsgBox(ex.Message)
         End Try
     End Sub
-    'Maximize from System-Tray
-    Private Sub NotifyIcon1_MouseClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseClick
+    'Maximize from System-Tray on DoubleClick
+    'Maybe Notify_MouseDoubleClick could be removed
+    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
         Try
             Me.Visible = True
             Me.WindowState = FormWindowState.Normal
@@ -417,7 +425,21 @@ Public Class home
             MsgBox(ex.Message)
         End Try
     End Sub
-
+    'Maximize from System-Tray menu -> Open
+    Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
+        Try
+            Me.Visible = True
+            Me.WindowState = FormWindowState.Normal
+            NotifyIcon1.Visible = False
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+    'Close Application from System-Tray menu -> Close
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        'Close
+        Me.Close()
+    End Sub
 #End Region
 
 #Region "Workers"
