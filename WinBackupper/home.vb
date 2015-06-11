@@ -242,7 +242,7 @@ Public Class home
         Else
             startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
         End If
-         If startResult = Windows.Forms.DialogResult.Yes Then
+        If startResult = Windows.Forms.DialogResult.Yes Then
             start_Backup()
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
@@ -557,5 +557,5 @@ Public Class home
     End Sub
 #End Region
 
-   
+
 End Class
