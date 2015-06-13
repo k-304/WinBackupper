@@ -183,9 +183,9 @@ Partial Class home
         '
         'rtb_log
         '
-        Me.rtb_log.Location = New System.Drawing.Point(13, 336)
+        Me.rtb_log.Location = New System.Drawing.Point(12, 336)
         Me.rtb_log.Name = "rtb_log"
-        Me.rtb_log.Size = New System.Drawing.Size(429, 55)
+        Me.rtb_log.Size = New System.Drawing.Size(430, 55)
         Me.rtb_log.TabIndex = 14
         Me.rtb_log.Text = ""
         '
@@ -195,7 +195,7 @@ Partial Class home
         Me.l_log.BackColor = System.Drawing.Color.Transparent
         Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_log.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_log.Location = New System.Drawing.Point(200, 309)
+        Me.l_log.Location = New System.Drawing.Point(199, 309)
         Me.l_log.Name = "l_log"
         Me.l_log.Size = New System.Drawing.Size(47, 24)
         Me.l_log.TabIndex = 15
