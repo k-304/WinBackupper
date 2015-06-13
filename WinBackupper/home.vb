@@ -73,20 +73,24 @@ Public Class home
                 'close reader to prevent file IO Exceptions
                 xmlReader2.Close()
                 xmlReader2.Dispose()
-                'loop through all source/dest. path's (Display in form Richtextbox)
-                For i = 0 To sourcepatharray.Count - 1 Step 1
-                    'also fill RTB_Source! (richtextbox)
-                    RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
-                    'also fill RTB_Backup! (richtextbox)
-                    RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
-                Next
 
+                'show settings in GUI
+                Reload_settings()
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
     End Sub
 
+    Public Function Reload_settings()
+        'loop through all source/dest. path's (Display in form Richtextbox)
+        For i = 0 To sourcepatharray.Count - 1 Step 1
+            'also fill RTB_Source! (richtextbox)
+            Me.RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+            'also fill RTB_Backup! (richtextbox)
+            Me.RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+        Next
+    End Function
 
     'copy of settings function - no way found to ference it =(
     Public Function RTB_SP_Clicked(sender As Object, e As MouseEventArgs)
@@ -243,7 +247,7 @@ Public Class home
             startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
         End If
         If startResult = Windows.Forms.DialogResult.Yes Then
-            start_Backup()
+            start_backup()
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
         End If
@@ -476,7 +480,7 @@ Public Class home
     End Function
 
     'Function to get Directory of current .exe-file
-    Private Function getexedir() As String
+    Public Function getexedir() As String
         Dim path As String
         path = System.IO.Path.GetDirectoryName( _
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)

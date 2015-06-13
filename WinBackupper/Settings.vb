@@ -19,7 +19,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public selectedpathlinesarray As New ArrayList
-    Public Shared linecurrentlyedited As Integer = 1000
+    Public Shared linecurrentlyedited As Integer = 0 'as default select the fist index (if not existing it will be written)
 
 #End Region
 
@@ -35,6 +35,12 @@ Public Class Settings
         sourcepatharray = WinBackupper.home.sourcepatharray
         'after getting current values - update displayed settings 
         Settings_Reload()
+    End Sub
+
+    'code executed when form closes
+    Private Sub settings_close(sender As Object, e As EventArgs) Handles MyBase.FormClosed
+        'try to reload settings for home form (in gui)
+        'when this form closes, all work should have been done
     End Sub
 
     'function to set autostart
@@ -53,7 +59,7 @@ Public Class Settings
                         startupparameters = " " & startupparameters
                     End If
                 End If
-                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", getexedir() & "\WinBackupper.exe" & startupparameters)
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", home.getexedir() & "\WinBackupper.exe" & startupparameters)
             Else
                 'define the run key
                 Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
@@ -98,7 +104,7 @@ Public Class Settings
             'read the value of our key
             Dim currrunkeyvalue = My.Computer.Registry.GetValue _
                                   ("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Winbackupper_Autostart", Nothing)
-            Dim supposedrunkeyvalue = getexedir() & Assembly.GetEntryAssembly() 'getentryassembly gets exe name
+            Dim supposedrunkeyvalue = home.getexedir() & Assembly.GetEntryAssembly().ToString 'getentryassembly gets exe name
             Dim parameters
             If currrunkeyvalue.contains("/s") Or currrunkeyvalue.contains("-s") Or currrunkeyvalue.contains("/silent") _
                 Or currrunkeyvalue.contains("-silent") Then
@@ -112,7 +118,7 @@ Public Class Settings
                 'delete the value
                 runkey.DeleteValue("Winbackupper_Autostart")
                 My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", _
-                                              "Winbackupper_Autostart", getexedir() & Assembly.GetEntryAssembly() & parameters)
+                                              "Winbackupper_Autostart", home.getexedir() & Assembly.GetEntryAssembly().ToString & parameters)
                 Return 0
             Else
                 'the value is already correct - exe name/location didn't change.               
@@ -131,9 +137,13 @@ Public Class Settings
             'run through Array and get needed Values
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'also fill RTB_Source! (richtextbox)
-                RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+                If Not sourcepatharray.Count = 0 Then
+                    RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
+                End If
                 'also fill RTB_Backup! (richtextbox)
-                RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+                If Not backupPatharray.Count = 0 Then
+                    RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+                End If
                 'to get the time, fill a richtextbox with all starttimes FOR THE SELECTED ENTRY! (no idea how to display it otherwise currently)
             Next
             'check if registry key for autostart exists -also set in the settings form
@@ -223,12 +233,14 @@ Public Class Settings
     ' Button Save defaults to own XML File
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
         'delete default.xml if it exists already
-        If System.IO.File.Exists(getexedir() & "\default.xml") Then
+        If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
             'delete it 
-            System.IO.File.Delete(getexedir() & "\default.xml")
+            System.IO.File.Delete(home.getexedir() & "\default.xml")
         End If
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
+        'try to update home GUI
+        home.Reload_settings()
         'close
         Me.Close()
     End Sub
@@ -238,9 +250,9 @@ Public Class Settings
 
         If resetchoice = vbYes Then
             'delete xml file - reset arrays
-            If System.IO.File.Exists(getexedir() & "\default.xml") Then
+            If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
                 'delete it 
-                System.IO.File.Delete(getexedir() & "\default.xml")
+                System.IO.File.Delete(home.getexedir() & "\default.xml")
             End If
             'Clear Array
             sourcepatharray.Clear()
@@ -524,7 +536,13 @@ Public Class Settings
         'if added source and backup folder =>
         If DialogResult = Windows.Forms.DialogResult.OK Then
             'ask user to edit the time settings for this folder pair
-            Timetable.Show()
+            Timetable.ShowDialog()
+            'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
+            'it seems as when the "finish" button on the timetableform is clicked and the dialogs are finished the settings form is closed too.
+            'but there is no code to close it ...
+            'according to there http://blogs.msdn.com/b/cumgranosalis/archive/2005/10/03/showdialog-in-showdialog.aspx
+            'it should help to set the dialogresult to none for this dialog (so it doesnt close if i understood correctly)
+            DialogResult = DialogResult.None
         End If
 
     End Sub
@@ -567,14 +585,6 @@ Public Class Settings
             'don't execute the code since the checkbox is changen on the LOAD event! This would execute this code too - and we don't want that!
         End If
     End Sub
-
-    'Function to get Directory of current .exe-file
-    Private Function getexedir()
-        Dim path As String
-        path = System.IO.Path.GetDirectoryName( _
-           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
-        Return path.Substring(6, path.Length - 6)
-    End Function
 
 #End Region
 
