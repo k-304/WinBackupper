@@ -258,7 +258,7 @@ Public Class home
         Try
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
-            starttime = GetDate() & GetTime()
+            starttime = GetDate()
             'log it
             rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
             'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
