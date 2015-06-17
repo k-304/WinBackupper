@@ -1,11 +1,13 @@
 # WinBackupper
-Simple Windows Backup-Tool.
+A simple and automated Backup-Tool for Windows.
+
+# Features
+- Multiple Source & Destination Folders
+- Source & Destination default Folders
+- Set multuiple start Times for every Folder for every Day, Hour and Minute
 
 # Bugs
-
-Nr:6 .exe Filename change results in breaking autostart. See =>
-
-https://github.com/SnipeLike/WinBackupper/issues/6
+https://github.com/SnipeLike/WinBackupper/issues
 
 # Next Update
 Many new Feutures!
