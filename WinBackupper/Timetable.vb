@@ -178,6 +178,10 @@
             finalarray.Reverse()
             'loop thorugh all hours from the selcted hour to 24
             For i As Integer = seltimehours + intervall To 24 Step intervall '+intervall in the i= declaration to prevent add the selected time 2 times. (prevents a "bug")
+                If i = 24 Then
+                    'exclude the 24 hour since it doesnt exist =)
+                    Exit For
+                End If
                 finalarray.Add(i)
             Next
 
@@ -333,13 +337,77 @@
                 'get values of home class
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
                 'call settings for dayn with 0 argument to get values for monday and load them appropriately.
-                Dim mondaytimes = settings_of_dayn(home.getdayofweek, timesettingsforcurrentfolderpair)
+                'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
+
+                Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
                 Dim mondaytimesarray As New ArrayList
                 mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
                 'fill the current times into RTB_Time
                 For Each time As String In mondaytimesarray
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 1
+                'next day (tue)
+                Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
+                Dim tuedaytimesarray As New ArrayList
+                tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In tuedaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 2
+                'next day (wed)
+                Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
+                Dim weddaytimesarray As New ArrayList
+                weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In weddaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 3
+                'next day (thu)
+                Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
+                Dim thudaytimesarray As New ArrayList
+                thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In thudaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 4
+                'next day (fri)
+                Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
+                Dim fridaytimesarray As New ArrayList
+                fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In fridaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 5
+                'next day (fri)
+                Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
+                Dim satdaytimesarray As New ArrayList
+                satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In satdaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index to fill
+                ComboBox_Day.SelectedIndex = 6
+                'next day (fri)
+                Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
+                Dim sundaytimesarray As New ArrayList
+                sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
+                'fill the current times into RTB_Time
+                For Each time As String In sundaytimesarray
+                    RTB_Time.AppendText(time & vbNewLine)
+                Next
+                'select index 0 again (monday = 0) / or current day?
+                ComboBox_Day.SelectedIndex = 0
             Else
                 'is nothing - dont  load settings => a new entry is created)
             End If
