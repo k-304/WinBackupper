@@ -333,7 +333,7 @@
                 'get values of home class
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
                 'call settings for dayn with 0 argument to get values for monday and load them appropriately.
-                Dim mondaytimes = settings_of_dayn(home.getday, timesettingsforcurrentfolderpair)
+                Dim mondaytimes = settings_of_dayn(home.getdayofweek, timesettingsforcurrentfolderpair)
                 Dim mondaytimesarray As New ArrayList
                 mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
                 'fill the current times into RTB_Time

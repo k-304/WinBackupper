@@ -427,27 +427,31 @@ Public Class home
         End Try
     End Sub
 
-    Function GetDate() As String
+    Public Function GetDate() As String
         Dim day = getday()
         Dim month = DateTime.Now.ToString("MM")
         Dim year = DateTime.Now.ToString("yyyy")
         Dim time = GetTime()
         Return (year & month & day & time)
     End Function
-    Function getday() As String
+    Public Function getday() As String
         Dim day = DateTime.Now.ToString("dd")
         Return day
     End Function
-    Function GetTime() As String
+    Public Function getdayofweek() As String
+        Dim day = DateTime.Now.DayOfWeek
+        Return day
+    End Function
+    Public Function GetTime() As String
         Dim hour = GetHour()
         Dim min = GetMinutes()
         Return (hour & min)
     End Function
-    Function GetHour() As String
+    Public Function GetHour() As String
         Dim hour = DateTime.Now.ToString("HH")
         Return hour
     End Function
-    Function GetMinutes() As String
+    Public Function GetMinutes() As String
         Dim min = DateTime.Now.ToString("mm")
         Return min
     End Function
