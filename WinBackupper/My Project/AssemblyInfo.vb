@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("WinBackupper")> 
-<Assembly: AssemblyDescription("Wimple Windows Backupper")> 
+<Assembly: AssemblyDescription("Simple Windows Backupper")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("WinBackupper")> 
 <Assembly: AssemblyCopyright("Copyright ©  2015")> 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.0.0.8")> 
-<Assembly: AssemblyFileVersion("0.0.0.8")> 
+<Assembly: AssemblyVersion("0.0.0.9")> 
+<Assembly: AssemblyFileVersion("0.0.0.9")> 
