@@ -134,6 +134,9 @@ Public Class Settings
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
+            'clear RTB's - somehow the "clear()" function of rtb's does not work? dont know what could have affected this? either way should be fixxed now
+            RTB_Sourcepath.Text = ""
+            RTB_Backuppath.Text = ""
             'run through Array and get needed Values
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'also fill RTB_Source! (richtextbox)
