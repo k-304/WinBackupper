@@ -83,6 +83,9 @@ Public Class home
     End Sub
 
     Public Function Reload_settings()
+        'reset the text of the rtb's
+        RTB_Backuppath.Text = ""
+        RTB_Sourcepath.Text = ""
         'loop through all source/dest. path's (Display in form Richtextbox)
         For i = 0 To sourcepatharray.Count - 1 Step 1
             'also fill RTB_Source! (richtextbox)
