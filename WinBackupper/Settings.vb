@@ -348,6 +348,13 @@ Public Class Settings
             For Each TimeSetting In TSArray
                 RTB_timesettings.AppendText(TimeSetting & vbNewLine)
             Next
+            If TSArray.Count = 0 Then ' no members in array
+                RTB_timesettings.AppendText("Not defined for Today")
+            Else
+                For Each TimeSetting In TSArray
+                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+                Next
+            End If
         Catch ex As Exception
 
         End Try

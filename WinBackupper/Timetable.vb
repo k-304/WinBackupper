@@ -333,7 +333,9 @@
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
-            If Not Settings.linecurrentlyedited = Nothing Then
+            'reset text before reloading settings
+            RTB_Time.Text = ""
+            If Not Settings.linecurrentlyedited = home.timesettingsarray.Count Then
                 'get values of home class
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
                 'call settings for dayn with 0 argument to get values for monday and load them appropriately.
@@ -388,7 +390,7 @@
                 Next
                 'select index to fill
                 dd_Day.SelectedIndex = 5
-                'next day (fri)
+                'next day (sat)
                 Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
                 Dim satdaytimesarray As New ArrayList
                 satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
@@ -398,7 +400,7 @@
                 Next
                 'select index to fill
                 dd_Day.SelectedIndex = 6
-                'next day (fri)
+                'next day (sun)
                 Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
                 Dim sundaytimesarray As New ArrayList
                 sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
@@ -410,6 +412,7 @@
                 dd_Day.SelectedIndex = 0
             Else
                 'is nothing - dont  load settings => a new entry is created)
+                MsgBox("Linecurrentlyedited is nothing")
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
