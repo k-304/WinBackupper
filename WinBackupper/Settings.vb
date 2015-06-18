@@ -731,4 +731,33 @@ Public Class Settings
 
 #End Region
 
+    Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
+
+        'loop through selected lines
+        For Each line As Integer In selectedpathlinesarray
+                'also remove from array 
+            home.timesettingsarray.RemoveAt(line)
+            'delete rtb time text
+            RTB_timesettings.Text = ""
+
+            Dim curentbackuplist As List(Of String) = RTB_Backuppath.Lines.ToList()
+            If curentbackuplist.Count > 0 Then
+                curentbackuplist.RemoveAt(line)
+                RTB_Backuppath.Lines = curentbackuplist.ToArray()
+                RTB_Backuppath.Refresh()
+                'also remove from array 
+                home.backupPatharray.RemoveAt(line)
+            End If
+
+            Dim curentsourcelist As List(Of String) = RTB_Sourcepath.Lines.ToList()
+            If curentsourcelist.Count > 0 Then
+                curentsourcelist.RemoveAt(line)
+                RTB_Sourcepath.Lines = curentsourcelist.ToArray()
+                RTB_Sourcepath.Refresh()
+                'also remove from array 
+                home.sourcepatharray.RemoveAt(line)
+            End If
+        Next
+
+    End Sub
 End Class

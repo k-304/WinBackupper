@@ -40,6 +40,7 @@ Private Sub InitializeComponent()
         Me.l_backuptimes = New System.Windows.Forms.Label()
         Me.cb_Autostart = New System.Windows.Forms.CheckBox()
         Me.b_showtimetable = New System.Windows.Forms.Button()
+        Me.b_Remove_Folderpair = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'l_BackupPath
@@ -69,9 +70,9 @@ Private Sub InitializeComponent()
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(121, 442)
+        Me.b_save.Location = New System.Drawing.Point(345, 441)
         Me.b_save.Name = "b_save"
-        Me.b_save.Size = New System.Drawing.Size(321, 35)
+        Me.b_save.Size = New System.Drawing.Size(97, 35)
         Me.b_save.TabIndex = 18
         Me.b_save.Text = "Save"
         Me.b_save.UseVisualStyleBackColor = True
@@ -201,6 +202,16 @@ Private Sub InitializeComponent()
         Me.b_showtimetable.Text = "Edit Time Confgiuration"
         Me.b_showtimetable.UseVisualStyleBackColor = True
         '
+        'b_Remove_Folderpair
+        '
+        Me.b_Remove_Folderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_Remove_Folderpair.Location = New System.Drawing.Point(121, 441)
+        Me.b_Remove_Folderpair.Name = "b_Remove_Folderpair"
+        Me.b_Remove_Folderpair.Size = New System.Drawing.Size(218, 35)
+        Me.b_Remove_Folderpair.TabIndex = 29
+        Me.b_Remove_Folderpair.Text = "Remove Directory"
+        Me.b_Remove_Folderpair.UseVisualStyleBackColor = True
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -208,6 +219,7 @@ Private Sub InitializeComponent()
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(454, 489)
+        Me.Controls.Add(Me.b_Remove_Folderpair)
         Me.Controls.Add(Me.b_showtimetable)
         Me.Controls.Add(Me.cb_Autostart)
         Me.Controls.Add(Me.l_backuptimes)
@@ -248,4 +260,5 @@ Private Sub InitializeComponent()
 Friend WithEvents l_backuptimes As System.Windows.Forms.Label
     Friend WithEvents cb_Autostart As System.Windows.Forms.CheckBox
     Friend WithEvents b_showtimetable As System.Windows.Forms.Button
+    Friend WithEvents b_Remove_Folderpair As System.Windows.Forms.Button
 End Class
