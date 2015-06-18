@@ -134,6 +134,9 @@ Public Class Settings
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
+            'clear RTB's - somehow the "clear()" function of rtb's does not work? dont know what could have affected this? either way should be fixxed now
+            RTB_Sourcepath.Text = ""
+            RTB_Backuppath.Text = ""
             'run through Array and get needed Values
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'also fill RTB_Source! (richtextbox)
@@ -345,6 +348,13 @@ Public Class Settings
             For Each TimeSetting In TSArray
                 RTB_timesettings.AppendText(TimeSetting & vbNewLine)
             Next
+            If TSArray.Count = 0 Then ' no members in array
+                RTB_timesettings.AppendText("Not defined for Today")
+            Else
+                For Each TimeSetting In TSArray
+                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
+                Next
+            End If
         Catch ex As Exception
 
         End Try
@@ -721,4 +731,33 @@ Public Class Settings
 
 #End Region
 
+    Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
+
+        'loop through selected lines
+        For Each line As Integer In selectedpathlinesarray
+                'also remove from array 
+            home.timesettingsarray.RemoveAt(line)
+            'delete rtb time text
+            RTB_timesettings.Text = ""
+
+            Dim curentbackuplist As List(Of String) = RTB_Backuppath.Lines.ToList()
+            If curentbackuplist.Count > 0 Then
+                curentbackuplist.RemoveAt(line)
+                RTB_Backuppath.Lines = curentbackuplist.ToArray()
+                RTB_Backuppath.Refresh()
+                'also remove from array 
+                home.backupPatharray.RemoveAt(line)
+            End If
+
+            Dim curentsourcelist As List(Of String) = RTB_Sourcepath.Lines.ToList()
+            If curentsourcelist.Count > 0 Then
+                curentsourcelist.RemoveAt(line)
+                RTB_Sourcepath.Lines = curentsourcelist.ToArray()
+                RTB_Sourcepath.Refresh()
+                'also remove from array 
+                home.sourcepatharray.RemoveAt(line)
+            End If
+        Next
+
+    End Sub
 End Class
