@@ -10,4 +10,4 @@ A simple and automated Backup-Tool for Windows.
 https://github.com/SnipeLike/WinBackupper/issues
 
 # Next Update
-Many new Feutures!
+Many new Features!
