@@ -23,12 +23,12 @@ Partial Class Timetable
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
-        Me.DTP = New System.Windows.Forms.DateTimePicker()
+        Me.dtp = New System.Windows.Forms.DateTimePicker()
         Me.b_add = New System.Windows.Forms.Button()
         Me.RTB_Time = New System.Windows.Forms.RichTextBox()
         Me.b_stopediting = New System.Windows.Forms.Button()
         Me.b_remove = New System.Windows.Forms.Button()
-        Me.ComboBox_Day = New System.Windows.Forms.ComboBox()
+        Me.dd_Day = New System.Windows.Forms.ComboBox()
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -37,14 +37,14 @@ Partial Class Timetable
         Me.cb_intervall = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
-        'DTP
+        'dtp
         '
-        Me.DTP.CustomFormat = "HH:mm"
-        Me.DTP.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DTP.Location = New System.Drawing.Point(132, 40)
-        Me.DTP.Name = "DTP"
-        Me.DTP.Size = New System.Drawing.Size(126, 20)
-        Me.DTP.TabIndex = 0
+        Me.dtp.CustomFormat = "HH:mm"
+        Me.dtp.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtp.Location = New System.Drawing.Point(132, 40)
+        Me.dtp.Name = "dtp"
+        Me.dtp.Size = New System.Drawing.Size(126, 20)
+        Me.dtp.TabIndex = 0
         '
         'b_add
         '
@@ -85,15 +85,15 @@ Partial Class Timetable
         Me.b_remove.Text = "Remove"
         Me.b_remove.UseVisualStyleBackColor = True
         '
-        'ComboBox_Day
+        'dd_Day
         '
-        Me.ComboBox_Day.FormattingEnabled = True
-        Me.ComboBox_Day.Items.AddRange(New Object() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"})
-        Me.ComboBox_Day.Location = New System.Drawing.Point(133, 13)
-        Me.ComboBox_Day.Name = "ComboBox_Day"
-        Me.ComboBox_Day.Size = New System.Drawing.Size(125, 21)
-        Me.ComboBox_Day.TabIndex = 25
-        Me.ComboBox_Day.Text = "Monday"
+        Me.dd_Day.FormattingEnabled = True
+        Me.dd_Day.Items.AddRange(New Object() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"})
+        Me.dd_Day.Location = New System.Drawing.Point(133, 13)
+        Me.dd_Day.Name = "dd_Day"
+        Me.dd_Day.Size = New System.Drawing.Size(125, 21)
+        Me.dd_Day.TabIndex = 25
+        Me.dd_Day.Text = "Monday"
         '
         'l_sourcePath
         '
@@ -174,12 +174,12 @@ Partial Class Timetable
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.l_sourcePath)
-        Me.Controls.Add(Me.ComboBox_Day)
+        Me.Controls.Add(Me.dd_Day)
         Me.Controls.Add(Me.b_remove)
         Me.Controls.Add(Me.b_stopediting)
         Me.Controls.Add(Me.RTB_Time)
         Me.Controls.Add(Me.b_add)
-        Me.Controls.Add(Me.DTP)
+        Me.Controls.Add(Me.dtp)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Timetable"
@@ -188,12 +188,12 @@ Partial Class Timetable
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents DTP As System.Windows.Forms.DateTimePicker
+    Friend WithEvents dtp As System.Windows.Forms.DateTimePicker
     Friend WithEvents b_add As System.Windows.Forms.Button
     Friend WithEvents RTB_Time As System.Windows.Forms.RichTextBox
     Friend WithEvents b_stopediting As System.Windows.Forms.Button
     Friend WithEvents b_remove As System.Windows.Forms.Button
-    Friend WithEvents ComboBox_Day As System.Windows.Forms.ComboBox
+    Friend WithEvents dd_Day As System.Windows.Forms.ComboBox
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label

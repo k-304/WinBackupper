@@ -21,11 +21,11 @@
 #End Region
 
 #Region "MainCode"
-    Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Day.SelectedIndexChanged
+    Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles dd_Day.SelectedIndexChanged
 
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
         'use this to reread all settings when user changes to another Day
-        selectedday = ComboBox_Day.SelectedIndex
+        selectedday = dd_Day.SelectedIndex
 
         'define Lines for lastly selected day (before changing index)
         'when it changes again, reload the data for the selected day
@@ -69,7 +69,7 @@
 
 
         'define old index -  needed to keep old settings (and store them correctly in vars)
-        lastcomboboxindex = ComboBox_Day.SelectedIndex
+        lastcomboboxindex = dd_Day.SelectedIndex
 
     End Sub
 
@@ -157,8 +157,8 @@
         'define target array
         Dim finalarray As New ArrayList
         'get selected time
-        Dim seltimehours As Integer = DTP.ToString.Substring(DTP.ToString.Length - 8, 2)
-        Dim seltimeminutes As String = DTP.ToString.Substring(DTP.ToString.Length - 5, 2)
+        Dim seltimehours As Integer = dtp.ToString.Substring(dtp.ToString.Length - 8, 2)
+        Dim seltimeminutes As String = dtp.ToString.Substring(dtp.ToString.Length - 5, 2)
         Dim intervall As Integer = Me.tb_intervall.Text
 
         'if checkbox is checked calculate others and add them (and check if intervall makes sense, if not just add currently selected time)
@@ -194,7 +194,7 @@
         Else
             'just add selected value
             'gt entered text and add to richtextbox (later also array)
-            RTB_Time.AppendText(DTP.ToString.Substring(DTP.ToString.Length - 8, 5) & vbNewLine)
+            RTB_Time.AppendText(dtp.ToString.Substring(dtp.ToString.Length - 8, 5) & vbNewLine)
         End If
 
     End Sub
@@ -212,7 +212,7 @@
         ' save the current field too - if edited it will be saved in the Variable, since it only saves when the combox (day) is changed . 
         'this might not happen the last time, so save it here (too) 
 
-        Select Case ComboBox_Day.SelectedIndex
+        Select Case dd_Day.SelectedIndex
             Case 0
                 RTB_Lines_Mon = RTB_Time.Lines
             Case 1
@@ -347,7 +347,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 1
+                dd_Day.SelectedIndex = 1
                 'next day (tue)
                 Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
                 Dim tuedaytimesarray As New ArrayList
@@ -357,7 +357,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 2
+                dd_Day.SelectedIndex = 2
                 'next day (wed)
                 Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
                 Dim weddaytimesarray As New ArrayList
@@ -367,7 +367,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 3
+                dd_Day.SelectedIndex = 3
                 'next day (thu)
                 Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
                 Dim thudaytimesarray As New ArrayList
@@ -377,7 +377,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 4
+                dd_Day.SelectedIndex = 4
                 'next day (fri)
                 Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
                 Dim fridaytimesarray As New ArrayList
@@ -387,7 +387,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 5
+                dd_Day.SelectedIndex = 5
                 'next day (fri)
                 Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
                 Dim satdaytimesarray As New ArrayList
@@ -397,7 +397,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index to fill
-                ComboBox_Day.SelectedIndex = 6
+                dd_Day.SelectedIndex = 6
                 'next day (fri)
                 Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
                 Dim sundaytimesarray As New ArrayList
@@ -407,7 +407,7 @@
                     RTB_Time.AppendText(time & vbNewLine)
                 Next
                 'select index 0 again (monday = 0) / or current day?
-                ComboBox_Day.SelectedIndex = 0
+                dd_Day.SelectedIndex = 0
             Else
                 'is nothing - dont  load settings => a new entry is created)
             End If
@@ -436,11 +436,11 @@
         If resetchoice = vbYes Then
             'cycle through all time data and reset it
             For i = 0 To 6 Step 1
-                ComboBox_Day.SelectedIndex = i
+                dd_Day.SelectedIndex = i
                 RTB_Time.Clear()
             Next
             'select first day again
-            ComboBox_Day.SelectedIndex = 0
+            dd_Day.SelectedIndex = 0
         Else
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
