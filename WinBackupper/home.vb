@@ -331,6 +331,8 @@ Public Class home
                             silent = True
                             'hours AND Minutes are the same - start backup 
                             start_backup()
+                            'after autobackup- set silent to false again!
+                            silent = True
                         End If
                     End If
 
