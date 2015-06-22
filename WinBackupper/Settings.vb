@@ -260,9 +260,12 @@ Public Class Settings
             'Clear Array
             sourcepatharray.Clear()
             backupPatharray.Clear()
+            home.timesettingsarray.Clear()
             'Refresh Richtextbox
             RTB_Sourcepath.Clear()
             RTB_Backuppath.Clear()
+            RTB_timesettings.Clear()
+
         Else
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)

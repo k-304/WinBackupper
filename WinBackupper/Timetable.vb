@@ -412,7 +412,6 @@
                 dd_Day.SelectedIndex = 0
             Else
                 'is nothing - dont  load settings => a new entry is created)
-                MsgBox("Linecurrentlyedited is nothing")
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)

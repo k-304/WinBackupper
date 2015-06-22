@@ -77,6 +77,9 @@ Public Class home
                 'show settings in GUI
                 Reload_settings()
             End If
+
+            'then start timer to start automated backup
+            Timer_per_Minute.Start()
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
@@ -93,6 +96,7 @@ Public Class home
             'also fill RTB_Backup! (richtextbox)
             Me.RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
         Next
+        Return 0
     End Function
 
     'copy of settings function - no way found to ference it =(
@@ -283,10 +287,11 @@ Public Class home
                     rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & vbNewLine)
                 End If
             Next
-
+            Return 0
 
         Catch ex As Exception
-
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured instart_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
         End Try
     End Function
     'executed when the minutely timer ticks+
@@ -298,7 +303,7 @@ Public Class home
             End If
             'get current values
             'get current day
-            Dim currday = GetDate()
+            Dim currday = getday()
             'define current time in hours
             Dim currhour = GetHour()
             'define current time in minutes
@@ -310,10 +315,10 @@ Public Class home
                 'define the member for current folderpair
                 Dim currpairsettings As String = timesettingsarray(i)
                 'get string out of the array 
-                Dim TSArraystring = Timetable.settings_of_dayn(getday, currpairsettings)
+                Dim TSArraystring = Timetable.settings_of_dayn(getdayofweek, currpairsettings)
                 Dim TSArray As New ArrayList 'TS for Time Settings
                 TSArray = StringtoArray(TSArraystring, ";")
-                For Each time As String In timesettingsarray(i)
+                For Each time As String In TSArray
                     'time is written like HH:MM
                     'so get hours and minutes
                     Dim checkhour = time.Substring(0, 2) 'gets first 2 chars so the HH
@@ -322,6 +327,8 @@ Public Class home
                         If checkMinute = currmin Then
                             'log the auto start
                             rtb_log.AppendText("The Following Backup Process was autostarted:")
+                            'before starting set "silent" var to true- so no msgbox pooops up to ask user
+                            silent = True
                             'hours AND Minutes are the same - start backup 
                             start_backup()
                         End If
@@ -440,6 +447,14 @@ Public Class home
     End Function
     Public Function getdayofweek() As String
         Dim day = DateTime.Now.DayOfWeek
+        If day = 0 Then
+            'this is sunday for Microsoft - why the hell ever
+            'so convert the numbers, don t wanna rewrite everything
+            day = 6 'this set s sunday in my logic
+        Else
+            'if not it s f.E monday which is 1 => calc -1 so it's 0---
+            day -= 1
+        End If
         Return day
     End Function
     Public Function GetTime() As String
