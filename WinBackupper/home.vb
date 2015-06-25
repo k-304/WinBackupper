@@ -16,6 +16,9 @@ Public Class home
     Public GlobalSeperator As String = ";" 'used to seperate strings if ever needed
     Public starttime As String 'used later to store datetime of start event (currently in the click function - if automated we 
     Public silent As Boolean = False
+    Public Logfilename_Prefix As String = "BackupLog_" 'only use filename - no / allowed!
+    Public LogfileFolder = "/Logs/" 'enter / %dirname / ! Slashes are Needed in front and at the end of this string!
+
 #End Region
 
 #Region "MainCode"
@@ -23,9 +26,38 @@ Public Class home
     '*----Main Code----*'
     '*-----------------*'
 
+    'Sub executed when Form is closed
+    Private Sub home_Formclosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
+        'write Log here?
+        ''''''''''  WriteLogfile("Test1", w)
+    End Sub
+
+
+    'Function to write a Logfile
+    'accepts filepath, text to write and a boolead (true/false) if the file should be overwritten.
+    Public Function WriteLogfile(filepath As String, text As String, Optional overwrite As Boolean = False)
+        Try
+            'check if file already exists
+
+            'if so check if we should overwrite (delete&recreate) it
+
+            'open the file
+            Using w As StreamWriter = File.AppendText(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt")
+                'write some header information first - then write all RTB_log text into it
+
+                'workinprogreS!!!!!!!!!
+
+            End Using
+
+            'in the end return 0 to indicate success!
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
+
+
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'attention! "count" gives a locigal "human" value, but info is stored in an array which begins from 0
         Try
             If Environment.GetCommandLineArgs.Count <> 1 Then
                 If Environment.GetCommandLineArgs.Count = 2 Then
@@ -33,10 +65,8 @@ Public Class home
                     'if argument is supplied -hide forms!
                     Dim var = Environment.GetCommandLineArgs(1)
                     If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
-                        'not sure how to hide correctly yet - just testing. (this is to run silent at each startup - so user is not annoyed by he form popping up all the time
+                        'set silent var to true in order to "minimize" and hide all forms (check home_resize function)
                         silent = True
-                        ' Me.Visible = False
-                        'Settings.Visible = False
                     End If
                 End If
             End If
