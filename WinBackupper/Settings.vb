@@ -18,8 +18,7 @@ Public Class Settings
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
-    Public selectedpathlinesarray As New ArrayList
-    Public Shared linecurrentlyedited As Integer = 0 'as default select the fist index (if not existing it will be written)
+    Public linecurrentlyedited As Integer = 0
 
 #End Region
 
@@ -78,18 +77,14 @@ Public Class Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
-        If Not selectedpathlinesarray.Count = 0 Then
+        If Not lv_settings.SelectedItems.Count = 0 Then
             'loop through all selected indexes to edit configuration of each one
 
-            For Each line In selectedpathlinesarray
-                'set variable of timetable form so it knows which folderpair to edit
-                'on load it will check this variable and load the appropriate settings - if the variable is emptyit will not load any
-                linecurrentlyedited = line
+            For Each item As ListViewItem In lv_settings.SelectedItems
+                'set currently edited index
+                linecurrentlyedited = item.Index
                 Timetable.ShowDialog() 'pass current line as argument
             Next
-
-            'reset the currentlyeditedline variable (has to be nothing - will be checked like that in other form)
-            linecurrentlyedited = Nothing
         Else
             MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
@@ -134,21 +129,21 @@ Public Class Settings
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
-            'clear RTB's - somehow the "clear()" function of rtb's does not work? dont know what could have affected this? either way should be fixxed now
-            RTB_Sourcepath.Text = ""
-            RTB_Backuppath.Text = ""
+            'reset the content of the listview (lv_settings) (the .items. is important! otherwise it deletes the columns to!
+            lv_settings.Items.Clear()
             'run through Array and get needed Values
             For i = 0 To sourcepatharray.Count - 1 Step 1
-                'also fill RTB_Source! (richtextbox)
-                If Not sourcepatharray.Count = 0 Then
-                    RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
-                End If
-                'also fill RTB_Backup! (richtextbox)
-                If Not backupPatharray.Count = 0 Then
-                    RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
-                End If
-                'to get the time, fill a richtextbox with all starttimes FOR THE SELECTED ENTRY! (no idea how to display it otherwise currently)
+                'first, fill in the index, the "main item" (look at the code and you ll understand)
+                'define the item to add
+                Dim lvi As ListViewItem
+                lvi = Me.lv_settings.Items.Add(i) 'define listviewitem variable as the "current lsitviewitem to add". (fill it with index)
+                'fill in first subitem (in this case source)
+                lvi.SubItems.Add(sourcepatharray(i) & vbNewLine)
+                'then fill backuppath part 
+                lvi.SubItems.Add(backupPatharray(i) & vbNewLine)
+
             Next
+
             'check if registry key for autostart exists -also set in the settings form
             Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run")
             'checks if our valuename is within the run key
@@ -243,7 +238,7 @@ Public Class Settings
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
         'try to update home GUI
-        home.Reload_settings()
+        home.Settings_reload()
         'close
         Me.Close()
     End Sub
@@ -261,9 +256,8 @@ Public Class Settings
             sourcepatharray.Clear()
             backupPatharray.Clear()
             home.timesettingsarray.Clear()
-            'Refresh Richtextbox
-            RTB_Sourcepath.Clear()
-            RTB_Backuppath.Clear()
+            'Refresh listview and RTB
+            lv_settings.Items.Clear()
             RTB_timesettings.Clear()
 
         Else
@@ -273,187 +267,7 @@ Public Class Settings
 
     End Sub
 
-    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
-    Private Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Sourcepath.MouseDown
-        Try
-            If home.sourcepatharray.Count = 0 Then
-                Exit Sub
-            End If
-            'get mouseposition
-            Dim rtb = DirectCast(sender, RichTextBox)
-            'then get the char where the mouse is
-            Dim index = rtb.GetCharIndexFromPosition(e.Location)
-            'get the line where this char is (with it's index in the char array of the rtb)
-            Dim line = rtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
-            'define the last one
-            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
-            'start selection
-            rtb.SelectionStart = lineStart
-            'define the length of it
-            rtb.SelectionLength = lineEnd - lineStart
-            'define color to set
-            Dim tempselectionfont
-            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
-                'set the font type to bold to mark that it s selcted
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
-                'add to selcted line var
-                selectedpathlinesarray.Add(line)
-            Else
-                'set font normal again
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
-                'remove the entry of selected lines again
-                selectedpathlinesarray.Remove(line)
-            End If
-            rtb.SelectionFont = tempselectionfont
-            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim backuppathrtb = DirectCast(Me.RTB_Backuppath, RichTextBox)
-            'repeat above steps for other rtbox...
-            Dim backupline = backuppathrtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim backuplineStart = backuppathrtb.GetFirstCharIndexFromLine(line)
-            'define the last one
-            Dim backuplineEnd = backuppathrtb.GetFirstCharIndexFromLine(line + 1) - 1
-            'start selection
-            backuppathrtb.SelectionStart = backuplineStart
-            'define the length of it
-            backuppathrtb.SelectionLength = backuplineEnd - backuplineStart
-            If (backuppathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(backuppathrtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(backuppathrtb.SelectionFont, FontStyle.Regular)
-            End If
-            backuppathrtb.SelectionFont = tempselectionfont
-            'after setting bold font in both boxes, select "nothing" so no text is blue.
-            rtb.SelectionStart = 0
-            rtb.SelectionLength = 0
-            'define current day
-            Dim now = DateTime.Now
-            Dim day As Integer = now.DayOfWeek
-            If day = 0 Then
-                'this is sunday for Microsoft - why the hell ever
-                'so convert the numbers, don t wanna rewrite everything
-                day = 6 'this set s sunday in my logic
-            Else
-                'if not it s f.E monday which is 1 => calc -1 so it's 0---
-                day -= 1
-            End If
-            'get time settings for currently selected folderpair only (Serialized string)
-            Dim TSSerialized As String
-            TSSerialized = Timetable.settings_of_dayn(day, home.timesettingsarray(line))
-            'since serialized string is seperated by ";" as a seperator,
-            ' use stringtoarray funtion to get array and loop through all it s member to add them
-            Dim TSArray As New ArrayList
-            TSArray = home.StringtoArray(TSSerialized, ";")
-            'reset current text
-            RTB_timesettings.Clear()
-            For Each TimeSetting In TSArray
-                RTB_timesettings.AppendText(TimeSetting & vbNewLine)
-            Next
-            If TSArray.Count = 0 Then ' no members in array
-                RTB_timesettings.AppendText("Not defined for Today")
-            Else
-                For Each TimeSetting In TSArray
-                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
-                Next
-            End If
-        Catch ex As Exception
 
-        End Try
-
-    End Sub
-
-
-    'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
-    Public Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
-        If home.backupPatharray.Count = 0 Then
-            Exit Sub
-        End If
-        Try
-            'get mouseposition
-            Dim rtb = DirectCast(sender, RichTextBox)
-            'then get the char where the mouse is
-            Dim index = rtb.GetCharIndexFromPosition(e.Location)
-            'get the line where this char is (with it's index in the char array of the rtb)
-            Dim line = rtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
-            'define the last one
-            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
-            'start selection
-            rtb.SelectionStart = lineStart
-            'define the length of it
-            rtb.SelectionLength = lineEnd - lineStart
-            'define color to set
-            Dim tempselectionfont
-            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
-                'set line bold
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
-                'add line to array of selected paths (there is only 1 because both change at the same time (even if only 1 is clicked) )
-                selectedpathlinesarray.Add(line)
-            Else
-                'set line normal
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
-                'remove line from selected lines array
-                selectedpathlinesarray.Remove(line)
-            End If
-            rtb.SelectionFont = tempselectionfont
-            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim Sourcepathrtb = DirectCast(RTB_Sourcepath, RichTextBox)
-            'repeat above steps for other rtbox...
-            Dim sourceline = Sourcepathrtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim sourcelineStart = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
-            'define the last one
-            Dim sourcelineEnd = Sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
-            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
-            'now try to make it bold - maybe it0s enough
-            Sourcepathrtb.SelectionStart = sourcelineStart
-            'define the length of it
-            Sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
-            'define color to set
-            If (Sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(Sourcepathrtb.SelectionFont, FontStyle.Regular)
-            End If
-            Sourcepathrtb.SelectionFont = tempselectionfont
-            'after setting bold font in both boxes, select "nothing" so no text is blue.
-            rtb.SelectionStart = 0
-            rtb.SelectionLength = 0
-            'define current day
-            Dim now = DateTime.Now
-            Dim day As Integer = now.DayOfWeek
-            If day = 0 Then
-                'this is sunday for Microsoft - why the hell ever
-                'so convert the numbers, don t wanna rewrite everything
-                day = 6 'this set s sunday in my logic
-            Else
-                'if not it s f.E monday which is 1 => calc -1 so it's 0---
-                day -= 1
-            End If
-            'get time settings for currently selected folderpair only (Serialized string)
-            Dim TSSerialized As String
-            TSSerialized = Timetable.settings_of_dayn(day, home.timesettingsarray(sourceline))
-            'since serialized string is seperated by ";" as a seperator,
-            ' use stringtoarray funtion to get array and loop through all it s member to add them
-            Dim TSArray As New ArrayList
-            TSArray = home.StringtoArray(TSSerialized, ";")
-            'reset current text
-            RTB_timesettings.Clear()
-            If TSArray.Count = 0 Then ' no members in array
-                RTB_timesettings.AppendText("Not defined for Today")
-            Else
-                For Each TimeSetting In TSArray
-                    RTB_timesettings.AppendText(TimeSetting & vbNewLine)
-                Next
-            End If
-
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
-    End Sub
 
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
     Public Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_timesettings.MouseDown
@@ -494,6 +308,11 @@ Public Class Settings
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
         'only execute once so user is forced to enter a backuppath too - old functions still exist so still changeable!
+        'deselect selected folderpairs - to indicate a new pair is added!
+        For Each item As ListViewItem In lv_settings.SelectedItems
+            'access each selected row and deselect it
+            lv_settings.Items(item.Index).Selected = False
+        Next
         ' Dialog to select Source Path
         fbd_searchDefaultSource.Description = "Select Source Folder!"
         fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.MyComputer
@@ -517,7 +336,7 @@ Public Class Settings
             sourcepatharray.Add(SourcePathtresult)
 
             'Refresh Richtextbox to display selected Path instantly
-            RTB_Sourcepath.AppendText(SourcePathtresult & vbNewLine)
+            Settings_Reload()
         End If
 
         ' Dialog to select Backup Path
@@ -542,8 +361,8 @@ Public Class Settings
             'write value into Array!
             backupPatharray.Add(BackupPathresult)
 
-            'Refresh Richtextbox to display selected Path instantly
-            RTB_Backuppath.AppendText(BackupPathresult & vbNewLine)
+            'Refresh Richtextbox by simply reloading settings (array is filled now)
+            Settings_Reload()
         End If
 
         'if added source and backup folder =>
@@ -735,31 +554,15 @@ Public Class Settings
 #End Region
 
     Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
-
         'loop through selected lines
-        For Each line As Integer In selectedpathlinesarray
-                'also remove from array 
-            home.timesettingsarray.RemoveAt(line)
+        For Each item As ListViewItem In lv_settings.SelectedItems
+            'Remove from timesettingsarray
+            home.timesettingsarray.RemoveAt(item.Index)
+            'remove from source/backup array
+            home.sourcepatharray.RemoveAt(item.Index)
+            home.backupPatharray.RemoveAt(item.Index)
             'delete rtb time text
             RTB_timesettings.Text = ""
-
-            Dim curentbackuplist As List(Of String) = RTB_Backuppath.Lines.ToList()
-            If curentbackuplist.Count > 0 Then
-                curentbackuplist.RemoveAt(line)
-                RTB_Backuppath.Lines = curentbackuplist.ToArray()
-                RTB_Backuppath.Refresh()
-                'also remove from array 
-                home.backupPatharray.RemoveAt(line)
-            End If
-
-            Dim curentsourcelist As List(Of String) = RTB_Sourcepath.Lines.ToList()
-            If curentsourcelist.Count > 0 Then
-                curentsourcelist.RemoveAt(line)
-                RTB_Sourcepath.Lines = curentsourcelist.ToArray()
-                RTB_Sourcepath.Refresh()
-                'also remove from array 
-                home.sourcepatharray.RemoveAt(line)
-            End If
         Next
 
     End Sub

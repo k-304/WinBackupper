@@ -49,7 +49,8 @@ Public Class home
 
             End Using
 
-            'in the end return 0 to indicate success!
+            'in the end return 0 to indicate success! 
+            Return 0
         Catch ex As Exception
             Return -1
         End Try
@@ -105,7 +106,7 @@ Public Class home
                 xmlReader2.Dispose()
 
                 'show settings in GUI
-                Reload_settings()
+                Settings_reload()
             End If
 
             'then start timer to start automated backup
@@ -115,143 +116,25 @@ Public Class home
         End Try
     End Sub
 
-    Public Function Reload_settings()
-        'reset the text of the rtb's
-        RTB_Backuppath.Text = ""
-        RTB_Sourcepath.Text = ""
+    Public Function Settings_reload()
+        'reset the content of the listview (lv_overview) (the .items. is important! otherwise it deletes the columns to!
+        lv_overview.Items.Clear()
         'loop through all source/dest. path's (Display in form Richtextbox)
         For i = 0 To sourcepatharray.Count - 1 Step 1
-            'also fill RTB_Source! (richtextbox)
-            Me.RTB_Sourcepath.AppendText(sourcepatharray(i) & vbNewLine)
-            'also fill RTB_Backup! (richtextbox)
-            Me.RTB_Backuppath.AppendText(backupPatharray(i) & vbNewLine)
+            'first, fill in the index, the "main item" (look at the code and you ll understand)
+            'define the item to add
+            Dim lvi As ListViewItem
+            lvi = Me.lv_overview.Items.Add(i) 'define listviewitem variable as the "current lsitviewitem to add". (fill it with index)
+            'fill in first subitem (in this case source)
+            lvi.SubItems.Add(sourcepatharray(i) & vbNewLine)
+            'then fill backuppath part 
+            lvi.SubItems.Add(backupPatharray(i) & vbNewLine)
+            'because there are 4 columns, i need to supply a forth value - a dummy currently
+            lvi.SubItems.Add("N/A")
         Next
         Return 0
     End Function
 
-    'copy of settings function - no way found to ference it =(
-    Public Function RTB_SP_Clicked(sender As Object, e As MouseEventArgs)
-        Try
-            If home.sourcepatharray.Count = 0 Then
-                Return -1
-            End If
-            'get mouseposition
-            Dim rtb = DirectCast(sender, RichTextBox)
-            'then get the char where the mouse is
-            Dim index = rtb.GetCharIndexFromPosition(e.Location)
-            'get the line where this char is (with it's index in the char array of the rtb)
-            Dim line = rtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
-            'define the last one
-            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
-            'start selection
-            rtb.SelectionStart = lineStart
-            'define the length of it
-            rtb.SelectionLength = lineEnd - lineStart
-            'define color to set
-            Dim tempselectionfont
-            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
-            End If
-            rtb.SelectionFont = tempselectionfont
-            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim Backuppathrtb = DirectCast(RTB_Backuppath, RichTextBox)
-            'repeat above steps for other rtbox...
-            Dim backupline = Backuppathrtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim sourcelineStart = Backuppathrtb.GetFirstCharIndexFromLine(backupline)
-            'define the last one
-            Dim sourcelineEnd = Backuppathrtb.GetFirstCharIndexFromLine(backupline + 1) - 1
-            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
-            'now try to make it bold - maybe it0s enough
-            Backuppathrtb.SelectionStart = sourcelineStart
-            'define the length of it
-            Backuppathrtb.SelectionLength = sourcelineEnd - sourcelineStart
-            'define color to set
-            If (Backuppathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(Backuppathrtb.SelectionFont, FontStyle.Regular)
-            End If
-            Backuppathrtb.SelectionFont = tempselectionfont
-            'after setting bold font in both boxes, select "nothing" so no text is blue.
-            rtb.SelectionStart = 0
-            rtb.SelectionLength = 0
-
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
-        Return 0
-    End Function
-    'copy of settings function - no way ti just reference it yet =(
-    Public Function RTB_BP_Clicked(sender As Object, e As MouseEventArgs)
-        Try
-            If home.backupPatharray.Count = 0 Then
-                Return -1
-            End If
-            'get mouseposition
-            Dim rtb = DirectCast(sender, RichTextBox)
-            'then get the char where the mouse is
-            Dim index = rtb.GetCharIndexFromPosition(e.Location)
-            'get the line where this char is (with it's index in the char array of the rtb)
-            Dim line = rtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim lineStart = rtb.GetFirstCharIndexFromLine(line)
-            'define the last one
-            Dim lineEnd = rtb.GetFirstCharIndexFromLine(line + 1) - 1
-            'start selection
-            rtb.SelectionStart = lineStart
-            'define the length of it
-            rtb.SelectionLength = lineEnd - lineStart
-            'define color to set
-            Dim tempselectionfont
-            If (rtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(rtb.SelectionFont, FontStyle.Regular)
-            End If
-            rtb.SelectionFont = tempselectionfont
-            'after that,make shure to make same with other rtb's to select similar entries! (at least in backuppathrtb too - time rtb can be ignored)
-            Dim sourcepathrtb = DirectCast(RTB_Sourcepath, RichTextBox)
-            'repeat above steps for other rtbox...
-            Dim sourceline = sourcepathrtb.GetLineFromCharIndex(index)
-            'define the first char of line
-            Dim sourcelineStart = sourcepathrtb.GetFirstCharIndexFromLine(sourceline)
-            'define the last one
-            Dim sourcelineEnd = sourcepathrtb.GetFirstCharIndexFromLine(sourceline + 1) - 1
-            'start selection => seems not to work well with 2 boxes at the same time (only marks blue in one)
-            'now try to make it bold - maybe it0s enough
-            sourcepathrtb.SelectionStart = sourcelineStart
-            'define the length of it
-            sourcepathrtb.SelectionLength = sourcelineEnd - sourcelineStart
-            'define color to set
-            If (sourcepathrtb.SelectionFont.Style = FontStyle.Regular) Then
-                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Bold)
-            Else
-                tempselectionfont = New Font(sourcepathrtb.SelectionFont, FontStyle.Regular)
-            End If
-            sourcepathrtb.SelectionFont = tempselectionfont
-            'after setting bold font in both boxes, select "nothing" so no text is blue.
-            rtb.SelectionStart = 0
-            rtb.SelectionLength = 0
-
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
-        Return 0
-    End Function
-
-    '
-    Public Sub RTB_Backuppath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Backuppath.MouseDown
-        RTB_BP_Clicked(sender, e)
-    End Sub
-
-    Public Sub RTB_Sourcepath_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Sourcepath.MouseDown
-        RTB_SP_Clicked(sender, e)
-    End Sub
     ' TextBox for Source Path
     Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs)
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
@@ -614,6 +497,5 @@ Public Class home
         writerSettings.Dispose()
     End Sub
 #End Region
-
 
 End Class
