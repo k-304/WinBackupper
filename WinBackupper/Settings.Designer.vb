@@ -23,17 +23,12 @@ Private components As System.ComponentModel.IContainer
 <System.Diagnostics.DebuggerStepThrough()> _
 Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Settings))
-        Me.l_BackupPath = New System.Windows.Forms.Label()
-        Me.l_SourcePath = New System.Windows.Forms.Label()
         Me.b_save = New System.Windows.Forms.Button()
         Me.bw_writer = New System.ComponentModel.BackgroundWorker()
         Me.fbd_searchDefaultSource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_searchDefaultBackup = New System.Windows.Forms.FolderBrowserDialog()
         Me.b_addfolderpair = New System.Windows.Forms.Button()
         Me.l_settings = New System.Windows.Forms.Label()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
-        Me.RTB_Backuppath = New System.Windows.Forms.RichTextBox()
-        Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
         Me.b_reset = New System.Windows.Forms.Button()
         Me.b_editfolderpair = New System.Windows.Forms.Button()
         Me.RTB_timesettings = New System.Windows.Forms.RichTextBox()
@@ -41,31 +36,11 @@ Private Sub InitializeComponent()
         Me.cb_Autostart = New System.Windows.Forms.CheckBox()
         Me.b_showtimetable = New System.Windows.Forms.Button()
         Me.b_Remove_Folderpair = New System.Windows.Forms.Button()
+        Me.lv_settings = New System.Windows.Forms.ListView()
+        Me.ch_index = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ch_source = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ch_backup = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SuspendLayout()
-        '
-        'l_BackupPath
-        '
-        Me.l_BackupPath.AutoSize = True
-        Me.l_BackupPath.BackColor = System.Drawing.Color.Transparent
-        Me.l_BackupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_BackupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_BackupPath.Location = New System.Drawing.Point(240, 52)
-        Me.l_BackupPath.Name = "l_BackupPath"
-        Me.l_BackupPath.Size = New System.Drawing.Size(120, 24)
-        Me.l_BackupPath.TabIndex = 12
-        Me.l_BackupPath.Text = "Backup Path:"
-        '
-        'l_SourcePath
-        '
-        Me.l_SourcePath.AutoSize = True
-        Me.l_SourcePath.BackColor = System.Drawing.Color.Transparent
-        Me.l_SourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_SourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_SourcePath.Location = New System.Drawing.Point(12, 52)
-        Me.l_SourcePath.Name = "l_SourcePath"
-        Me.l_SourcePath.Size = New System.Drawing.Size(118, 24)
-        Me.l_SourcePath.TabIndex = 11
-        Me.l_SourcePath.Text = "Source Path:"
         '
         'b_save
         '
@@ -107,34 +82,6 @@ Private Sub InitializeComponent()
         Me.l_settings.Size = New System.Drawing.Size(113, 31)
         Me.l_settings.TabIndex = 10
         Me.l_settings.Text = "Settings"
-        '
-        'RichTextBox1
-        '
-        Me.RichTextBox1.Location = New System.Drawing.Point(293, 116)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.Size = New System.Drawing.Size(8, 8)
-        Me.RichTextBox1.TabIndex = 20
-        Me.RichTextBox1.Text = ""
-        '
-        'RTB_Backuppath
-        '
-        Me.RTB_Backuppath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 79)
-        Me.RTB_Backuppath.Name = "RTB_Backuppath"
-        Me.RTB_Backuppath.ShowSelectionMargin = True
-        Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)
-        Me.RTB_Backuppath.TabIndex = 22
-        Me.RTB_Backuppath.Text = ""
-        '
-        'RTB_Sourcepath
-        '
-        Me.RTB_Sourcepath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 79)
-        Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
-        Me.RTB_Sourcepath.ShowSelectionMargin = True
-        Me.RTB_Sourcepath.Size = New System.Drawing.Size(202, 142)
-        Me.RTB_Sourcepath.TabIndex = 21
-        Me.RTB_Sourcepath.Text = ""
         '
         'b_reset
         '
@@ -212,6 +159,34 @@ Private Sub InitializeComponent()
         Me.b_Remove_Folderpair.Text = "Remove Directory"
         Me.b_Remove_Folderpair.UseVisualStyleBackColor = True
         '
+        'lv_settings
+        '
+        Me.lv_settings.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_index, Me.ch_source, Me.ch_backup})
+        Me.lv_settings.FullRowSelect = True
+        Me.lv_settings.Location = New System.Drawing.Point(12, 44)
+        Me.lv_settings.Name = "lv_settings"
+        Me.lv_settings.Size = New System.Drawing.Size(430, 179)
+        Me.lv_settings.TabIndex = 30
+        Me.lv_settings.UseCompatibleStateImageBehavior = False
+        Me.lv_settings.View = System.Windows.Forms.View.Details
+        '
+        'ch_index
+        '
+        Me.ch_index.Text = "#"
+        Me.ch_index.Width = 25
+        '
+        'ch_source
+        '
+        Me.ch_source.Text = "Sourcepath:"
+        Me.ch_source.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ch_source.Width = 185
+        '
+        'ch_backup
+        '
+        Me.ch_backup.Text = "Backuppath:"
+        Me.ch_backup.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ch_backup.Width = 188
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -219,6 +194,7 @@ Private Sub InitializeComponent()
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(454, 489)
+        Me.Controls.Add(Me.lv_settings)
         Me.Controls.Add(Me.b_Remove_Folderpair)
         Me.Controls.Add(Me.b_showtimetable)
         Me.Controls.Add(Me.cb_Autostart)
@@ -226,13 +202,8 @@ Private Sub InitializeComponent()
         Me.Controls.Add(Me.RTB_timesettings)
         Me.Controls.Add(Me.b_editfolderpair)
         Me.Controls.Add(Me.b_reset)
-        Me.Controls.Add(Me.RTB_Backuppath)
-        Me.Controls.Add(Me.RTB_Sourcepath)
-        Me.Controls.Add(Me.RichTextBox1)
         Me.Controls.Add(Me.b_addfolderpair)
         Me.Controls.Add(Me.b_save)
-        Me.Controls.Add(Me.l_BackupPath)
-        Me.Controls.Add(Me.l_SourcePath)
         Me.Controls.Add(Me.l_settings)
         Me.ForeColor = System.Drawing.SystemColors.ControlText
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
@@ -243,22 +214,21 @@ Private Sub InitializeComponent()
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents l_BackupPath As System.Windows.Forms.Label
-    Friend WithEvents l_SourcePath As System.Windows.Forms.Label
     Friend WithEvents b_save As System.Windows.Forms.Button
     Friend WithEvents bw_writer As System.ComponentModel.BackgroundWorker
     Friend WithEvents fbd_searchDefaultSource As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents fbd_searchDefaultBackup As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents b_addfolderpair As System.Windows.Forms.Button
     Friend WithEvents l_settings As System.Windows.Forms.Label
-    Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
-    Friend WithEvents RTB_Backuppath As System.Windows.Forms.RichTextBox
-    Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
     Friend WithEvents b_editfolderpair As System.Windows.Forms.Button
     Friend WithEvents RTB_timesettings As System.Windows.Forms.RichTextBox
-Friend WithEvents l_backuptimes As System.Windows.Forms.Label
+    Friend WithEvents l_backuptimes As System.Windows.Forms.Label
     Friend WithEvents cb_Autostart As System.Windows.Forms.CheckBox
     Friend WithEvents b_showtimetable As System.Windows.Forms.Button
     Friend WithEvents b_Remove_Folderpair As System.Windows.Forms.Button
+    Friend WithEvents lv_settings As System.Windows.Forms.ListView
+    Friend WithEvents ch_index As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_source As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_backup As System.Windows.Forms.ColumnHeader
 End Class

@@ -25,8 +25,6 @@ Partial Class home
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(home))
         Me.l_title = New System.Windows.Forms.Label()
-        Me.l_sourcePath = New System.Windows.Forms.Label()
-        Me.l_backupPath = New System.Windows.Forms.Label()
         Me.b_start = New System.Windows.Forms.Button()
         Me.b_settings = New System.Windows.Forms.Button()
         Me.fbd_searchSource = New System.Windows.Forms.FolderBrowserDialog()
@@ -34,8 +32,6 @@ Partial Class home
         Me.b_update = New System.Windows.Forms.Button()
         Me.l_version = New System.Windows.Forms.Label()
         Me.bw_versionControll = New System.ComponentModel.BackgroundWorker()
-        Me.RTB_Sourcepath = New System.Windows.Forms.RichTextBox()
-        Me.RTB_Backuppath = New System.Windows.Forms.RichTextBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,14 +39,19 @@ Partial Class home
         Me.Timer_per_Minute = New System.Windows.Forms.Timer(Me.components)
         Me.rtb_log = New System.Windows.Forms.RichTextBox()
         Me.l_log = New System.Windows.Forms.Label()
-        Me.ContextMenuStrip1.SuspendLayout()
-        Me.SuspendLayout()
+        Me.lv_overview = New System.Windows.Forms.ListView()
+        Me.ch_index = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ch_source = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ch_backup = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ch_nextstarttime = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ContextMenuStrip1.SuspendLayout
+        Me.SuspendLayout
         '
         'l_title
         '
-        Me.l_title.AutoSize = True
+        Me.l_title.AutoSize = true
         Me.l_title.BackColor = System.Drawing.Color.Transparent
-        Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.l_title.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_title.Location = New System.Drawing.Point(133, 14)
         Me.l_title.Name = "l_title"
@@ -58,49 +59,25 @@ Partial Class home
         Me.l_title.TabIndex = 0
         Me.l_title.Text = "Windows Backupper"
         '
-        'l_sourcePath
-        '
-        Me.l_sourcePath.AutoSize = True
-        Me.l_sourcePath.BackColor = System.Drawing.Color.Transparent
-        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_sourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_sourcePath.Location = New System.Drawing.Point(53, 48)
-        Me.l_sourcePath.Name = "l_sourcePath"
-        Me.l_sourcePath.Size = New System.Drawing.Size(118, 24)
-        Me.l_sourcePath.TabIndex = 1
-        Me.l_sourcePath.Text = "Source Path:"
-        '
-        'l_backupPath
-        '
-        Me.l_backupPath.AutoSize = True
-        Me.l_backupPath.BackColor = System.Drawing.Color.Transparent
-        Me.l_backupPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_backupPath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_backupPath.Location = New System.Drawing.Point(276, 48)
-        Me.l_backupPath.Name = "l_backupPath"
-        Me.l_backupPath.Size = New System.Drawing.Size(120, 24)
-        Me.l_backupPath.TabIndex = 2
-        Me.l_backupPath.Text = "Backup Path:"
-        '
         'b_start
         '
-        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.b_start.Location = New System.Drawing.Point(12, 230)
         Me.b_start.Name = "b_start"
         Me.b_start.Size = New System.Drawing.Size(430, 35)
         Me.b_start.TabIndex = 7
         Me.b_start.Text = "Start Backup"
-        Me.b_start.UseVisualStyleBackColor = True
+        Me.b_start.UseVisualStyleBackColor = true
         '
         'b_settings
         '
-        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.b_settings.Location = New System.Drawing.Point(12, 271)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(135, 35)
         Me.b_settings.TabIndex = 8
         Me.b_settings.Text = "Configuration"
-        Me.b_settings.UseVisualStyleBackColor = True
+        Me.b_settings.UseVisualStyleBackColor = true
         '
         'fbd_searchSource
         '
@@ -110,17 +87,17 @@ Partial Class home
         '
         'b_update
         '
-        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.b_update.Location = New System.Drawing.Point(153, 271)
         Me.b_update.Name = "b_update"
         Me.b_update.Size = New System.Drawing.Size(136, 35)
         Me.b_update.TabIndex = 10
         Me.b_update.Text = "Update"
-        Me.b_update.UseVisualStyleBackColor = True
+        Me.b_update.UseVisualStyleBackColor = true
         '
         'l_version
         '
-        Me.l_version.AutoSize = True
+        Me.l_version.AutoSize = true
         Me.l_version.BackColor = System.Drawing.Color.Transparent
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_version.Location = New System.Drawing.Point(365, 284)
@@ -132,30 +109,12 @@ Partial Class home
         'bw_versionControll
         '
         '
-        'RTB_Sourcepath
-        '
-        Me.RTB_Sourcepath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RTB_Sourcepath.Location = New System.Drawing.Point(12, 82)
-        Me.RTB_Sourcepath.Name = "RTB_Sourcepath"
-        Me.RTB_Sourcepath.Size = New System.Drawing.Size(202, 142)
-        Me.RTB_Sourcepath.TabIndex = 12
-        Me.RTB_Sourcepath.Text = ""
-        '
-        'RTB_Backuppath
-        '
-        Me.RTB_Backuppath.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RTB_Backuppath.Location = New System.Drawing.Point(240, 82)
-        Me.RTB_Backuppath.Name = "RTB_Backuppath"
-        Me.RTB_Backuppath.Size = New System.Drawing.Size(202, 142)
-        Me.RTB_Backuppath.TabIndex = 13
-        Me.RTB_Backuppath.Text = ""
-        '
         'NotifyIcon1
         '
         Me.NotifyIcon1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
+        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"),System.Drawing.Icon)
         Me.NotifyIcon1.Text = "WinBackupper"
-        Me.NotifyIcon1.Visible = True
+        Me.NotifyIcon1.Visible = true
         '
         'ContextMenuStrip1
         '
@@ -177,7 +136,7 @@ Partial Class home
         '
         'Timer_per_Minute
         '
-        Me.Timer_per_Minute.Enabled = True
+        Me.Timer_per_Minute.Enabled = true
         Me.Timer_per_Minute.Interval = 60000
         Me.Timer_per_Minute.Tag = ""
         '
@@ -191,9 +150,9 @@ Partial Class home
         '
         'l_log
         '
-        Me.l_log.AutoSize = True
+        Me.l_log.AutoSize = true
         Me.l_log.BackColor = System.Drawing.Color.Transparent
-        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.l_log.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_log.Location = New System.Drawing.Point(199, 309)
         Me.l_log.Name = "l_log"
@@ -201,36 +160,64 @@ Partial Class home
         Me.l_log.TabIndex = 15
         Me.l_log.Text = "Log:"
         '
+        'lv_overview
+        '
+        Me.lv_overview.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_index, Me.ch_source, Me.ch_backup, Me.ch_nextstarttime})
+        Me.lv_overview.FullRowSelect = True
+        Me.lv_overview.Location = New System.Drawing.Point(12, 45)
+        Me.lv_overview.Name = "lv_overview"
+        Me.lv_overview.Size = New System.Drawing.Size(430, 179)
+        Me.lv_overview.TabIndex = 16
+        Me.lv_overview.UseCompatibleStateImageBehavior = False
+        Me.lv_overview.View = System.Windows.Forms.View.Details
+        '
+        'ch_index
+        '
+        Me.ch_index.Text = "#"
+        Me.ch_index.Width = 38
+        '
+        'ch_source
+        '
+        Me.ch_source.Text = "Sourcepath:"
+        Me.ch_source.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ch_source.Width = 125
+        '
+        'ch_backup
+        '
+        Me.ch_backup.Text = "Backuppath:"
+        Me.ch_backup.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ch_backup.Width = 99
+        '
+        'ch_nextstarttime
+        '
+        Me.ch_nextstarttime.Text = "Next start time:"
+        Me.ch_nextstarttime.Width = 89
+        '
         'home
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(454, 403)
+        Me.Controls.Add(Me.lv_overview)
         Me.Controls.Add(Me.l_log)
         Me.Controls.Add(Me.rtb_log)
-        Me.Controls.Add(Me.RTB_Backuppath)
-        Me.Controls.Add(Me.RTB_Sourcepath)
         Me.Controls.Add(Me.l_version)
         Me.Controls.Add(Me.b_update)
         Me.Controls.Add(Me.b_settings)
         Me.Controls.Add(Me.b_start)
-        Me.Controls.Add(Me.l_backupPath)
-        Me.Controls.Add(Me.l_sourcePath)
         Me.Controls.Add(Me.l_title)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.Name = "home"
         Me.Text = "WinBackupper"
-        Me.ContextMenuStrip1.ResumeLayout(False)
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(false)
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents l_title As System.Windows.Forms.Label
-    Friend WithEvents l_sourcePath As System.Windows.Forms.Label
-    Friend WithEvents l_backupPath As System.Windows.Forms.Label
     Friend WithEvents b_start As System.Windows.Forms.Button
     Friend WithEvents b_settings As System.Windows.Forms.Button
     Friend WithEvents fbd_searchSource As System.Windows.Forms.FolderBrowserDialog
@@ -238,8 +225,6 @@ Partial Class home
     Friend WithEvents b_update As System.Windows.Forms.Button
     Friend WithEvents l_version As System.Windows.Forms.Label
     Friend WithEvents bw_versionControll As System.ComponentModel.BackgroundWorker
-    Friend WithEvents RTB_Sourcepath As System.Windows.Forms.RichTextBox
-    Friend WithEvents RTB_Backuppath As System.Windows.Forms.RichTextBox
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents OpenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -247,5 +232,10 @@ Partial Class home
     Friend WithEvents Timer_per_Minute As System.Windows.Forms.Timer
     Friend WithEvents rtb_log As System.Windows.Forms.RichTextBox
     Friend WithEvents l_log As System.Windows.Forms.Label
+    Friend WithEvents lv_overview As System.Windows.Forms.ListView
+    Friend WithEvents ch_index As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_source As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_backup As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_nextstarttime As System.Windows.Forms.ColumnHeader
 
 End Class

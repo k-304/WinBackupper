@@ -200,17 +200,10 @@
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
-        Dim indextoeditoradd = home.timesettingsarray.Count
 
-        'check if there is a entry to edit or not - set index accordingly
-        If Not Settings.linecurrentlyedited = Nothing Then
-            'we are editing a line set an index accordingly
-            indextoeditoradd = Settings.linecurrentlyedited
-        End If
+        'first create timesettings string to save to xml
         'reset finalstring if executed before (var is public)
         finalstring = ""
-        ' save the current field too - if edited it will be saved in the Variable, since it only saves when the combox (day) is changed . 
-        'this might not happen the last time, so save it here (too) 
 
         Select Case dd_Day.SelectedIndex
             Case 0
@@ -308,15 +301,21 @@
             Next
         End If
 
-        'write value into timesettingsarray of homeform 
-        'check if we are adding an entry or aediting an xisting one
-        If indextoeditoradd = home.timesettingsarray.Count Then
-            'adding a new entry
-            home.timesettingsarray.Add(finalstring) 'first one so use the add function
+
+        'check if there is a entry to edit or not - set index accordingly (Folder arrays are updated by settings form via add button)
+        'if an entry in settings form was selected  - assume user wants to edit it
+        If Not Settings.lv_settings.SelectedItems.Count = 0 Then
+            'user wants to edit entry
+            'loop trhough the lines (all selected)
+            For Each item As ListViewItem In Settings.lv_settings.SelectedItems
+                'loop through all selected entries to set time
+                home.timesettingsarray(item.Index) = finalstring
+            Next
         Else
-            home.timesettingsarray(indextoeditoradd) = finalstring
-            'editing an existing one
+            'user wants to add entry (form is called when adding new entry)
+            home.timesettingsarray.Add(finalstring)
         End If
+
 
         'close form when finished
         Me.Close()
@@ -335,7 +334,7 @@
         Try
             'reset text before reloading settings
             RTB_Time.Text = ""
-            If Not Settings.linecurrentlyedited = home.timesettingsarray.Count Then
+            If Not Settings.lv_settings.SelectedItems.Count = 0 Then
                 'get values of home class
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
                 'call settings for dayn with 0 argument to get values for monday and load them appropriately.
