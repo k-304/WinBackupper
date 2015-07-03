@@ -18,7 +18,7 @@ Public Class Settings
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
-    Public linecurrentlyedited As Integer = 0
+    Public Shared linecurrentlyedited As Integer = 0
 
 #End Region
 
