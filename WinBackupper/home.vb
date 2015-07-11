@@ -259,7 +259,7 @@ Public Class home
 
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
-    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True)
+    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
         'check if targetpath already contains date information . if not add it
         If Not targetpath.Contains(starttime) Then
             'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
@@ -300,7 +300,55 @@ Public Class home
                                 'if simulate mode is on, only log!!! Dont copy!
                                 'check if targetfile already exists
                                 If Not File.Exists(targetpath & "\" & filename) Then
-                                    File.Copy(filepath, targetpath & "\" & filename)
+                                    '''''''''''''' File.Copy(filepath, targetpath & "\" & filename)
+                                    'use robocopy to achieve archiving... BUT don't use it to loop through the folders
+                                    'this way we still have access to each file (which means we could zip it afterwards etc)
+                                    'also, Easier to implement incremental/differental backups this way
+
+                                    'THEORY:
+                                    'Full - resets archive bit
+                                    'Differential - does NOT resete archive bit (copies all files that changed since last full backup)
+                                    'Incremental - resets archive bit (Copies all files since last Full/Incremental - slower to restore)
+
+                                    'define rrobocopy vars (general)
+                                    'commands for Robocopy
+                                    '/M will remove Archive bitbut only copy files where it's set
+                                    '/A will only copy files with archive bit  set
+                                    '/A-:%atributes% will rmeove a specified attribute afterwards 
+                                    'example: /A-:A (resets archive bit    
+                                    Dim processname As String = "robocopy.exe"
+                                    Dim filestocopy As String = filename ' used in the robocopy command to only copy that file
+                                    Dim ARGFull As String = "/A-:A"
+                                    Dim ARGdifferential As String = "/A"
+                                    Dim ARGincremental As String = "/M"
+
+                                    'define the process where the job runs in (cmd)
+                                    Dim Proc As New System.Diagnostics.Process
+                                    Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
+                                    Proc.StartInfo.UseShellExecute = False
+                                    Proc.StartInfo.CreateNoWindow = True
+                                    Select Case backuptype 'define arguments in here depending on backuptype
+
+                                        Case "Full"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGFull
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case "Diff"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGdifferential
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case "Incr"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGincremental
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case Else
+                                            rtb_log.AppendText(vbNewLine & "Invalid Backuptyep detected")
+                                    End Select
+
+                                    Proc.Start() 'after defining everythig start the process
+                                    'then wait for it to exit to continue with the next file
+                                    Proc.WaitForExit()
+
                                 Else
                                     'log it already exists or overwrite if timestamp changed
                                 End If
@@ -311,21 +359,21 @@ Public Class home
                         End Try
                     Next 'for each filepath end
 
-                    'get Subdirectories and repeat process
-                    For Each dir As String In Directory.GetDirectories(sourcepath)
-                        'calculate the relative path
-                        Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
-                        'call routine to delete subfiles
-                        If simulate_mode_active = True Then
-                            BackupDirectory(dir, targetpath & relpath, True)
-                        Else
-                            BackupDirectory(dir, targetpath & relpath, False)
-                        End If
-                    Next
+        'get Subdirectories and repeat process
+        For Each dir As String In Directory.GetDirectories(sourcepath)
+            'calculate the relative path
+            Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
+            'call routine to delete subfiles
+            If simulate_mode_active = True Then
+                BackupDirectory(dir, targetpath & relpath, True)
+            Else
+                BackupDirectory(dir, targetpath & relpath, False)
+            End If
+        Next
                 End If
             End If
 
-            Return (0) 'return code "0" if everything went ok - without breaking code anywhere
+        Return (0) 'return code "0" if everything went ok - without breaking code anywhere
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Backup_Directory Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return -1 'return code "-1" to indicate an unknown/unhandlet error 
