@@ -160,17 +160,46 @@ Public Class home
         'Confirm & Start Backup-Progress
         ' Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         'think it's better to keep such msg in loop...
+        Dim backuptype As String = "  " 'later filled
         Dim startResult
-        If silent Then 'if silent start directly - if not ask user
+        If silent = True Then 'if silent start directly - if not ask user
             startResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
         Else
             startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
+            If cb_defaultmanualbackup.Checked = True Then
+                'do a full backup without asking user
+                backuptype = "Full"
+            Else
+                'askuser which kind of backup he wants to perform
+                Dim tmplctr = 0
+                If Not backuptype.Length = 0 Then
+
+
+                    While Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "I" And Not backuptype.Substring(0, 1) = "D"
+                        tmplctr += 1
+                        backuptype = InputBox("Please enter 'Full', 'Diff' or 'Incr' " & vbNewLine & "To resemble Full / Differential and Incremental Backup types.")
+                        If Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "D" And Not backuptype.Substring(0, 1) = "I" Then
+                            MsgBox("Please Enter a Valid entry ('Full', 'Diff' or 'Incr')")
+                        End If
+                    End While
+                    If backuptype.Substring(0, 1) = "F" Then
+                        backuptype = "Full"
+                    End If
+                    If backuptype.Substring(0, 1) = "I" Then
+                        backuptype = "Incr"
+                    End If
+                    If backuptype.Substring(0, 1) = "D" Then
+                        backuptype = "Diff"
+                    End If
+                End If
+            End If
         End If
         If startResult = Windows.Forms.DialogResult.Yes Then
-            start_backup()
+            start_backup(backuptype)
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
         End If
+
     End Sub
 
     'function to encapsulate the actual backup process
@@ -361,21 +390,21 @@ Public Class home
                         End Try
                     Next 'for each filepath end
 
-        'get Subdirectories and repeat process
-        For Each dir As String In Directory.GetDirectories(sourcepath)
-            'calculate the relative path
-            Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
-            'call routine to delete subfiles
-            If simulate_mode_active = True Then
-                BackupDirectory(dir, targetpath & relpath, True)
-            Else
-                BackupDirectory(dir, targetpath & relpath, False)
-            End If
-        Next
+                    'get Subdirectories and repeat process
+                    For Each dir As String In Directory.GetDirectories(sourcepath)
+                        'calculate the relative path
+                        Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
+                        'call routine to delete subfiles
+                        If simulate_mode_active = True Then
+                            BackupDirectory(dir, targetpath & relpath, True, backuptype)
+                        Else
+                            BackupDirectory(dir, targetpath & relpath, False, backuptype)
+                        End If
+                    Next
                 End If
             End If
 
-        Return (0) 'return code "0" if everything went ok - without breaking code anywhere
+            Return (0) 'return code "0" if everything went ok - without breaking code anywhere
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Backup_Directory Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return -1 'return code "-1" to indicate an unknown/unhandlet error 
