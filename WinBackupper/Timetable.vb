@@ -205,6 +205,19 @@ Public Class Timetable
         Try
             'check if user has marked any specific time entry
             'if not, assume he wants to change everything of that day
+            If Not lv_timetable.SelectedItems.Count = 0 Then
+                For Each item As ListViewItem In lv_timetable.SelectedItems
+                    'loop thourgh each selected item and change backuptype
+                    Select Case item.SubItems(1).Text
+                        Case "Full"
+                            item.SubItems(1).Text = "Diff"
+                        Case "Diff"
+                            item.SubItems(1).Text = "Incr"
+                        Case "Incr"
+                            item.SubItems(1).Text = "Full"
+                    End Select
+                Next
+            End If
         Catch ex As Exception
 
         End Try

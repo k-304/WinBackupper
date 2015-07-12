@@ -174,7 +174,8 @@ Public Class home
     End Sub
 
     'function to encapsulate the actual backup process
-    Function start_backup()
+    'eccepted params are "Full | Incr | Diff"  
+    Function start_backup(Optional backuptype As String = "Full")
         Try
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
@@ -195,7 +196,7 @@ Public Class home
                 If tempstartResult = Windows.Forms.DialogResult.Yes Then
                     'log start of specific folderpair
                     rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine)
-                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False) 'more arguments can be added like incremental/not etc...
+                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False, backuptype) 'more arguments can be added like incremental/not etc...
                     'log success
                     rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & vbNewLine)
                 End If
@@ -236,6 +237,7 @@ Public Class home
                     'so get hours and minutes
                     Dim checkhour = time.Substring(0, 2) 'gets first 2 chars so the HH
                     Dim checkMinute = time.Substring(3, 2) 'get s the last two chars MM (: not needed)
+                    Dim backuptype = time.Substring(5, 4) ' get chars 5-8 which re the backuptype as a 4 char code (Full Diff and Incr)
                     If checkhour = currhour Then
                         If checkMinute = currmin Then
                             'log the auto start
