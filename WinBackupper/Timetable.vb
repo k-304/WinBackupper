@@ -1,4 +1,9 @@
-﻿Public Class Timetable
+﻿Imports System.Threading
+Imports System.Reflection
+
+Public Class Timetable
+
+
 
 #Region "Variables"
     '*------------------------*'
@@ -7,13 +12,13 @@
     Public selectedday As Integer
     Public ToplevelSeperator As String = "::" 'has to be 2 chars (should be)  if changed code needs to change too!
     Public seperator As String = ";"
-    Public RTB_Lines_Mon() As String
-    Public RTB_Lines_Tue() As String
-    Public RTB_Lines_Wed() As String
-    Public RTB_Lines_Thu() As String
-    Public RTB_Lines_Fri() As String
-    Public RTB_Lines_Sat() As String
-    Public RTB_Lines_Sun() As String
+    Public lvc_Mon As New ArrayList
+    Public lvc_Tue As New ArrayList
+    Public lvc_Wed As New ArrayList
+    Public lvc_Thu As New ArrayList
+    Public lvc_Fri As New ArrayList
+    Public lvc_Sat As New ArrayList
+    Public lvc_Sun As New ArrayList
     Dim lastcomboboxindex As Integer
     Dim finalstring As String = ""
     Public selectedtimesarray As New ArrayList
@@ -25,52 +30,178 @@
 
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
         'use this to reread all settings when user changes to another Day
-        selectedday = dd_Day.SelectedIndex
 
         'define Lines for lastly selected day (before changing index)
         'when it changes again, reload the data for the selected day
+        selectedday = dd_Day.SelectedIndex
+
+
         Select Case lastcomboboxindex
             Case 0
-                RTB_Lines_Mon = RTB_Time.Lines
+                'build an array out of all items in listview and save them accoridngly in var as string
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Mon = temparray
+                End If
+
             Case 1
-                RTB_Lines_Tue = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Tue = temparray
+                End If
             Case 2
-                RTB_Lines_Wed = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Wed = temparray
+                End If
             Case 3
-                RTB_Lines_Thu = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Thu = temparray
+                End If
             Case 4
-                RTB_Lines_Fri = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Fri = temparray
+                End If
             Case 5
-                RTB_Lines_Sat = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Sat = temparray
+                End If
             Case 6
-                RTB_Lines_Sun = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
+                    lvc_Sun = temparray
+                End If
         End Select
 
         'clear old data in RTB
-        RTB_Time.Clear()
+        lv_timetable.Items.Clear()
         'reread data for new day  and repupulate RTB
         'this is for the currently selected index
         Select Case selectedday
             Case 0
-                RTB_Time.Lines = RTB_Lines_Mon
+                For Each item As String In lvc_Mon
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 1
-                RTB_Time.Lines = RTB_Lines_Tue
+                For Each item As String In lvc_Tue
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 2
-                RTB_Time.Lines = RTB_Lines_Wed
+                For Each item As String In lvc_Wed
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 3
-                RTB_Time.Lines = RTB_Lines_Thu
+                For Each item As String In lvc_Thu
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 4
-                RTB_Time.Lines = RTB_Lines_Fri
+                For Each item As String In lvc_Fri
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 5
-                RTB_Time.Lines = RTB_Lines_Sat
+                For Each item As String In lvc_Sat
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
             Case 6
-                RTB_Time.Lines = RTB_Lines_Sun
+                For Each item As String In lvc_Sun
+                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                    tempitem.SubItems.Add(backuptype)
+                Next
         End Select
 
 
         'define old index -  needed to keep old settings (and store them correctly in vars)
         lastcomboboxindex = dd_Day.SelectedIndex
 
+    End Sub
+
+    'executed when user wants toc hagne backuptype
+    Private Sub b_changebackuptype_Click(sender As Object, e As EventArgs) Handles b_changebackuptype.Click
+        Try
+            'check if user has marked any specific time entry
+            'if not, assume he wants to change everything of that day
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Public Function settings_of_dayn(day As Integer, settingsstringserialized As String) As String
@@ -189,12 +320,15 @@
             For Each hourentry As String In finalarray
                 'recreating time structure ( HH:MM )
                 Dim finalentry = hourentry & ":" & seltimeminutes
-                RTB_Time.AppendText(finalentry & vbNewLine)
+                Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
+                'assume the backuptype is full - make another dropdowm in gui for that?
+                tempitem.SubItems.Add("Full")
             Next
         Else
             'just add selected value
             'gt entered text and add to richtextbox (later also array)
-            RTB_Time.AppendText(dtp.ToString.Substring(dtp.ToString.Length - 8, 5) & vbNewLine)
+            Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
+            tempitem.SubItems.Add("Full")
         End If
 
     End Sub
@@ -207,31 +341,94 @@
 
         Select Case dd_Day.SelectedIndex
             Case 0
-                RTB_Lines_Mon = RTB_Time.Lines
+                'build an array out of all items in listview and save them accoridngly in var as string
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Mon = temparray
             Case 1
-                RTB_Lines_Tue = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Tue = temparray
             Case 2
-                RTB_Lines_Wed = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Wed = temparray
             Case 3
-                RTB_Lines_Thu = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Thu = temparray
             Case 4
-                RTB_Lines_Fri = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Fri = temparray
             Case 5
-                RTB_Lines_Sat = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Sat = temparray
             Case 6
-                RTB_Lines_Sun = RTB_Time.Lines
+                Dim temparray As New ArrayList
+                For Each item As ListViewItem In lv_timetable.Items
+                    'gett al entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    Dim tempitemtext As String
+                    tempitemtext = item.Text
+                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                    temparray.Add(tempitemtext)
+                Next
+                lvc_Sun = temparray
         End Select
 
         'Process Monday Times 
         'write top lvl speerator =>
         finalstring = finalstring & "MON" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Mon Is Nothing Then
-            'now write monday the values seperated by ";"
-            For ii = 0 To RTB_Lines_Mon.LongCount - 2 'this is minus 2 because: -1 is needed anyway . -2 is needed because a vbnewline is written - if there is only 1 time in the RTP thereare still 2 Lines. 
-                'If this would not be 2 there would be 2 ";;" written after the last value.
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Mon(ii).ToString & seperator
+        If Not lvc_Mon Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+
+            For Each item As String In lvc_Mon
+                finalstring = finalstring & item
             Next
         End If
 
@@ -239,20 +436,20 @@
         'write top lvl speerator =>
         finalstring = finalstring & "TUE" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Tue Is Nothing Then
-            For ii = 0 To RTB_Lines_Tue.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Tue(ii) & seperator
+        If Not lvc_Tue Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Tue
+                finalstring = finalstring & item
             Next
         End If
         'set Wednesday
         'write top lvl speerator =>
         finalstring = finalstring & "WED" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Wed Is Nothing Then
-            For ii = 0 To RTB_Lines_Wed.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Wed(ii) & seperator
+        If Not lvc_Wed Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Wed
+                finalstring = finalstring & item
             Next
         End If
 
@@ -260,10 +457,10 @@
         'write top lvl speerator =>
         finalstring = finalstring & "THU" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Thu Is Nothing Then
-            For ii = 0 To RTB_Lines_Thu.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Thu(ii) & seperator
+        If Not lvc_Thu Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Thu
+                finalstring = finalstring & item
             Next
         End If
 
@@ -271,10 +468,10 @@
         'write top lvl speerator =>
         finalstring = finalstring & "FRI" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Fri Is Nothing Then
-            For ii = 0 To RTB_Lines_Fri.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Fri(ii) & seperator
+        If Not lvc_Fri Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Fri
+                finalstring = finalstring & item
             Next
         End If
 
@@ -282,10 +479,10 @@
         'write top lvl speerator =>
         finalstring = finalstring & "SAT" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Sat Is Nothing Then
-            For ii = 0 To RTB_Lines_Sat.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Sat(ii) & seperator
+        If Not lvc_Sat Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Sun
+                finalstring = finalstring & item
             Next
         End If
 
@@ -294,10 +491,10 @@
         'write top lvl speerator =>
         finalstring = finalstring & "SUN" & ToplevelSeperator
         'check if there are values to write
-        If Not RTB_Lines_Sun Is Nothing Then
-            For ii = 0 To RTB_Lines_Sun.LongCount - 2
-                ' wrtie current line =>
-                finalstring = finalstring & RTB_Lines_Sun(ii) & seperator
+        If Not lvc_Sun Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Sat
+                finalstring = finalstring & item
             Next
         End If
 
@@ -316,7 +513,7 @@
             home.timesettingsarray.Add(finalstring)
         End If
 
-
+        MsgBox(lvc_Mon.Count.ToString & " | " & lvc_Tue.Count.ToString & " | " & lvc_Wed.Count.ToString & " | " & lvc_Thu.Count.ToString & " | " & lvc_Fri.Count.ToString & " | " & lvc_Sat.Count.ToString & " | " & lvc_Sun.Count.ToString & " | ")
         'close form when finished
         Me.Close()
     End Sub
@@ -331,91 +528,148 @@
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
-        Try
-            'reset text before reloading settings
-            RTB_Time.Text = ""
-            If Not Settings.lv_settings.SelectedItems.Count = 0 Then
-                'get values of home class
-                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-                'call settings for dayn with 0 argument to get values for monday and load them appropriately.
-                'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
+        '''''''''''''' Try
+        'reset text before reloading settings (for each day)
+        lv_timetable.Items.Clear()
+        If Not Settings.lv_settings.SelectedItems.Count = 0 Then
+            'get values of home class
+            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+            'call settings for dayn with 0 argument to get values for monday and load them appropriately.
+            'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
 
-                Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
-                Dim mondaytimesarray As New ArrayList
-                mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In mondaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 1
-                'next day (tue)
-                Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
-                Dim tuedaytimesarray As New ArrayList
-                tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In tuedaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 2
-                'next day (wed)
-                Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
-                Dim weddaytimesarray As New ArrayList
-                weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In weddaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 3
-                'next day (thu)
-                Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
-                Dim thudaytimesarray As New ArrayList
-                thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In thudaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 4
-                'next day (fri)
-                Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
-                Dim fridaytimesarray As New ArrayList
-                fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In fridaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 5
-                'next day (sat)
-                Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
-                Dim satdaytimesarray As New ArrayList
-                satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In satdaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index to fill
-                dd_Day.SelectedIndex = 6
-                'next day (sun)
-                Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
-                Dim sundaytimesarray As New ArrayList
-                sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
-                'fill the current times into RTB_Time
-                For Each time As String In sundaytimesarray
-                    RTB_Time.AppendText(time & vbNewLine)
-                Next
-                'select index 0 again (monday = 0) / or current day?
-                dd_Day.SelectedIndex = 0
-            Else
-                'is nothing - dont  load settings => a new entry is created)
-            End If
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return -1
-        End Try
+
+            'TESTIGN
+
+            Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
+            Dim mondaytimesarray As New ArrayList
+            mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempmontimesettingsarray As New ArrayList
+            For Each time As String In mondaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempmontimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Mon = tempmontimesettingsarray
+
+
+
+            'TESTIGN
+
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 1
+            'next day (tue)
+            Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
+            Dim tuedaytimesarray As New ArrayList
+            tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim temptuetimesettingsarray As New ArrayList
+            For Each time As String In tuedaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                temptuetimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Tue = temptuetimesettingsarray
+
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 2
+            'next day (wed)
+            Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
+            Dim weddaytimesarray As New ArrayList
+            weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempwedtimesettingsarray As New ArrayList
+            For Each time As String In weddaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempwedtimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Wed = tempwedtimesettingsarray
+
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 3
+            'next day (thu)
+            Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
+            Dim thudaytimesarray As New ArrayList
+            thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempthutimesettingsarray As New ArrayList
+            For Each time As String In thudaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempthutimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Thu = tempthutimesettingsarray
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 4
+            'next day (fri)
+            Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
+            Dim fridaytimesarray As New ArrayList
+            fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempfritimesettingsarray As New ArrayList
+            For Each time As String In fridaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempfritimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Fri = tempfritimesettingsarray
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 5
+            'next day (sat)
+            Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
+            Dim satdaytimesarray As New ArrayList
+            satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempsattimesettingsarray As New ArrayList
+            For Each time As String In satdaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempsattimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Sat = tempsattimesettingsarray
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+            'select index to fill
+            dd_Day.SelectedIndex = 6
+            'next day (sun)
+            Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
+            Dim sundaytimesarray As New ArrayList
+            sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
+            'fill the current times into RTB_Time
+            Dim tempsuntimesettingsarray As New ArrayList
+            For Each time As String In sundaytimesarray
+
+                'gett all entry of a line in lv and save them as 1 entry in array
+                'later get it back by serializing the string and get data for each line
+                tempsuntimesettingsarray.Add(time & seperator)
+            Next
+            lvc_Sun = tempsuntimesettingsarray
+            'select index 0 again (monday = 0) / or current day?
+            dd_Day.SelectedIndex = 0
+        Else
+            'is nothing - dont  load settings => a new entry is created)
+        End If
+        ''''''  Catch ex As Exception
+        ''''MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        ''''   Return -1
+        ''''   End Try
         Return 0
     End Function
 
@@ -438,7 +692,7 @@
             'cycle through all time data and reset it
             For i = 0 To 6 Step 1
                 dd_Day.SelectedIndex = i
-                RTB_Time.Clear()
+                lv_timetable.Items.Clear()
             Next
             'select first day again
             dd_Day.SelectedIndex = 0
@@ -451,20 +705,15 @@
     'executed when remocve button is clicked
     Private Sub b_remove_Click(sender As Object, e As EventArgs) Handles b_remove.Click
         'loop through selected lines
-        For Each line As Integer In selectedtimesarray
+        For Each item As ListViewItem In lv_timetable.SelectedItems
             'remove the selected line
-            Dim curentlist As List(Of String) = RTB_Time.Lines.ToList()
-            If curentlist.Count > 0 Then
-                curentlist.RemoveAt(line)
-                RTB_Time.Lines = curentlist.ToArray()
-                RTB_Time.Refresh()
-            End If
+            lv_timetable.Items.Remove(item)
         Next
 
     End Sub
 
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
-    Private Sub RTB_Time_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_Time.MouseDown
+    Private Sub RTB_Time_MouseDown(sender As Object, e As MouseEventArgs)
         Try
             If home.sourcepatharray.Count = 0 Then
                 Exit Sub
@@ -507,6 +756,7 @@
     End Sub
 
 #End Region
+
 
 
 End Class

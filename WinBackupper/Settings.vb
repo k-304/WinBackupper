@@ -566,4 +566,5 @@ Public Class Settings
         Next
 
     End Sub
+
 End Class
