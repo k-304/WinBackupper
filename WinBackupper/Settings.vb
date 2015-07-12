@@ -474,6 +474,10 @@ Public Class Settings
             For Each timesetting As String In home.timesettingsarray
                 'start writing each sourcepath of the array
                 .WriteStartElement("StartTimes")
+                '''  'due to some bug i cant find the source -a dirty fix I search for double ";;" and replace them by ";" 
+                '''  For i = 0 To 100
+                '''timesetting.Replace(";;", ";")
+                ''''Next
                 .WriteString(timesetting)
                 'write ending "</StartTimes>" tag
                 .WriteEndElement()

@@ -65,6 +65,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Tue = temparray
                 End If
+                temparray = Nothing
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -78,6 +79,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Wed = temparray
                 End If
+                temparray = Nothing
             Case 3
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -91,6 +93,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Thu = temparray
                 End If
+                temparray = Nothing
             Case 4
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -104,6 +107,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Fri = temparray
                 End If
+                temparray = Nothing
             Case 5
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -117,6 +121,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Sat = temparray
                 End If
+                temparray = Nothing
             Case 6
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -130,6 +135,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Sun = temparray
                 End If
+                temparray = Nothing
         End Select
 
         'clear old data in RTB
@@ -140,49 +146,49 @@ Public Class Timetable
             Case 0
                 For Each item As String In lvc_Mon
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1)) '(don t write last character , so 5+1 is used. last character is ";" leads to nasty bugs)
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 1
                 For Each item As String In lvc_Tue
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 2
                 For Each item As String In lvc_Wed
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 3
                 For Each item As String In lvc_Thu
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 4
                 For Each item As String In lvc_Fri
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 5
                 For Each item As String In lvc_Sat
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
             Case 6
                 For Each item As String In lvc_Sun
                     Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - 5)
+                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
                     Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
                     tempitem.SubItems.Add(backuptype)
                 Next
@@ -342,82 +348,98 @@ Public Class Timetable
         Select Case dd_Day.SelectedIndex
             Case 0
                 'build an array out of all items in listview and save them accoridngly in var as string
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Mon = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+
+
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Mon = temparray
+                End If
             Case 1
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Tue = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Tue = temparray
+                End If
             Case 2
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Wed = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Wed = temparray
+                End If
             Case 3
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Thu = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Thu = temparray
+                End If
             Case 4
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Fri = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Fri = temparray
+                End If
             Case 5
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Sat = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings fil
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Sat = temparray
+                End If
             Case 6
-                Dim temparray As New ArrayList
-                For Each item As ListViewItem In lv_timetable.Items
-                    'gett al entry of a line in lv and save them as 1 entry in array
-                    'later get it back by serializing the string and get data for each line
-                    Dim tempitemtext As String
-                    tempitemtext = item.Text
-                    tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                    temparray.Add(tempitemtext)
-                Next
-                lvc_Sun = temparray
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        'gett al entry of a line in lv and save them as 1 entry in array
+                        'later get it back by serializing the string and get data for each line
+                        Dim tempitemtext As String
+                        tempitemtext = item.Text
+                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                        temparray.Add(tempitemtext)
+                    Next
+                    lvc_Sun = temparray
+                End If
         End Select
 
         'Process Monday Times 
@@ -513,7 +535,7 @@ Public Class Timetable
             home.timesettingsarray.Add(finalstring)
         End If
 
-        MsgBox(lvc_Mon.Count.ToString & " | " & lvc_Tue.Count.ToString & " | " & lvc_Wed.Count.ToString & " | " & lvc_Thu.Count.ToString & " | " & lvc_Fri.Count.ToString & " | " & lvc_Sat.Count.ToString & " | " & lvc_Sun.Count.ToString & " | ")
+        ' MsgBox(lvc_Mon.Count.ToString & " | " & lvc_Tue.Count.ToString & " | " & lvc_Wed.Count.ToString & " | " & lvc_Thu.Count.ToString & " | " & lvc_Fri.Count.ToString & " | " & lvc_Sat.Count.ToString & " | " & lvc_Sun.Count.ToString & " | ")
         'close form when finished
         Me.Close()
     End Sub
