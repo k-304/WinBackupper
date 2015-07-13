@@ -160,21 +160,51 @@ Public Class home
         'Confirm & Start Backup-Progress
         ' Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
         'think it's better to keep such msg in loop...
+        Dim backuptype As String = "  " 'later filled
         Dim startResult
-        If silent Then 'if silent start directly - if not ask user
+        If silent = True Then 'if silent start directly - if not ask user
             startResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
         Else
             startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
+            If cb_defaultmanualbackup.Checked = True Then
+                'do a full backup without asking user
+                backuptype = "Full"
+            Else
+                'askuser which kind of backup he wants to perform
+                Dim tmplctr = 0
+                If Not backuptype.Length = 0 Then
+
+
+                    While Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "I" And Not backuptype.Substring(0, 1) = "D"
+                        tmplctr += 1
+                        backuptype = InputBox("Please enter 'Full', 'Diff' or 'Incr' " & vbNewLine & "To resemble Full / Differential and Incremental Backup types.")
+                        If Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "D" And Not backuptype.Substring(0, 1) = "I" Then
+                            MsgBox("Please Enter a Valid entry ('Full', 'Diff' or 'Incr')")
+                        End If
+                    End While
+                    If backuptype.Substring(0, 1) = "F" Then
+                        backuptype = "Full"
+                    End If
+                    If backuptype.Substring(0, 1) = "I" Then
+                        backuptype = "Incr"
+                    End If
+                    If backuptype.Substring(0, 1) = "D" Then
+                        backuptype = "Diff"
+                    End If
+                End If
+            End If
         End If
         If startResult = Windows.Forms.DialogResult.Yes Then
-            start_backup()
+            start_backup(backuptype)
         ElseIf startResult = Windows.Forms.DialogResult.No Then
             MessageBox.Show("Cancled Backup!")
         End If
+
     End Sub
 
     'function to encapsulate the actual backup process
-    Function start_backup()
+    'eccepted params are "Full | Incr | Diff"  
+    Function start_backup(Optional backuptype As String = "Full")
         Try
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
@@ -195,7 +225,7 @@ Public Class home
                 If tempstartResult = Windows.Forms.DialogResult.Yes Then
                     'log start of specific folderpair
                     rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine)
-                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False) 'more arguments can be added like incremental/not etc...
+                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False, backuptype) 'more arguments can be added like incremental/not etc...
                     'log success
                     rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & vbNewLine)
                 End If
@@ -236,6 +266,7 @@ Public Class home
                     'so get hours and minutes
                     Dim checkhour = time.Substring(0, 2) 'gets first 2 chars so the HH
                     Dim checkMinute = time.Substring(3, 2) 'get s the last two chars MM (: not needed)
+                    Dim backuptype = time.Substring(5, 4) ' get chars 5-8 which re the backuptype as a 4 char code (Full Diff and Incr)
                     If checkhour = currhour Then
                         If checkMinute = currmin Then
                             'log the auto start
@@ -259,7 +290,7 @@ Public Class home
 
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
-    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True)
+    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
         'check if targetpath already contains date information . if not add it
         If Not targetpath.Contains(starttime) Then
             'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
@@ -300,7 +331,55 @@ Public Class home
                                 'if simulate mode is on, only log!!! Dont copy!
                                 'check if targetfile already exists
                                 If Not File.Exists(targetpath & "\" & filename) Then
-                                    File.Copy(filepath, targetpath & "\" & filename)
+                                    '''''''''''''' File.Copy(filepath, targetpath & "\" & filename)
+                                    'use robocopy to achieve archiving... BUT don't use it to loop through the folders
+                                    'this way we still have access to each file (which means we could zip it afterwards etc)
+                                    'also, Easier to implement incremental/differental backups this way
+
+                                    'THEORY:
+                                    'Full - resets archive bit
+                                    'Differential - does NOT resete archive bit (copies all files that changed since last full backup)
+                                    'Incremental - resets archive bit (Copies all files since last Full/Incremental - slower to restore)
+
+                                    'define rrobocopy vars (general)
+                                    'commands for Robocopy
+                                    '/M will remove Archive bitbut only copy files where it's set
+                                    '/A will only copy files with archive bit  set
+                                    '/A-:%atributes% will rmeove a specified attribute afterwards 
+                                    'example: /A-:A (resets archive bit    
+                                    Dim processname As String = "robocopy.exe"
+                                    Dim filestocopy As String = filename ' used in the robocopy command to only copy that file
+                                    Dim ARGFull As String = "/A-:A"
+                                    Dim ARGdifferential As String = "/A"
+                                    Dim ARGincremental As String = "/M"
+
+                                    'define the process where the job runs in (cmd)
+                                    Dim Proc As New System.Diagnostics.Process
+                                    Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
+                                    Proc.StartInfo.UseShellExecute = False
+                                    Proc.StartInfo.CreateNoWindow = True
+                                    Select Case backuptype 'define arguments in here depending on backuptype
+
+                                        Case "Full"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGFull
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case "Diff"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGdifferential
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case "Incr"
+                                            Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
+                                                & targetpath & " " & filestocopy & " " & ARGincremental
+                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        Case Else
+                                            rtb_log.AppendText(vbNewLine & "Invalid Backuptyep detected")
+                                    End Select
+
+                                    Proc.Start() 'after defining everythig start the process
+                                    'then wait for it to exit to continue with the next file
+                                    Proc.WaitForExit()
+
                                 Else
                                     'log it already exists or overwrite if timestamp changed
                                 End If
@@ -317,9 +396,9 @@ Public Class home
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
                         'call routine to delete subfiles
                         If simulate_mode_active = True Then
-                            BackupDirectory(dir, targetpath & relpath, True)
+                            BackupDirectory(dir, targetpath & relpath, True, backuptype)
                         Else
-                            BackupDirectory(dir, targetpath & relpath, False)
+                            BackupDirectory(dir, targetpath & relpath, False, backuptype)
                         End If
                     Next
                 End If

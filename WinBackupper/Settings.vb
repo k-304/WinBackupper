@@ -18,7 +18,7 @@ Public Class Settings
     Dim Allsourcepaths As String 'this is the whole string "path1;path2;path2" etc
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
-    Public linecurrentlyedited As Integer = 0
+    Public Shared linecurrentlyedited As Integer = 0
 
 #End Region
 
@@ -538,6 +538,19 @@ Public Class Settings
                         mismatches += 1
                     End If
                 Next
+                If home.timesettingsarray.Count <> Savedtimedata.Count Then
+                    'difference in entries for the 2 arrays - Savedtimedata not saved correctly
+                    mismatches += 1
+                End If
+                If home.backupPatharray.Count <> Savedbackupdata.Count Then
+                    'difference in entries for the 2 arrays - Savedbackupdata not saved correctly
+                    mismatches += 1
+                End If
+                If home.sourcepatharray.Count <> Savedsourcedata.Count Then
+                    'difference in entries for the 2 arrays - Savedsourcedata not saved correctly
+                    mismatches += 1
+                End If
+
                 If mismatches > 0 Then 'if there are no mismatches the array's are equal!
                     MessageBox.Show("Unable to save Configuration!", "Error while saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
@@ -566,4 +579,5 @@ Public Class Settings
         Next
 
     End Sub
+
 End Class

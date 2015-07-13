@@ -44,14 +44,15 @@ Partial Class home
         Me.ch_source = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
         Me.ch_backup = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
         Me.ch_nextstarttime = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
-        Me.ContextMenuStrip1.SuspendLayout
-        Me.SuspendLayout
+        Me.cb_defaultmanualbackup = New System.Windows.Forms.CheckBox()
+        Me.ContextMenuStrip1.SuspendLayout()
+        Me.SuspendLayout()
         '
         'l_title
         '
-        Me.l_title.AutoSize = true
+        Me.l_title.AutoSize = True
         Me.l_title.BackColor = System.Drawing.Color.Transparent
-        Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.l_title.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_title.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_title.Location = New System.Drawing.Point(133, 14)
         Me.l_title.Name = "l_title"
@@ -61,23 +62,23 @@ Partial Class home
         '
         'b_start
         '
-        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.b_start.Location = New System.Drawing.Point(12, 230)
+        Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_start.Location = New System.Drawing.Point(12, 256)
         Me.b_start.Name = "b_start"
         Me.b_start.Size = New System.Drawing.Size(430, 35)
         Me.b_start.TabIndex = 7
         Me.b_start.Text = "Start Backup"
-        Me.b_start.UseVisualStyleBackColor = true
+        Me.b_start.UseVisualStyleBackColor = True
         '
         'b_settings
         '
-        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.b_settings.Location = New System.Drawing.Point(12, 271)
+        Me.b_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_settings.Location = New System.Drawing.Point(12, 297)
         Me.b_settings.Name = "b_settings"
         Me.b_settings.Size = New System.Drawing.Size(135, 35)
         Me.b_settings.TabIndex = 8
         Me.b_settings.Text = "Configuration"
-        Me.b_settings.UseVisualStyleBackColor = true
+        Me.b_settings.UseVisualStyleBackColor = True
         '
         'fbd_searchSource
         '
@@ -87,20 +88,20 @@ Partial Class home
         '
         'b_update
         '
-        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.b_update.Location = New System.Drawing.Point(153, 271)
+        Me.b_update.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_update.Location = New System.Drawing.Point(153, 297)
         Me.b_update.Name = "b_update"
         Me.b_update.Size = New System.Drawing.Size(136, 35)
         Me.b_update.TabIndex = 10
         Me.b_update.Text = "Update"
-        Me.b_update.UseVisualStyleBackColor = true
+        Me.b_update.UseVisualStyleBackColor = True
         '
         'l_version
         '
-        Me.l_version.AutoSize = true
+        Me.l_version.AutoSize = True
         Me.l_version.BackColor = System.Drawing.Color.Transparent
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_version.Location = New System.Drawing.Point(365, 284)
+        Me.l_version.Location = New System.Drawing.Point(365, 310)
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(77, 13)
         Me.l_version.TabIndex = 11
@@ -112,9 +113,9 @@ Partial Class home
         'NotifyIcon1
         '
         Me.NotifyIcon1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"),System.Drawing.Icon)
+        Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
         Me.NotifyIcon1.Text = "WinBackupper"
-        Me.NotifyIcon1.Visible = true
+        Me.NotifyIcon1.Visible = True
         '
         'ContextMenuStrip1
         '
@@ -136,13 +137,13 @@ Partial Class home
         '
         'Timer_per_Minute
         '
-        Me.Timer_per_Minute.Enabled = true
+        Me.Timer_per_Minute.Enabled = True
         Me.Timer_per_Minute.Interval = 60000
         Me.Timer_per_Minute.Tag = ""
         '
         'rtb_log
         '
-        Me.rtb_log.Location = New System.Drawing.Point(12, 336)
+        Me.rtb_log.Location = New System.Drawing.Point(12, 362)
         Me.rtb_log.Name = "rtb_log"
         Me.rtb_log.Size = New System.Drawing.Size(430, 55)
         Me.rtb_log.TabIndex = 14
@@ -150,11 +151,11 @@ Partial Class home
         '
         'l_log
         '
-        Me.l_log.AutoSize = true
+        Me.l_log.AutoSize = True
         Me.l_log.BackColor = System.Drawing.Color.Transparent
-        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_log.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_log.Location = New System.Drawing.Point(199, 309)
+        Me.l_log.Location = New System.Drawing.Point(199, 335)
         Me.l_log.Name = "l_log"
         Me.l_log.Size = New System.Drawing.Size(47, 24)
         Me.l_log.TabIndex = 15
@@ -193,13 +194,27 @@ Partial Class home
         Me.ch_nextstarttime.Text = "Next start time:"
         Me.ch_nextstarttime.Width = 89
         '
+        'cb_defaultmanualbackup
+        '
+        Me.cb_defaultmanualbackup.AutoSize = True
+        Me.cb_defaultmanualbackup.BackColor = System.Drawing.Color.Transparent
+        Me.cb_defaultmanualbackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_defaultmanualbackup.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.cb_defaultmanualbackup.Location = New System.Drawing.Point(12, 230)
+        Me.cb_defaultmanualbackup.Name = "cb_defaultmanualbackup"
+        Me.cb_defaultmanualbackup.Size = New System.Drawing.Size(336, 21)
+        Me.cb_defaultmanualbackup.TabIndex = 32
+        Me.cb_defaultmanualbackup.Text = "Start Default Full backup for selected Folderpair?"
+        Me.cb_defaultmanualbackup.UseVisualStyleBackColor = False
+        '
         'home
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 403)
+        Me.ClientSize = New System.Drawing.Size(454, 429)
+        Me.Controls.Add(Me.cb_defaultmanualbackup)
         Me.Controls.Add(Me.lv_overview)
         Me.Controls.Add(Me.l_log)
         Me.Controls.Add(Me.rtb_log)
@@ -237,5 +252,6 @@ End Sub
     Friend WithEvents ch_source As System.Windows.Forms.ColumnHeader
     Friend WithEvents ch_backup As System.Windows.Forms.ColumnHeader
     Friend WithEvents ch_nextstarttime As System.Windows.Forms.ColumnHeader
+    Friend WithEvents cb_defaultmanualbackup As System.Windows.Forms.CheckBox
 
 End Class

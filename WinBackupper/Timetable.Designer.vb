@@ -25,7 +25,6 @@ Partial Class Timetable
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
         Me.dtp = New System.Windows.Forms.DateTimePicker()
         Me.b_add = New System.Windows.Forms.Button()
-        Me.RTB_Time = New System.Windows.Forms.RichTextBox()
         Me.b_stopediting = New System.Windows.Forms.Button()
         Me.b_remove = New System.Windows.Forms.Button()
         Me.dd_Day = New System.Windows.Forms.ComboBox()
@@ -35,6 +34,10 @@ Partial Class Timetable
         Me.tb_intervall = New System.Windows.Forms.TextBox()
         Me.b_reset = New System.Windows.Forms.Button()
         Me.cb_intervall = New System.Windows.Forms.CheckBox()
+        Me.lv_timetable = New System.Windows.Forms.ListView()
+        Me.ch_starttime = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ch_backuptype = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.b_changebackuptype = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'dtp
@@ -49,26 +52,17 @@ Partial Class Timetable
         'b_add
         '
         Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_add.Location = New System.Drawing.Point(10, 362)
+        Me.b_add.Location = New System.Drawing.Point(9, 404)
         Me.b_add.Name = "b_add"
         Me.b_add.Size = New System.Drawing.Size(247, 36)
         Me.b_add.TabIndex = 20
         Me.b_add.Text = "Add"
         Me.b_add.UseVisualStyleBackColor = True
         '
-        'RTB_Time
-        '
-        Me.RTB_Time.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RTB_Time.Location = New System.Drawing.Point(11, 107)
-        Me.RTB_Time.Name = "RTB_Time"
-        Me.RTB_Time.Size = New System.Drawing.Size(247, 180)
-        Me.RTB_Time.TabIndex = 21
-        Me.RTB_Time.Text = ""
-        '
         'b_stopediting
         '
         Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_stopediting.Location = New System.Drawing.Point(10, 404)
+        Me.b_stopediting.Location = New System.Drawing.Point(9, 446)
         Me.b_stopediting.Name = "b_stopediting"
         Me.b_stopediting.Size = New System.Drawing.Size(247, 36)
         Me.b_stopediting.TabIndex = 22
@@ -78,7 +72,7 @@ Partial Class Timetable
         'b_remove
         '
         Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_remove.Location = New System.Drawing.Point(11, 320)
+        Me.b_remove.Location = New System.Drawing.Point(10, 362)
         Me.b_remove.Name = "b_remove"
         Me.b_remove.Size = New System.Drawing.Size(112, 36)
         Me.b_remove.TabIndex = 23
@@ -142,7 +136,7 @@ Partial Class Timetable
         'b_reset
         '
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(132, 320)
+        Me.b_reset.Location = New System.Drawing.Point(131, 362)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(125, 36)
         Me.b_reset.TabIndex = 30
@@ -162,12 +156,44 @@ Partial Class Timetable
         Me.cb_intervall.Text = "Add intervall entries?"
         Me.cb_intervall.UseVisualStyleBackColor = False
         '
+        'lv_timetable
+        '
+        Me.lv_timetable.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_starttime, Me.ch_backuptype})
+        Me.lv_timetable.Location = New System.Drawing.Point(10, 105)
+        Me.lv_timetable.Name = "lv_timetable"
+        Me.lv_timetable.Size = New System.Drawing.Size(248, 182)
+        Me.lv_timetable.TabIndex = 32
+        Me.lv_timetable.UseCompatibleStateImageBehavior = False
+        Me.lv_timetable.View = System.Windows.Forms.View.Details
+        '
+        'ch_starttime
+        '
+        Me.ch_starttime.Text = "Starttime"
+        Me.ch_starttime.Width = 67
+        '
+        'ch_backuptype
+        '
+        Me.ch_backuptype.Text = "Backup type"
+        Me.ch_backuptype.Width = 76
+        '
+        'b_changebackuptype
+        '
+        Me.b_changebackuptype.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_changebackuptype.Location = New System.Drawing.Point(9, 320)
+        Me.b_changebackuptype.Name = "b_changebackuptype"
+        Me.b_changebackuptype.Size = New System.Drawing.Size(246, 36)
+        Me.b_changebackuptype.TabIndex = 33
+        Me.b_changebackuptype.Text = "Change Backuptype"
+        Me.b_changebackuptype.UseVisualStyleBackColor = True
+        '
         'Timetable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(268, 445)
+        Me.ClientSize = New System.Drawing.Size(267, 494)
+        Me.Controls.Add(Me.b_changebackuptype)
+        Me.Controls.Add(Me.lv_timetable)
         Me.Controls.Add(Me.cb_intervall)
         Me.Controls.Add(Me.b_reset)
         Me.Controls.Add(Me.tb_intervall)
@@ -177,7 +203,6 @@ Partial Class Timetable
         Me.Controls.Add(Me.dd_Day)
         Me.Controls.Add(Me.b_remove)
         Me.Controls.Add(Me.b_stopediting)
-        Me.Controls.Add(Me.RTB_Time)
         Me.Controls.Add(Me.b_add)
         Me.Controls.Add(Me.dtp)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
@@ -190,7 +215,6 @@ Partial Class Timetable
     End Sub
     Friend WithEvents dtp As System.Windows.Forms.DateTimePicker
     Friend WithEvents b_add As System.Windows.Forms.Button
-    Friend WithEvents RTB_Time As System.Windows.Forms.RichTextBox
     Friend WithEvents b_stopediting As System.Windows.Forms.Button
     Friend WithEvents b_remove As System.Windows.Forms.Button
     Friend WithEvents dd_Day As System.Windows.Forms.ComboBox
@@ -200,4 +224,8 @@ Partial Class Timetable
     Friend WithEvents tb_intervall As System.Windows.Forms.TextBox
     Friend WithEvents b_reset As System.Windows.Forms.Button
     Friend WithEvents cb_intervall As System.Windows.Forms.CheckBox
+    Friend WithEvents lv_timetable As System.Windows.Forms.ListView
+    Friend WithEvents ch_starttime As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ch_backuptype As System.Windows.Forms.ColumnHeader
+    Friend WithEvents b_changebackuptype As System.Windows.Forms.Button
 End Class

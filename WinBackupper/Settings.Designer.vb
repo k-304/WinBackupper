@@ -96,6 +96,7 @@ Private Sub InitializeComponent()
         '
         'b_editfolderpair
         '
+        Me.b_editfolderpair.Enabled = False
         Me.b_editfolderpair.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_editfolderpair.Location = New System.Drawing.Point(240, 401)
         Me.b_editfolderpair.Name = "b_editfolderpair"
