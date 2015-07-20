@@ -29,24 +29,41 @@ Public Class home
     'Sub executed when Form is closed
     Private Sub home_Formclosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
         'write Log here?
-        ''''''''''  WriteLogfile("Test1", w)
+        WriteLogfile(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt", True) 'writes logfile and overwrites axisting ones with the same name
     End Sub
 
 
     'Function to write a Logfile
-    'accepts filepath, text to write and a boolead (true/false) if the file should be overwritten.
-    Public Function WriteLogfile(filepath As String, text As String, Optional overwrite As Boolean = False)
+    'accepts filepath and a boolead (true/false) if the file should be overwritten.
+    Public Function WriteLogfile(filepath As String, Optional overwrite As Boolean = False)
         Try
             'check if file already exists
-
-            'if so check if we should overwrite (delete&recreate) it
+            If File.Exists(filepath) Then
+                'if so check if we should overwrite (delete&recreate) it
+                If overwrite Then ' if overwrite is true
+                    File.Delete(filepath) 'delete the file
+                End If
+            End If
 
             'open the file
             Using w As StreamWriter = File.AppendText(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt")
                 'write some header information first - then write all RTB_log text into it
+                Dim headermsg As String = "Logfile of Winbackupper for " & GetDate() & " on" & GetTime()
+                For Each Character As Char In headermsg
+                    w.Write(Character) 'write current character into file
+                Next
+                'after that write a new line into the file
+                w.WriteLine()
 
-                'workinprogreS!!!!!!!!!
-
+                'now start to write the actual logfile
+                'loop through all line of the log richtextbox and then loop thorugh al chars of that line
+                For Each line As String In rtb_log.Lines ' get each line of rtb
+                    For Each character As Char In line
+                        w.Write(character) 'write current character into file
+                    Next
+                    'after that write a new line into the file - a new line is reached
+                    w.WriteLine()
+                Next
             End Using
 
             'in the end return 0 to indicate success! 
@@ -175,20 +192,25 @@ Public Class home
                 If Not backuptype.Length = 0 Then
 
 
-                    While Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "I" And Not backuptype.Substring(0, 1) = "D"
+                    While Not (backuptype.Substring(0, 1) = "F" Or backuptype.Substring(0, 1) = "f") And Not (backuptype.Substring(0, 1) = "D" Or backuptype.Substring(0, 1) = "d") And Not (backuptype.Substring(0, 1) = "I" Or backuptype.Substring(0, 1) = "i")
                         tmplctr += 1
                         backuptype = InputBox("Please enter 'Full', 'Diff' or 'Incr' " & vbNewLine & "To resemble Full / Differential and Incremental Backup types.")
-                        If Not backuptype.Substring(0, 1) = "F" And Not backuptype.Substring(0, 1) = "D" And Not backuptype.Substring(0, 1) = "I" Then
+                        'check if user aborted
+                        If backuptype.Length = 0 Then
+                            MessageBox.Show("Cancled Backup! Please enter some valid text")
+                            Exit Sub
+                        End If
+                        If Not (backuptype.Substring(0, 1) = "F" Or backuptype.Substring(0, 1) = "f") And Not (backuptype.Substring(0, 1) = "D" Or backuptype.Substring(0, 1) = "d") And Not (backuptype.Substring(0, 1) = "I" Or backuptype.Substring(0, 1) = "i") Then
                             MsgBox("Please Enter a Valid entry ('Full', 'Diff' or 'Incr')")
                         End If
                     End While
-                    If backuptype.Substring(0, 1) = "F" Then
+                    If backuptype.Substring(0, 1) = "F" Or backuptype.Substring(0, 1) = "f" Then
                         backuptype = "Full"
                     End If
-                    If backuptype.Substring(0, 1) = "I" Then
+                    If backuptype.Substring(0, 1) = "I" Or backuptype.Substring(0, 1) = "i" Then
                         backuptype = "Incr"
                     End If
-                    If backuptype.Substring(0, 1) = "D" Then
+                    If backuptype.Substring(0, 1) = "D" Or backuptype.Substring(0, 1) = "d" Then
                         backuptype = "Diff"
                     End If
                 End If
@@ -227,7 +249,7 @@ Public Class home
                     rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine)
                     BackupDirectory(sourcepatharray(i), backupPatharray(i), False, backuptype) 'more arguments can be added like incremental/not etc...
                     'log success
-                    rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & vbNewLine)
+                    rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & backuptype & vbNewLine)
                 End If
             Next
             Return 0
