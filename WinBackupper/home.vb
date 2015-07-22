@@ -231,6 +231,13 @@ Public Class home
             'start backup processes
             'first define the starttime - and therefore the subfolder name for the backup
             starttime = GetDate()
+
+            'Messege Box for System-Tray
+            If Me.Visible = False Then
+                'Show Notification
+                startnotification()
+            End If
+
             'log it
             rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
             'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
@@ -250,15 +257,23 @@ Public Class home
                     BackupDirectory(sourcepatharray(i), backupPatharray(i), False, backuptype) 'more arguments can be added like incremental/not etc...
                     'log success
                     rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & backuptype & vbNewLine)
+
+                    'Message Box for System-Tray
+                    If Me.Visible = False Then
+                        'Show Notification
+                        finishnotification()
+                    End If
+
                 End If
             Next
             Return 0
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured instart_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return -1
         End Try
     End Function
+
     'executed when the minutely timer ticks+
     Private Sub Timer_per_Minute_Tick(sender As Object, e As EventArgs) Handles Timer_per_Minute.Tick
         Try
@@ -569,6 +584,16 @@ Public Class home
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         'Close
         Me.Close()
+    End Sub
+
+    'Notify Backup-Start
+    Public Sub startnotification()
+        NotifyIcon1.ShowBalloonTip(3000, "Backup Started", "Your Backup is running...", ToolTipIcon.Info)
+    End Sub
+
+    'Notify Backup-End
+    Public Sub finishnotification()
+        NotifyIcon1.ShowBalloonTip(3000, "Backup Complete", "Backup Completed!", ToolTipIcon.Info)
     End Sub
 #End Region
 
