@@ -183,6 +183,10 @@ Public Class home
             startResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
         Else
             startResult = MessageBox.Show("Starting Backup? ", "Continue?", MessageBoxButtons.YesNo)
+            'if user wants to abort abort directly
+            If startResult = Windows.Forms.DialogResult.No Then
+                MessageBox.Show("Cancled Backup!")
+            End If
             If cb_defaultmanualbackup.Checked = True Then
                 'do a full backup without asking user
                 backuptype = "Full"
@@ -218,8 +222,6 @@ Public Class home
         End If
         If startResult = Windows.Forms.DialogResult.Yes Then
             start_backup(backuptype)
-        ElseIf startResult = Windows.Forms.DialogResult.No Then
-            MessageBox.Show("Cancled Backup!")
         End If
 
     End Sub
@@ -297,8 +299,14 @@ Public Class home
                 'get string out of the array 
                 Dim TSArraystring = Timetable.settings_of_dayn(getdayofweek, currpairsettings)
                 Dim TSArray As New ArrayList 'TS for Time Settings
+
                 TSArray = StringtoArray(TSArraystring, ";")
                 For Each time As String In TSArray
+                    'check if nothing is configured for this day
+                    'this string will be returned by the settings_of_day_n function if no settings are configured for that day
+                    If time.Substring(0, 7) = "Nothing" Then
+                        Exit Sub
+                    End If
                     'time is written like HH:MM
                     'so get hours and minutes
                     Dim checkhour = time.Substring(0, 2) 'gets first 2 chars so the HH
@@ -313,7 +321,7 @@ Public Class home
                             'hours AND Minutes are the same - start backup 
                             start_backup()
                             'after autobackup- set silent to false again!
-                            silent = True
+                            silent = False
                         End If
                     End If
 
@@ -514,7 +522,7 @@ Public Class home
         For i = 0 To seperatedmultistring.ToString.Length Step 1
             If (seperatedmultistring.ToString.Length = 0) Then
                 'empty string was given, reutrn null
-                Throw New ArgumentException("Array is null (not set yet)")
+                Throw New ArgumentException("Calling this Function without Input (enmpty string) is NOT valid!")
             End If
             If (i = seperatedmultistring.ToString.Length) Then
                 Exit For

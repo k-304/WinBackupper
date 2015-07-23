@@ -83,7 +83,7 @@ Public Class Settings
             For Each item As ListViewItem In lv_settings.SelectedItems
                 'set currently edited index
                 linecurrentlyedited = item.Index
-                Timetable.ShowDialog() 'pass current line as argument
+                Timetable.ShowDialog()
             Next
         Else
             MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -131,16 +131,16 @@ Public Class Settings
         Try
             'reset the content of the listview (lv_settings) (the .items. is important! otherwise it deletes the columns to!
             lv_settings.Items.Clear()
-            'run through Array and get needed Values
+            'run through Array and get needed Values - Do it seperately to avoid errors
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 'first, fill in the index, the "main item" (look at the code and you ll understand)
                 'define the item to add
                 Dim lvi As ListViewItem
                 lvi = Me.lv_settings.Items.Add(i) 'define listviewitem variable as the "current lsitviewitem to add". (fill it with index)
                 'fill in first subitem (in this case source)
-                lvi.SubItems.Add(sourcepatharray(i) & vbNewLine)
+                lvi.SubItems.Add(sourcepatharray(i))
                 'then fill backuppath part 
-                lvi.SubItems.Add(backupPatharray(i) & vbNewLine)
+                lvi.SubItems.Add(backupPatharray(i))
 
             Next
 
@@ -334,9 +334,6 @@ Public Class Settings
             'sane string ...add it
             'write value into Array!
             sourcepatharray.Add(SourcePathtresult)
-
-            'Refresh Richtextbox to display selected Path instantly
-            Settings_Reload()
         End If
 
         ' Dialog to select Backup Path
