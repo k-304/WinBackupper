@@ -11,3 +11,7 @@ https://github.com/SnipeLike/WinBackupper/issues
 
 # Next Update
 Many new Features!
+
+# Credits
+- T0mH4rr1s0n
+- SnipeLike

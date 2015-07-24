@@ -27,7 +27,7 @@ Public Class Settings
     '*----Main Code----*'
     '*-----------------*'
 
-    ' Settings Form
+    'Settings Form
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'get Values from "home"-class (form1.vb) to get already loaded settings (to display/manipulate)
         backupPatharray = WinBackupper.home.backupPatharray
@@ -160,12 +160,12 @@ Public Class Settings
 
     End Function
 
-    ' TextBox for default Source Path
+    'TextBox for default Source Path
     Private Sub tb_defaultSourcePath_TextChanged(sender As Object, e As EventArgs)
         'if something is pasted in, add the globalsperator sign at the end!
     End Sub
 
-    ' Button Search default Source Path
+    'Button Search default Source Path
     Private Sub b_searchDefaultSource_Click(sender As Object, e As EventArgs)
         ' Dialog to select Source Path
         fbd_searchDefaultSource.Description = "Select Folder"
@@ -188,17 +188,17 @@ Public Class Settings
         End If
     End Sub
 
-    ' FolderBrowserDialog to select default Source Path
+    'FolderBrowserDialog to select default Source Path
     Private Sub fbd_searchDefaultSource_HelpRequest(sender As Object, e As EventArgs) Handles fbd_searchDefaultSource.HelpRequest
 
     End Sub
 
-    ' TextBox for default Backup Path
+    'TextBox for default Backup Path
     Private Sub tb_defaultBackupPath_TextChanged(sender As Object, e As EventArgs)
         'if something is pasted in, add the globalsperator sign at the end!
     End Sub
 
-    ' Button Search default Backup Path
+    'Button Search default Backup Path
     Private Sub b_searchDefaultBackup_Click(sender As Object, e As EventArgs)
         ' Dialog to select Backup Path
         fbd_searchDefaultBackup.Description = "Select Folder"
@@ -223,12 +223,27 @@ Public Class Settings
         End If
     End Sub
 
-    ' FolderBrowserDialog to select default Backup Path
+    'FolderBrowserDialog to select default Backup Path
     Private Sub fbd_searchDefaultBackup_HelpRequest(sender As Object, e As EventArgs) Handles fbd_searchDefaultBackup.HelpRequest
 
     End Sub
 
-    ' Button Save defaults to own XML File
+    'Button to Remove selected Folder Pair
+    Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
+        'loop through selected lines
+        For Each item As ListViewItem In lv_settings.SelectedItems
+            'Remove from timesettingsarray
+            home.timesettingsarray.RemoveAt(item.Index)
+            'remove from source/backup array
+            home.sourcepatharray.RemoveAt(item.Index)
+            home.backupPatharray.RemoveAt(item.Index)
+            'delete rtb time text
+            RTB_timesettings.Text = ""
+        Next
+
+    End Sub
+
+    'Button Save defaults to own XML File
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
         'delete default.xml if it exists already
         If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
@@ -243,6 +258,7 @@ Public Class Settings
         Me.Close()
     End Sub
 
+    'Reset Button
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
         Dim resetchoice = MessageBox.Show("Do you really want to reset ALL your configurations?", "Reset EVERYTHING?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
@@ -562,19 +578,5 @@ Public Class Settings
     End Sub
 
 #End Region
-
-    Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
-        'loop through selected lines
-        For Each item As ListViewItem In lv_settings.SelectedItems
-            'Remove from timesettingsarray
-            home.timesettingsarray.RemoveAt(item.Index)
-            'remove from source/backup array
-            home.sourcepatharray.RemoveAt(item.Index)
-            home.backupPatharray.RemoveAt(item.Index)
-            'delete rtb time text
-            RTB_timesettings.Text = ""
-        Next
-
-    End Sub
 
 End Class
