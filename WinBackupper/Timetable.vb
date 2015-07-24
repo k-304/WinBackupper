@@ -3,8 +3,6 @@ Imports System.Reflection
 
 Public Class Timetable
 
-
-
 #Region "Variables"
     '*------------------------*'
     '*----Global Variables----*'
@@ -26,6 +24,27 @@ Public Class Timetable
 #End Region
 
 #Region "MainCode"
+    'Textbox showing Source Path of selected Pair
+    Private Sub tb_showSource_TextChanged(sender As Object, e As EventArgs) Handles tb_showSource.TextChanged
+
+    End Sub
+
+    'Button to edit Source Path
+    Private Sub b_editBackup_Click(sender As Object, e As EventArgs) Handles b_editBackup.Click
+
+    End Sub
+
+    'Textbox showing Backup Path of selected Pair
+    Private Sub tb_showBackup_TextChanged(sender As Object, e As EventArgs) Handles tb_showBackup.TextChanged
+
+    End Sub
+
+    'Button to edit Backup Path
+    Private Sub b_editSource_Click(sender As Object, e As EventArgs) Handles b_editSource.Click
+
+    End Sub
+
+    'ComboBox Day
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles dd_Day.SelectedIndexChanged
 
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
@@ -168,7 +187,7 @@ Public Class Timetable
         'this is for the currently selected index
         Select Case selectedday
             Case 0
-              
+
                 For Each item As String In lvc_Mon
                     If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
                         'only add the nothing configured text - no need to get each time
@@ -413,7 +432,6 @@ Public Class Timetable
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
-
         'first create timesettings string to save to xml
         'reset finalstring if executed before (var is public)
         finalstring = ""
@@ -900,7 +918,5 @@ Public Class Timetable
     End Sub
 
 #End Region
-
-
 
 End Class
