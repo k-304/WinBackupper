@@ -159,9 +159,9 @@ Partial Class Timetable
         'lv_timetable
         '
         Me.lv_timetable.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_starttime, Me.ch_backuptype})
-        Me.lv_timetable.Location = New System.Drawing.Point(10, 105)
+        Me.lv_timetable.Location = New System.Drawing.Point(10, 107)
         Me.lv_timetable.Name = "lv_timetable"
-        Me.lv_timetable.Size = New System.Drawing.Size(248, 182)
+        Me.lv_timetable.Size = New System.Drawing.Size(248, 180)
         Me.lv_timetable.TabIndex = 32
         Me.lv_timetable.UseCompatibleStateImageBehavior = False
         Me.lv_timetable.View = System.Windows.Forms.View.Details
@@ -169,12 +169,12 @@ Partial Class Timetable
         'ch_starttime
         '
         Me.ch_starttime.Text = "Starttime"
-        Me.ch_starttime.Width = 67
+        Me.ch_starttime.Width = 52
         '
         'ch_backuptype
         '
         Me.ch_backuptype.Text = "Backup type"
-        Me.ch_backuptype.Width = 76
+        Me.ch_backuptype.Width = 79
         '
         'b_changebackuptype
         '

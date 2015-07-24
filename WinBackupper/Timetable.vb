@@ -55,6 +55,10 @@ Public Class Timetable
             Case 1
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -69,6 +73,10 @@ Public Class Timetable
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -83,6 +91,10 @@ Public Class Timetable
             Case 3
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -97,6 +109,10 @@ Public Class Timetable
             Case 4
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -111,6 +127,10 @@ Public Class Timetable
             Case 5
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -125,6 +145,10 @@ Public Class Timetable
             Case 6
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 7) = "Nothing" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -144,53 +168,89 @@ Public Class Timetable
         'this is for the currently selected index
         Select Case selectedday
             Case 0
+              
                 For Each item As String In lvc_Mon
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1)) '(don t write last character , so 5+1 is used. last character is ";" leads to nasty bugs)
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1)) '(don t write last character , so 5+1 is used. last character is ";" leads to nasty bugs)
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 1
                 For Each item As String In lvc_Tue
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 2
                 For Each item As String In lvc_Wed
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 3
                 For Each item As String In lvc_Thu
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 4
                 For Each item As String In lvc_Fri
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 5
                 For Each item As String In lvc_Sat
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
             Case 6
                 For Each item As String In lvc_Sun
-                    Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
-                    Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
-                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
-                    tempitem.SubItems.Add(backuptype)
+                    If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        'only add the nothing configured text - no need to get each time
+                        lv_timetable.Items.Add(item)
+                    Else ' search for the times and fill them in
+                        Dim timepart As String = item.Substring(0, 5) 'get first 5 chars (the time like HH:MM)
+                        Dim backuptype As String = item.Substring(5, item.Length - (5 + 1))
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(timepart)
+                        tempitem.SubItems.Add(backuptype)
+                    End If
                 Next
         End Select
 
@@ -282,7 +342,7 @@ Public Class Timetable
             lastchar = currchar
         Next
         If daystring(day) Is Nothing Then
-            Return "Nothing Configured"
+            Return "Nothing Configured" & seperator 'This will be used to fill a array - and the string to array function needs the seperator to work correctly
         End If
         Select Case day
             Case 0 'monday
@@ -463,6 +523,10 @@ Public Class Timetable
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
 
             For Each item As String In lvc_Mon
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -474,6 +538,10 @@ Public Class Timetable
         If Not lvc_Tue Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Tue
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -484,6 +552,10 @@ Public Class Timetable
         If Not lvc_Wed Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Wed
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -495,6 +567,10 @@ Public Class Timetable
         If Not lvc_Thu Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Thu
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -506,6 +582,10 @@ Public Class Timetable
         If Not lvc_Fri Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Fri
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -517,6 +597,10 @@ Public Class Timetable
         If Not lvc_Sat Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Sun
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -529,6 +613,10 @@ Public Class Timetable
         If Not lvc_Sun Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
             For Each item As String In lvc_Sat
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
                 finalstring = finalstring & item
             Next
         End If
@@ -576,6 +664,9 @@ Public Class Timetable
             'TESTIGN
 
             Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
+            If mondaytimes = "" Then 'dirty fix if called with empty string
+                mondaytimes = "Nothing Configured!" & seperator
+            End If
             Dim mondaytimesarray As New ArrayList
             mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
             'fill the current times into RTB_Time
@@ -598,6 +689,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 1
             'next day (tue)
             Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
+            If tuedaytimes = "" Then 'dirty fix if called with empty string
+                tuedaytimes = "Nothing Configured!" & seperator
+            End If
             Dim tuedaytimesarray As New ArrayList
             tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
             'fill the current times into RTB_Time
@@ -616,6 +710,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 2
             'next day (wed)
             Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
+            If weddaytimes = "" Then 'dirty fix if called with empty string
+                weddaytimes = "Nothing Configured!" & seperator
+            End If
             Dim weddaytimesarray As New ArrayList
             weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
             'fill the current times into RTB_Time
@@ -634,6 +731,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 3
             'next day (thu)
             Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
+            If thudaytimes = "" Then 'dirty fix if called with empty string
+                thudaytimes = "Nothing Configured!" & seperator
+            End If
             Dim thudaytimesarray As New ArrayList
             thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
             'fill the current times into RTB_Time
@@ -651,6 +751,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 4
             'next day (fri)
             Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
+            If fridaytimes = "" Then 'dirty fix if called with empty string
+                fridaytimes = "Nothing Configured!" & seperator
+            End If
             Dim fridaytimesarray As New ArrayList
             fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
             'fill the current times into RTB_Time
@@ -668,6 +771,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 5
             'next day (sat)
             Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
+            If satdaytimes = "" Then 'dirty fix if called with empty string
+                satdaytimes = "Nothing Configured!" & seperator
+            End If
             Dim satdaytimesarray As New ArrayList
             satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
             'fill the current times into RTB_Time
@@ -685,6 +791,9 @@ Public Class Timetable
             dd_Day.SelectedIndex = 6
             'next day (sun)
             Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
+            If sundaytimes = "" Then 'dirty fix if called with empty string
+                sundaytimes = "Nothing Configured!" & seperator
+            End If
             Dim sundaytimesarray As New ArrayList
             sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
             'fill the current times into RTB_Time
