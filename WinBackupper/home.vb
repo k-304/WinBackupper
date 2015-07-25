@@ -85,6 +85,9 @@ Public Class home
                     If var = "-silent" Or var = "-s" Or var = "/s" Or var = "/silent" Then
                         'set silent var to true in order to "minimize" and hide all forms (check home_resize function)
                         silent = True
+                        'set form to minimized statte
+                        'this will trigger it to don't show an icon and fall into the icontray
+                        Me.WindowState = FormWindowState.Minimized
                     End If
                 End If
             End If
@@ -95,9 +98,9 @@ Public Class home
             bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
 
             ' Check if there is a "default.xml" File
-            If Not Dir("default.xml") = "" Then
+            If Not Dir(getexedir() & "\default.xml") = "" Then
                 ' Read XML File to load defaults
-                Dim xmlReader2 As XmlReader = New XmlTextReader("default.xml")
+                Dim xmlReader2 As XmlReader = New XmlTextReader(getexedir() & "\default.xml")
                 ' Loop through XML File
                 While (xmlReader2.Read())
                     Dim type = xmlReader2.NodeType
@@ -542,10 +545,8 @@ Public Class home
 
     'Function to get Directory of current .exe-file
     Public Function getexedir() As String
-        Dim path As String
-        path = System.IO.Path.GetDirectoryName( _
-           System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
-        Return path.Substring(6, path.Length - 6)
+        Dim directory As String = My.Application.Info.DirectoryPath
+        Return directory
     End Function
 #End Region
 

@@ -60,6 +60,10 @@ Public Class Timetable
                 'build an array out of all items in listview and save them accoridngly in var as string
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
+                    If item.Text.Substring(0, 5) = "Nothi" Then
+                        temparray.Add(item.Text & seperator)
+                        Exit For
+                    End If
                     'gett al entry of a line in lv and save them as 1 entry in array
                     'later get it back by serializing the string and get data for each line
                     Dim tempitemtext As String
@@ -74,7 +78,7 @@ Public Class Timetable
             Case 1
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -92,7 +96,7 @@ Public Class Timetable
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -110,7 +114,7 @@ Public Class Timetable
             Case 3
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -128,7 +132,7 @@ Public Class Timetable
             Case 4
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -146,7 +150,7 @@ Public Class Timetable
             Case 5
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -164,7 +168,7 @@ Public Class Timetable
             Case 6
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 6) = "Nothin" Then
+                    If item.Text.Substring(0, 5) = "Nothi" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -669,169 +673,173 @@ Public Class Timetable
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
-        '''''''''''''' Try
-        'reset text before reloading settings (for each day)
-        lv_timetable.Items.Clear()
-        If Not Settings.lv_settings.SelectedItems.Count = 0 Then
-            'get values of home class
-            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-            'call settings for dayn with 0 argument to get values for monday and load them appropriately.
-            'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
-
-
-            'TESTIGN
-
-            Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
-            If mondaytimes = "" Then 'dirty fix if called with empty string
-                mondaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim mondaytimesarray As New ArrayList
-            mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempmontimesettingsarray As New ArrayList
-            For Each time As String In mondaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempmontimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Mon = tempmontimesettingsarray
-
-
-
-            'TESTIGN
-
+        Try
             'reset text before reloading settings (for each day)
             lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 1
-            'next day (tue)
-            Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
-            If tuedaytimes = "" Then 'dirty fix if called with empty string
-                tuedaytimes = "Nothing Configured!" & seperator
+            If Not Settings.lv_settings.SelectedItems.Count = 0 Then
+                'get values of home class (which have relevant settings in home/settings class to calculate this variables)
+                'get teimsettings for the current folderpair
+                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+                'get sourcepath for current folderpair
+                Dim sourcepath As String = home.sourcepatharray(Settings.linecurrentlyedited)
+                'then write it into txtboxt
+                tb_showSource.Text = sourcepath
+                'get backuppath for current pair
+                Dim backuppath As String = home.backupPatharray(Settings.linecurrentlyedited)
+                'then write it into txtboxt
+                tb_showBackup.Text = backuppath
+
+
+                'call settings for dayn with 0 argument to get values for monday and load them appropriately.
+                'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
+
+                Dim mondaytimes = settings_of_dayn(0, timesettingsforcurrentfolderpair)
+                If mondaytimes = "" Then 'dirty fix if called with empty string
+                    mondaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim mondaytimesarray As New ArrayList
+                mondaytimesarray = home.StringtoArray(mondaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempmontimesettingsarray As New ArrayList
+                For Each time As String In mondaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempmontimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Mon = tempmontimesettingsarray
+
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 1
+                'next day (tue)
+                Dim tuedaytimes = settings_of_dayn(1, timesettingsforcurrentfolderpair)
+                If tuedaytimes = "" Then 'dirty fix if called with empty string
+                    tuedaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim tuedaytimesarray As New ArrayList
+                tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim temptuetimesettingsarray As New ArrayList
+                For Each time As String In tuedaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    temptuetimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Tue = temptuetimesettingsarray
+
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 2
+                'next day (wed)
+                Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
+                If weddaytimes = "" Then 'dirty fix if called with empty string
+                    weddaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim weddaytimesarray As New ArrayList
+                weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempwedtimesettingsarray As New ArrayList
+                For Each time As String In weddaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempwedtimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Wed = tempwedtimesettingsarray
+
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 3
+                'next day (thu)
+                Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
+                If thudaytimes = "" Then 'dirty fix if called with empty string
+                    thudaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim thudaytimesarray As New ArrayList
+                thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempthutimesettingsarray As New ArrayList
+                For Each time As String In thudaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempthutimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Thu = tempthutimesettingsarray
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 4
+                'next day (fri)
+                Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
+                If fridaytimes = "" Then 'dirty fix if called with empty string
+                    fridaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim fridaytimesarray As New ArrayList
+                fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempfritimesettingsarray As New ArrayList
+                For Each time As String In fridaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempfritimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Fri = tempfritimesettingsarray
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 5
+                'next day (sat)
+                Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
+                If satdaytimes = "" Then 'dirty fix if called with empty string
+                    satdaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim satdaytimesarray As New ArrayList
+                satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempsattimesettingsarray As New ArrayList
+                For Each time As String In satdaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempsattimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Sat = tempsattimesettingsarray
+                'reset text before reloading settings (for each day)
+                lv_timetable.Items.Clear()
+                'select index to fill
+                dd_Day.SelectedIndex = 6
+                'next day (sun)
+                Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
+                If sundaytimes = "" Then 'dirty fix if called with empty string
+                    sundaytimes = "Nothing Configured!" & seperator
+                End If
+                Dim sundaytimesarray As New ArrayList
+                sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
+                'fill the current times into RTB_Time
+                Dim tempsuntimesettingsarray As New ArrayList
+                For Each time As String In sundaytimesarray
+
+                    'gett all entry of a line in lv and save them as 1 entry in array
+                    'later get it back by serializing the string and get data for each line
+                    tempsuntimesettingsarray.Add(time & seperator)
+                Next
+                lvc_Sun = tempsuntimesettingsarray
+                'select index 0 again (monday = 0) / or current day?
+                dd_Day.SelectedIndex = 0
+            Else
+                'is nothing - dont  load settings => a new entry is created)
             End If
-            Dim tuedaytimesarray As New ArrayList
-            tuedaytimesarray = home.StringtoArray(tuedaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim temptuetimesettingsarray As New ArrayList
-            For Each time As String In tuedaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                temptuetimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Tue = temptuetimesettingsarray
-
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 2
-            'next day (wed)
-            Dim weddaytimes = settings_of_dayn(2, timesettingsforcurrentfolderpair)
-            If weddaytimes = "" Then 'dirty fix if called with empty string
-                weddaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim weddaytimesarray As New ArrayList
-            weddaytimesarray = home.StringtoArray(weddaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempwedtimesettingsarray As New ArrayList
-            For Each time As String In weddaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempwedtimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Wed = tempwedtimesettingsarray
-
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 3
-            'next day (thu)
-            Dim thudaytimes = settings_of_dayn(3, timesettingsforcurrentfolderpair)
-            If thudaytimes = "" Then 'dirty fix if called with empty string
-                thudaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim thudaytimesarray As New ArrayList
-            thudaytimesarray = home.StringtoArray(thudaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempthutimesettingsarray As New ArrayList
-            For Each time As String In thudaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempthutimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Thu = tempthutimesettingsarray
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 4
-            'next day (fri)
-            Dim fridaytimes = settings_of_dayn(4, timesettingsforcurrentfolderpair)
-            If fridaytimes = "" Then 'dirty fix if called with empty string
-                fridaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim fridaytimesarray As New ArrayList
-            fridaytimesarray = home.StringtoArray(fridaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempfritimesettingsarray As New ArrayList
-            For Each time As String In fridaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempfritimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Fri = tempfritimesettingsarray
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 5
-            'next day (sat)
-            Dim satdaytimes = settings_of_dayn(5, timesettingsforcurrentfolderpair)
-            If satdaytimes = "" Then 'dirty fix if called with empty string
-                satdaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim satdaytimesarray As New ArrayList
-            satdaytimesarray = home.StringtoArray(satdaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempsattimesettingsarray As New ArrayList
-            For Each time As String In satdaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempsattimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Sat = tempsattimesettingsarray
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
-            'select index to fill
-            dd_Day.SelectedIndex = 6
-            'next day (sun)
-            Dim sundaytimes = settings_of_dayn(6, timesettingsforcurrentfolderpair)
-            If sundaytimes = "" Then 'dirty fix if called with empty string
-                sundaytimes = "Nothing Configured!" & seperator
-            End If
-            Dim sundaytimesarray As New ArrayList
-            sundaytimesarray = home.StringtoArray(sundaytimes, seperator)
-            'fill the current times into RTB_Time
-            Dim tempsuntimesettingsarray As New ArrayList
-            For Each time As String In sundaytimesarray
-
-                'gett all entry of a line in lv and save them as 1 entry in array
-                'later get it back by serializing the string and get data for each line
-                tempsuntimesettingsarray.Add(time & seperator)
-            Next
-            lvc_Sun = tempsuntimesettingsarray
-            'select index 0 again (monday = 0) / or current day?
-            dd_Day.SelectedIndex = 0
-        Else
-            'is nothing - dont  load settings => a new entry is created)
-        End If
-        ''''''  Catch ex As Exception
-        ''''MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        ''''   Return -1
-        ''''   End Try
+        Catch ex As Exception
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
+        End Try
         Return 0
     End Function
 

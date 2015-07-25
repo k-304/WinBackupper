@@ -444,7 +444,7 @@ Public Class Settings
         ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
         writerOption.Indent = True
-        Dim writerSettings As XmlWriter = XmlWriter.Create("default.xml", writerOption)
+        Dim writerSettings As XmlWriter = XmlWriter.Create(home.getexedir() & "\default.xml", writerOption)
         'check if array's have unequal nr of members
         'maybe user closed box to choose backup path or didnt open it 
         If Not (sourcepatharray.Count = backupPatharray.Count) Then
@@ -505,9 +505,9 @@ Public Class Settings
 
 
         'start checking if settings are saved correctly!
-        If Not Dir("default.xml") = "" Then
+        If Not Dir(home.getexedir() & "\default.xml") = "" Then
             ' Read XML File to check if it was written
-            Dim xmlReader As XmlReader = New XmlTextReader("default.xml")
+            Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & "\default.xml")
             'define var's used to compare saveddata to supposed data
             Dim sourcetargetdata As ArrayList = sourcepatharray
             Dim backuptargetdata As ArrayList = backupPatharray
