@@ -76,6 +76,11 @@ Public Class home
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Hide SystemTray Icon at startup to prevent Bugs
+        If Me.WindowState = FormWindowState.Normal Then
+            NotifyIcon1.Visible = False
+        End If
+
         Try
             If Environment.GetCommandLineArgs.Count <> 1 Then
                 If Environment.GetCommandLineArgs.Count = 2 Then
