@@ -19,6 +19,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public Shared linecurrentlyedited As Integer = 0
+    Public BackupPathResultTest As String
 
 #End Region
 
@@ -240,7 +241,7 @@ Public Class Settings
             'delete rtb time text
             RTB_timesettings.Text = ""
         Next
-
+        Settings_Reload()
     End Sub
 
     'Button Save defaults to own XML File
@@ -389,7 +390,6 @@ Public Class Settings
             'it should help to set the dialogresult to none for this dialog (so it doesnt close if i understood correctly)
             DialogResult = DialogResult.None
         End If
-
     End Sub
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
