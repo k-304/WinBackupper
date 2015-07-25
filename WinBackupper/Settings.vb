@@ -242,6 +242,8 @@ Public Class Settings
             RTB_timesettings.Text = ""
         Next
         Settings_Reload()
+        'also call settings_reload for home form
+        home.Settings_reload()
     End Sub
 
     'Button Save defaults to own XML File
