@@ -74,7 +74,7 @@ Public Class Timetable
             Case 1
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -92,7 +92,7 @@ Public Class Timetable
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -110,7 +110,7 @@ Public Class Timetable
             Case 3
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -128,7 +128,7 @@ Public Class Timetable
             Case 4
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -146,7 +146,7 @@ Public Class Timetable
             Case 5
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
@@ -164,7 +164,7 @@ Public Class Timetable
             Case 6
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
-                    If item.Text.Substring(0, 7) = "Nothing" Then
+                    If item.Text.Substring(0, 6) = "Nothin" Then
                         temparray.Add(item.Text & seperator)
                         Exit For
                     End If
