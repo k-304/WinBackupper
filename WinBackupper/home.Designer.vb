@@ -146,9 +146,9 @@ Partial Class home
         'rtb_log
         '
         Me.rtb_log.BackColor = System.Drawing.SystemColors.Window
-        Me.rtb_log.Enabled = False
         Me.rtb_log.Location = New System.Drawing.Point(12, 362)
         Me.rtb_log.Name = "rtb_log"
+        Me.rtb_log.ReadOnly = True
         Me.rtb_log.Size = New System.Drawing.Size(430, 55)
         Me.rtb_log.TabIndex = 14
         Me.rtb_log.Text = ""

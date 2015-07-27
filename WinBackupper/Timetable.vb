@@ -499,7 +499,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -516,7 +516,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -533,7 +533,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -550,7 +550,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -567,7 +567,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -584,7 +584,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings fil
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
@@ -601,7 +601,7 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
                             'dont write the nothing configured into settings file it looks ugly
                             Exit For
                         End If
