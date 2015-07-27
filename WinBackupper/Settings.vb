@@ -169,20 +169,20 @@ Public Class Settings
         fbd_searchDefaultSource.Description = "Select Folder"
         fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.LocalizedResources
         DialogResult = fbd_searchDefaultSource.ShowDialog
-        Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
+        Dim SourcePathresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
         'does string contain "desktop"?
-        If sourcepatharray.Contains(SourcePathtresult) Then
+        If sourcepatharray.Contains(SourcePathresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
-                sourcepatharray.Add(SourcePathtresult)
+                sourcepatharray.Add(SourcePathresult)
             End If
         Else
             'sane string ...add it
             'write value into Array!
-            sourcepatharray.Add(SourcePathtresult)
+            sourcepatharray.Add(SourcePathresult)
         End If
     End Sub
 
@@ -329,23 +329,23 @@ Public Class Settings
         fbd_searchDefaultSource.Description = "Select Source Folder!"
         fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultSource.ShowDialog
-        Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
+        Dim SourcePathresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
             Exit Sub
         End If
-        If sourcepatharray.Contains(SourcePathtresult) Then
+        If sourcepatharray.Contains(SourcePathresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
-                sourcepatharray.Add(SourcePathtresult)
+                sourcepatharray.Add(SourcePathresult)
             End If
         Else
             'sane string ...add it
             'write value into Array!
-            sourcepatharray.Add(SourcePathtresult)
+            sourcepatharray.Add(SourcePathresult)
         End If
 
         ' Dialog to select Backup Path

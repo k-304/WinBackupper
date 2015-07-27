@@ -30,8 +30,30 @@ Public Class Timetable
     End Sub
 
     'Button to edit Source Path
-    Private Sub b_editBackup_Click(sender As Object, e As EventArgs) Handles b_editBackup.Click
+    Private Sub b_editSource_Click(sender As Object, e As EventArgs) Handles b_editBackup.Click
+        ' Dialog to select Source Path (Same as in Settings.vb by adding new Folderpair!)
+        fbd_editsource.Description = "Select Source Folder!"
+        fbd_editsource.RootFolder = Environment.SpecialFolder.MyComputer
+        'do sanity check before adding (check if already existing?)
+        If Not fbd_editsource.ShowDialog() = DialogResult.OK Then
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
 
+        Dim SourcePathResult As String = fbd_editsource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
+
+        'Some User-Fail checks
+        If home.sourcepatharray.Contains(SourcePathResult) Then
+            Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If userchoice = vbYes Then
+                'add it anyway, even if already existing in source list
+                home.sourcepatharray(Settings.linecurrentlyedited) = SourcePathResult
+                tb_showSource.Text = SourcePathResult
+            End If
+        Else
+            home.sourcepatharray(Settings.linecurrentlyedited) = SourcePathResult
+            tb_showSource.Text = SourcePathResult
+        End If
     End Sub
 
     'Textbox showing Backup Path of selected Pair
@@ -39,8 +61,40 @@ Public Class Timetable
 
     End Sub
 
-    'Button to edit Backup Path
-    Private Sub b_editSource_Click(sender As Object, e As EventArgs) Handles b_editSource.Click
+    'Button to edit Backup Path of selected Pair
+    Private Sub b_editBackup_Click(sender As Object, e As EventArgs) Handles b_editSource.Click
+        'Dialog select other Backup Path (Same as in Settings.vb by adding new Folderpair!)
+        fbd_editbackup.Description = "Change Backup Folder!"
+        fbd_editbackup.RootFolder = Environment.SpecialFolder.MyComputer
+        'do sanity check before adding (check if already existing?)
+        If Not fbd_editbackup.ShowDialog() = DialogResult.OK Then
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
+
+        Dim BackupPathResult As String = fbd_editbackup.SelectedPath.ToString
+
+        'Some User-Fail checks
+        If home.sourcepatharray.Contains(BackupPathResult) And DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok"
+            Dim userchoice = MessageBox.Show("You want to save into a Folder which is getting back-upped itself!" & vbNewLine & "Do you want to continue?", "Destination getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If userchoice = vbYes Then
+                'add it anyway, even if user Is saving data into a directory which Is getting backed-up
+                home.backupPatharray(Settings.linecurrentlyedited) = BackupPathResult
+                tb_showBackup.Text = BackupPathResult
+            End If
+        Else
+            home.backupPatharray(Settings.linecurrentlyedited) = BackupPathResult
+            tb_showBackup.Text = BackupPathResult
+        End If
+    End Sub
+
+    'fbd for Editing Source Path
+    Private Sub fbd_editsource_HelpRequest(sender As Object, e As EventArgs) Handles fbd_editsource.HelpRequest
+
+    End Sub
+
+    'fbd for Editing Backup Path
+    Private Sub fbd_editbackup_HelpRequest(sender As Object, e As EventArgs) Handles fbd_editbackup.HelpRequest
 
     End Sub
 
@@ -432,7 +486,6 @@ Public Class Timetable
             Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
             tempitem.SubItems.Add("Full")
         End If
-
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
@@ -677,7 +730,7 @@ Public Class Timetable
             lv_timetable.Items.Clear()
             If Not Settings.lv_settings.SelectedItems.Count = 0 Then
                 'get values of home class (which have relevant settings in home/settings class to calculate this variables)
-                'get teimsettings for the current folderpair
+                'get timesettings for the current folderpair
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
                 'get sourcepath for current folderpair
                 Dim sourcepath As String = home.sourcepatharray(Settings.linecurrentlyedited)
@@ -687,7 +740,6 @@ Public Class Timetable
                 Dim backuppath As String = home.backupPatharray(Settings.linecurrentlyedited)
                 'then write it into txtboxt
                 tb_showBackup.Text = backuppath
-
 
                 'call settings for dayn with 0 argument to get values for monday and load them appropriately.
                 'Go through all indexes (days) and fill them accordingly (the rtb will save it into the according variables when the index is changed)
@@ -923,7 +975,6 @@ Public Class Timetable
         End Try
 
     End Sub
-
 #End Region
 
 End Class
