@@ -19,8 +19,6 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public Shared linecurrentlyedited As Integer = 0
-    Public BackupPathResultTest As String
-
 #End Region
 
 #Region "MainCode"
@@ -74,7 +72,7 @@ Public Class Settings
         End Try
     End Function
 
-
+    'Edit Time Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
@@ -126,7 +124,6 @@ Public Class Settings
         End Try
     End Function
 
-
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
         Try
@@ -172,20 +169,20 @@ Public Class Settings
         fbd_searchDefaultSource.Description = "Select Folder"
         fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.LocalizedResources
         DialogResult = fbd_searchDefaultSource.ShowDialog
-        Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
+        Dim SourcePathresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
         'does string contain "desktop"?
-        If sourcepatharray.Contains(SourcePathtresult) Then
+        If sourcepatharray.Contains(SourcePathresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
-                sourcepatharray.Add(SourcePathtresult)
+                sourcepatharray.Add(SourcePathresult)
             End If
         Else
             'sane string ...add it
             'write value into Array!
-            sourcepatharray.Add(SourcePathtresult)
+            sourcepatharray.Add(SourcePathresult)
         End If
     End Sub
 
@@ -283,10 +280,7 @@ Public Class Settings
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
     End Sub
-
-
 
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
     Public Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_timesettings.MouseDown
@@ -322,7 +316,6 @@ Public Class Settings
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
@@ -336,23 +329,23 @@ Public Class Settings
         fbd_searchDefaultSource.Description = "Select Source Folder!"
         fbd_searchDefaultSource.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultSource.ShowDialog
-        Dim SourcePathtresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
+        Dim SourcePathresult As String = fbd_searchDefaultSource.SelectedPath.ToString 'maybe get multiple paths? (ad ask user if he wants to backup them to same place)
         'do sanity check before adding (check if already existing?)
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
             Exit Sub
         End If
-        If sourcepatharray.Contains(SourcePathtresult) Then
+        If sourcepatharray.Contains(SourcePathresult) Then
             Dim userchoice = MessageBox.Show("Folder is already getting backupped, add it anyway?", "Already getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If userchoice = vbYes Then
                 'add it anyway, even if already existing in source list
                 'write value into Array!
-                sourcepatharray.Add(SourcePathtresult)
+                sourcepatharray.Add(SourcePathresult)
             End If
         Else
             'sane string ...add it
             'write value into Array!
-            sourcepatharray.Add(SourcePathtresult)
+            sourcepatharray.Add(SourcePathresult)
         End If
 
         ' Dialog to select Backup Path
@@ -405,10 +398,10 @@ Public Class Settings
         If formfullyloaded Then
             If cb_Autostart.Checked = True Then
                 'ask user if he want to start silently ....
-                Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine & _
-                                             "This will hide all forms and do all work in the background!", _
-                                             "Startup Silently in the Future?", _
-                                             MessageBoxButtons.YesNoCancel, _
+                Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine &
+                                             "This will hide all forms and do all work in the background!",
+                                             "Startup Silently in the Future?",
+                                             MessageBoxButtons.YesNoCancel,
                                              MessageBoxIcon.Question)
 
                 'Application_Autostart sets autostart - accepts arguments "enabled" which is a boolean
@@ -432,7 +425,6 @@ Public Class Settings
             'don't execute the code since the checkbox is changen on the LOAD event! This would execute this code too - and we don't want that!
         End If
     End Sub
-
 #End Region
 
 #Region "Workers"
@@ -578,7 +570,6 @@ Public Class Settings
             xmlReader.Dispose()
         End If
     End Sub
-
 #End Region
 
 End Class

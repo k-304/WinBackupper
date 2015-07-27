@@ -47,6 +47,8 @@ Partial Class Timetable
         Me.l_sourcePath = New System.Windows.Forms.Label()
         Me.gb_paths = New System.Windows.Forms.GroupBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.fbd_editsource = New System.Windows.Forms.FolderBrowserDialog()
+        Me.fbd_editbackup = New System.Windows.Forms.FolderBrowserDialog()
         Me.gb_paths.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -112,6 +114,7 @@ Partial Class Timetable
         Me.tb_showSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_showSource.Location = New System.Drawing.Point(104, 14)
         Me.tb_showSource.Name = "tb_showSource"
+        Me.tb_showSource.ReadOnly = True
         Me.tb_showSource.Size = New System.Drawing.Size(239, 23)
         Me.tb_showSource.TabIndex = 38
         '
@@ -120,6 +123,7 @@ Partial Class Timetable
         Me.tb_showBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_showBackup.Location = New System.Drawing.Point(104, 43)
         Me.tb_showBackup.Name = "tb_showBackup"
+        Me.tb_showBackup.ReadOnly = True
         Me.tb_showBackup.Size = New System.Drawing.Size(239, 23)
         Me.tb_showBackup.TabIndex = 39
         '
@@ -225,7 +229,7 @@ Partial Class Timetable
         'ch_backuptype
         '
         Me.ch_backuptype.Text = "Backup type"
-        Me.ch_backuptype.Width = 118
+        Me.ch_backuptype.Width = 117
         '
         'Label1
         '
@@ -307,6 +311,12 @@ Partial Class Timetable
         Me.GroupBox1.TabIndex = 42
         Me.GroupBox1.TabStop = False
         '
+        'fbd_editsource
+        '
+        '
+        'fbd_editbackup
+        '
+        '
         'Timetable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -353,4 +363,6 @@ Partial Class Timetable
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
     Friend WithEvents gb_paths As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents fbd_editsource As FolderBrowserDialog
+    Friend WithEvents fbd_editbackup As FolderBrowserDialog
 End Class

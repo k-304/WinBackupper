@@ -32,7 +32,6 @@ Public Class home
         WriteLogfile(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt", True) 'writes logfile and overwrites axisting ones with the same name
     End Sub
 
-
     'Function to write a Logfile
     'accepts filepath and a boolead (true/false) if the file should be overwritten.
     Public Function WriteLogfile(filepath As String, Optional overwrite As Boolean = False)
@@ -72,7 +71,6 @@ Public Class home
             Return -1
         End Try
     End Function
-
 
     ' Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -231,7 +229,6 @@ Public Class home
         If startResult = Windows.Forms.DialogResult.Yes Then
             start_backup(backuptype)
         End If
-
     End Sub
 
     'function to encapsulate the actual backup process
@@ -416,15 +413,15 @@ Public Class home
                                         Case "Full"
                                             Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
                                                 & targetpath & " " & filestocopy & " " & ARGFull
-                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        ' Create text file inside of backup directory to let user know if full/inc or dif backup
                                         Case "Diff"
                                             Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
                                                 & targetpath & " " & filestocopy & " " & ARGdifferential
-                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        ' Create text file inside of backup directory to let user know if full/inc or dif backup
                                         Case "Incr"
                                             Proc.StartInfo.Arguments = "/C " & processname & " " & sourcepath & " " _
                                                 & targetpath & " " & filestocopy & " " & ARGincremental
-                                            ' Create text file inside of backup directory to let user know if full/inc or dif backup
+                                        ' Create text file inside of backup directory to let user know if full/inc or dif backup
                                         Case Else
                                             rtb_log.AppendText(vbNewLine & "Invalid Backuptyep detected")
                                     End Select
@@ -488,10 +485,12 @@ Public Class home
         Dim time = GetTime()
         Return (year & month & day & time)
     End Function
+
     Public Function getday() As String
         Dim day = DateTime.Now.ToString("dd")
         Return day
     End Function
+
     Public Function getdayofweek() As String
         Dim day = DateTime.Now.DayOfWeek
         If day = 0 Then
@@ -504,19 +503,23 @@ Public Class home
         End If
         Return day
     End Function
+
     Public Function GetTime() As String
         Dim hour = GetHour()
         Dim min = GetMinutes()
         Return (hour & min)
     End Function
+
     Public Function GetHour() As String
         Dim hour = DateTime.Now.ToString("HH")
         Return hour
     End Function
+
     Public Function GetMinutes() As String
         Dim min = DateTime.Now.ToString("mm")
         Return min
     End Function
+
     'function to get an array out of long seperated string like "nr1;nr2;nr3;nr4...."
     'use like "  dim array1  as arraylist = stringtoarray("nr1;nr2;nr3",";")     "
     Function StringtoArray(seperatedmultistring As String, seperator As String) As ArrayList
