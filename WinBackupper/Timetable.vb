@@ -446,8 +446,6 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
-
-
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -663,6 +661,7 @@ Public Class Timetable
         Me.Close()
     End Sub
 
+    'Loading Timetable Form
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'check if there are any settings to prevent errors
         If System.IO.File.Exists(home.getexedir() & "\default.xml") Then

@@ -164,7 +164,7 @@ Private Sub InitializeComponent()
         'ch_index
         '
         Me.ch_index.Text = "#"
-        Me.ch_index.Width = 26
+        Me.ch_index.Width = 25
         '
         'ch_source
         '

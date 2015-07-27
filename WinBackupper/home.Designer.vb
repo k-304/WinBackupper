@@ -175,19 +175,17 @@ Partial Class home
         'ch_index
         '
         Me.ch_index.Text = "#"
-        Me.ch_index.Width = 38
+        Me.ch_index.Width = 25
         '
         'ch_source
         '
         Me.ch_source.Text = "Sourcepath:"
-        Me.ch_source.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ch_source.Width = 125
+        Me.ch_source.Width = 156
         '
         'ch_backup
         '
         Me.ch_backup.Text = "Backuppath:"
-        Me.ch_backup.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ch_backup.Width = 99
+        Me.ch_backup.Width = 156
         '
         'ch_nextstarttime
         '

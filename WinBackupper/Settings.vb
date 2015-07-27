@@ -19,8 +19,6 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public Shared linecurrentlyedited As Integer = 0
-    Public BackupPathResultTest As String
-
 #End Region
 
 #Region "MainCode"
@@ -74,7 +72,7 @@ Public Class Settings
         End Try
     End Function
 
-
+    'Edit Time Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
@@ -125,7 +123,6 @@ Public Class Settings
             Return -1
         End Try
     End Function
-
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
@@ -283,10 +280,7 @@ Public Class Settings
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
     End Sub
-
-
 
     'sub called when mouse button is clicked (rtb refers to the clicked richtextbox!)
     Public Sub rtb_backupstarttimes_MouseDown(sender As Object, e As MouseEventArgs) Handles RTB_timesettings.MouseDown
@@ -322,7 +316,6 @@ Public Class Settings
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
@@ -405,10 +398,10 @@ Public Class Settings
         If formfullyloaded Then
             If cb_Autostart.Checked = True Then
                 'ask user if he want to start silently ....
-                Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine & _
-                                             "This will hide all forms and do all work in the background!", _
-                                             "Startup Silently in the Future?", _
-                                             MessageBoxButtons.YesNoCancel, _
+                Dim startsilent = MessageBox.Show("Want to start on startup in SILENT mode?" & vbNewLine &
+                                             "This will hide all forms and do all work in the background!",
+                                             "Startup Silently in the Future?",
+                                             MessageBoxButtons.YesNoCancel,
                                              MessageBoxIcon.Question)
 
                 'Application_Autostart sets autostart - accepts arguments "enabled" which is a boolean
@@ -432,7 +425,6 @@ Public Class Settings
             'don't execute the code since the checkbox is changen on the LOAD event! This would execute this code too - and we don't want that!
         End If
     End Sub
-
 #End Region
 
 #Region "Workers"
@@ -578,7 +570,6 @@ Public Class Settings
             xmlReader.Dispose()
         End If
     End Sub
-
 #End Region
 
 End Class
