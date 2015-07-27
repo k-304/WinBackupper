@@ -913,7 +913,23 @@ Public Class Timetable
                 'select index 0 again (monday = 0) / or current day?
                 dd_Day.SelectedIndex = 0
             Else
-                'is nothing - dont  load settings => a new entry is created)
+                'is nothing => a new entry is created)
+
+                'If a new entry is added, load the path settings from the last choice 
+                'the user then has a chance to correct them etc... 
+
+                'get values from array - they are in there but no line is selected
+                'but they are the last members, since they just got added => grab them
+                'count how many items are in the listview - that number is the index of the new item,
+                '(Count is human value and begins with 1- array begins with 0 so the number of items is the index of the new file (same logic already used before)
+
+                Dim sourcepath As String = Settings.sourcepatharray(Settings.lv_settings.Items.Count - 1)
+                Dim backuppath As String = Settings.backupPatharray(Settings.lv_settings.Items.Count - 1)
+
+                'then write them into they textboxes
+                tb_showSource.Text = sourcepath
+                tb_showBackup.Text = backuppath
+
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
