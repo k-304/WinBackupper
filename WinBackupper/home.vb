@@ -296,6 +296,13 @@ Public Class home
             'define current time in minutes
             Dim currmin = GetMinutes()
 
+            'check if it's a new day, if so write it into the log...
+            'if it s 00:00 suppose it's a new day...
+            'maybe usefull if running for weeks.... (another newline to seperate it from above)
+            If currhour = "00" And currmin = "00" Then
+                rtb_log.AppendText(vbNewLine & "Datechange: New Date is" & DateTime.Now.ToString("yyyy - MM - dd ") & vbNewLine)
+            End If
+
             'start to test values of all folderpairs => loop through all folderpairs
             For i = 0 To sourcepatharray.Count - 1
                 'now check the timesettingsarray for all timevalues for the current day =>
@@ -320,7 +327,7 @@ Public Class home
                     If checkhour = currhour Then
                         If checkMinute = currmin Then
                             'log the auto start
-                            rtb_log.AppendText("The Following Backup Process was autostarted:")
+                            rtb_log.AppendText("The Following Backup Process was autostarted:" & vbNewLine)
                             'before starting set "silent" var to true- so no msgbox pooops up to ask user
                             silent = True
                             'hours AND Minutes are the same - start backup 
