@@ -95,6 +95,7 @@ Private Sub InitializeComponent()
         '
         'RTB_timesettings
         '
+        Me.RTB_timesettings.Enabled = False
         Me.RTB_timesettings.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RTB_timesettings.Location = New System.Drawing.Point(53, 252)
         Me.RTB_timesettings.Name = "RTB_timesettings"

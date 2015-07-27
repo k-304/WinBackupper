@@ -62,6 +62,8 @@ Partial Class home
         '
         'b_start
         '
+        Me.b_start.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.b_start.Cursor = System.Windows.Forms.Cursors.Default
         Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_start.Location = New System.Drawing.Point(12, 256)
         Me.b_start.Name = "b_start"
@@ -143,6 +145,8 @@ Partial Class home
         '
         'rtb_log
         '
+        Me.rtb_log.BackColor = System.Drawing.SystemColors.Window
+        Me.rtb_log.Enabled = False
         Me.rtb_log.Location = New System.Drawing.Point(12, 362)
         Me.rtb_log.Name = "rtb_log"
         Me.rtb_log.Size = New System.Drawing.Size(430, 55)

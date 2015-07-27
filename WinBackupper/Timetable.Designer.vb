@@ -229,7 +229,7 @@ Partial Class Timetable
         'ch_backuptype
         '
         Me.ch_backuptype.Text = "Backup type"
-        Me.ch_backuptype.Width = 118
+        Me.ch_backuptype.Width = 117
         '
         'Label1
         '
