@@ -499,6 +499,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -512,6 +516,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -525,6 +533,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -538,6 +550,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -551,6 +567,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -564,6 +584,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings fil
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
@@ -577,6 +601,10 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
                     Dim temparray As New ArrayList
                     For Each item As ListViewItem In lv_timetable.Items
+                        If item.Text.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                            'dont write the nothing configured into settings file it looks ugly
+                            Exit For
+                        End If
                         'gett al entry of a line in lv and save them as 1 entry in array
                         'later get it back by serializing the string and get data for each line
                         Dim tempitemtext As String
