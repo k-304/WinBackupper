@@ -1,0 +1,25 @@
+WinBackupper v 0.0.1.0 RC 
+
+Legend:
+-B = Bugfix
+-NF = New Feature
+-ENF = Experimental New Feature
+-RF = Removed Feature
+-RW = Re Wrote (Function)
+<***> = In work. What ever is inside of the brackets (<>) isn't implemented yet, it's planned. (Testbuilds only)
+
+Examples:
+-B Changelog is now loading correctly!
+-RW GetDate function - Reason: Datetime Bug - wrong Date was calculated
+
+-------------------------------------------------------------------------------------------
+
+Current Version: 0.0.1.0 
+-NF Inital Release Draft of Version 0.0.1.0 RC (Release Candidate)
+	For Information before this Version and for minor Changes please visit the official Github Page:
+	https://github.com/SnipeLike/WinBackupper
+	
+
+
+
+
