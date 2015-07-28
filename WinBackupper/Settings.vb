@@ -9,9 +9,9 @@ Public Class Settings
     '*----Global Variables----*'
     '*------------------------*'
     Dim defaultsourcePath As String 'set via code - read from settings and set like that.
-    Public sourcepatharray As ArrayList = WinBackupper.home.sourcepatharray 'reference to form1.vb array. (which is loaded first)
+    Public Shared sourcepatharray As ArrayList = WinBackupper.home.sourcepatharray 'reference to form1.vb array. (which is loaded first)
     Dim defaultbackupPath As String 'set via code - read from settings and set like that.
-    Public backupPatharray As ArrayList = WinBackupper.home.backupPatharray 'reference to form1.vb array. (which is loaded first)
+    Public Shared backupPatharray As ArrayList = WinBackupper.home.backupPatharray 'reference to form1.vb array. (which is loaded first)
     Dim tempSourcePath As String
     Dim tempBackupPath As String
     Dim GlobalSeperator As String = WinBackupper.home.GlobalSeperator ' seperatir used to combine/cut strings (like allsourcepaths)
