@@ -102,10 +102,11 @@ Partial Class home
         '
         Me.l_version.AutoSize = True
         Me.l_version.BackColor = System.Drawing.Color.Transparent
+        Me.l_version.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_version.Location = New System.Drawing.Point(365, 310)
+        Me.l_version.Location = New System.Drawing.Point(342, 308)
         Me.l_version.Name = "l_version"
-        Me.l_version.Size = New System.Drawing.Size(77, 13)
+        Me.l_version.Size = New System.Drawing.Size(100, 17)
         Me.l_version.TabIndex = 11
         Me.l_version.Text = "Version: x.x.x.x"
         '

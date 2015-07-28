@@ -737,13 +737,6 @@ Public Class Timetable
             home.timesettingsarray.Add(finalstring)
         End If
 
-        ' MsgBox(lvc_Mon.Count.ToString & " | " & lvc_Tue.Count.ToString & " | " & lvc_Wed.Count.ToString & " | " & lvc_Thu.Count.ToString & " | " & lvc_Fri.Count.ToString & " | " & lvc_Sat.Count.ToString & " | " & lvc_Sun.Count.ToString & " | ")
-
-        'This Button doesn't close the Form any more!
-    End Sub
-
-    'Button to close Form
-    Private Sub b_exit_Click(sender As Object, e As EventArgs) Handles b_exit.Click
         'Exit Form
         Me.Close()
     End Sub
@@ -925,10 +918,8 @@ Public Class Timetable
                 'the user then has a chance to correct them etc... 
 
                 'get values from array - they are in there but no line is selected
-                'but they are the last members, since they just got added => grab them
-                'count how many items are in the listview - that number is the index of the new item,
-                '(Count is human value and begins with 1- array begins with 0 so the number of items is the index of the new file (same logic already used before)
-
+                'the array already has the newly added paths in it,
+                'therefore calculate the index correctly.
                 Dim sourcepath As String = Settings.sourcepatharray(Settings.lv_settings.Items.Count - 1)
                 Dim backuppath As String = Settings.backupPatharray(Settings.lv_settings.Items.Count - 1)
 
