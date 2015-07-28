@@ -49,6 +49,7 @@ Partial Class Timetable
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.fbd_editsource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_editbackup = New System.Windows.Forms.FolderBrowserDialog()
+        Me.b_exit = New System.Windows.Forms.Button()
         Me.gb_paths.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -318,12 +319,23 @@ Partial Class Timetable
         'fbd_editbackup
         '
         '
+        'b_exit
+        '
+        Me.b_exit.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_exit.Location = New System.Drawing.Point(116, 625)
+        Me.b_exit.Name = "b_exit"
+        Me.b_exit.Size = New System.Drawing.Size(239, 36)
+        Me.b_exit.TabIndex = 34
+        Me.b_exit.Text = "Finish"
+        Me.b_exit.UseVisualStyleBackColor = True
+        '
         'Timetable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 627)
+        Me.ClientSize = New System.Drawing.Size(454, 673)
+        Me.Controls.Add(Me.b_exit)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.gb_paths)
         Me.Controls.Add(Me.l_settings)
@@ -365,4 +377,5 @@ Partial Class Timetable
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents fbd_editsource As FolderBrowserDialog
     Friend WithEvents fbd_editbackup As FolderBrowserDialog
+    Friend WithEvents b_exit As Button
 End Class

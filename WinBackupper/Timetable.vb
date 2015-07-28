@@ -738,7 +738,13 @@ Public Class Timetable
         End If
 
         ' MsgBox(lvc_Mon.Count.ToString & " | " & lvc_Tue.Count.ToString & " | " & lvc_Wed.Count.ToString & " | " & lvc_Thu.Count.ToString & " | " & lvc_Fri.Count.ToString & " | " & lvc_Sat.Count.ToString & " | " & lvc_Sun.Count.ToString & " | ")
-        'close form when finished
+
+        'This Button doesn't close the Form any more!
+    End Sub
+
+    'Button to close Form
+    Private Sub b_exit_Click(sender As Object, e As EventArgs) Handles b_exit.Click
+        'Exit Form
         Me.Close()
     End Sub
 
