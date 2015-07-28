@@ -243,6 +243,9 @@ Public Class home
             If Me.Visible = False Then
                 'Show Notification
                 startnotification()
+            Else
+                'Cursor "Loading"
+                Me.Cursor = Cursors.WaitCursor
             End If
 
             'log it
@@ -269,6 +272,9 @@ Public Class home
                     If Me.Visible = False Then
                         'Show Notification
                         finishnotification()
+                    Else
+                        'Cursor "Default"
+                        Me.Cursor = Cursors.Default
                     End If
 
                 End If

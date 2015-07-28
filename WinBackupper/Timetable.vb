@@ -1019,6 +1019,12 @@ Public Class Timetable
         End Try
 
     End Sub
+
+    'On Form Closeing
+    Private Sub Timetable_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+        'Run Settings_Reload to reload the "lv_settings"
+        Settings.Settings_Reload()
+    End Sub
 #End Region
 
 End Class

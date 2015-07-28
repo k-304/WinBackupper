@@ -56,11 +56,11 @@ Partial Class Timetable
         'b_stopediting
         '
         Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_stopediting.Location = New System.Drawing.Point(116, 579)
+        Me.b_stopediting.Location = New System.Drawing.Point(104, 435)
         Me.b_stopediting.Name = "b_stopediting"
         Me.b_stopediting.Size = New System.Drawing.Size(239, 36)
         Me.b_stopediting.TabIndex = 22
-        Me.b_stopediting.Text = "Save and Exit"
+        Me.b_stopediting.Text = "Apply Times"
         Me.b_stopediting.UseVisualStyleBackColor = True
         '
         'l_settings
@@ -296,6 +296,7 @@ Partial Class Timetable
         Me.GroupBox1.Controls.Add(Me.lv_timetable)
         Me.GroupBox1.Controls.Add(Me.l_sourcePath)
         Me.GroupBox1.Controls.Add(Me.dtp)
+        Me.GroupBox1.Controls.Add(Me.b_stopediting)
         Me.GroupBox1.Controls.Add(Me.dd_Day)
         Me.GroupBox1.Controls.Add(Me.b_reset)
         Me.GroupBox1.Controls.Add(Me.Label1)
@@ -307,7 +308,7 @@ Partial Class Timetable
         Me.GroupBox1.Controls.Add(Me.b_add)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 138)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(430, 435)
+        Me.GroupBox1.Size = New System.Drawing.Size(430, 477)
         Me.GroupBox1.TabIndex = 42
         Me.GroupBox1.TabStop = False
         '
@@ -326,7 +327,6 @@ Partial Class Timetable
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.gb_paths)
         Me.Controls.Add(Me.l_settings)
-        Me.Controls.Add(Me.b_stopediting)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Timetable"

@@ -39,6 +39,7 @@ Private Sub InitializeComponent()
         Me.ch_index = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ch_source = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ch_backup = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.l_note = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'b_save
@@ -48,7 +49,7 @@ Private Sub InitializeComponent()
         Me.b_save.Name = "b_save"
         Me.b_save.Size = New System.Drawing.Size(241, 35)
         Me.b_save.TabIndex = 18
-        Me.b_save.Text = "Save"
+        Me.b_save.Text = "Save Folderpair"
         Me.b_save.UseVisualStyleBackColor = True
         '
         'bw_writer
@@ -177,13 +178,26 @@ Private Sub InitializeComponent()
         Me.ch_backup.Text = "Backuppath:"
         Me.ch_backup.Width = 198
         '
+        'l_note
+        '
+        Me.l_note.AutoSize = True
+        Me.l_note.BackColor = System.Drawing.Color.Transparent
+        Me.l_note.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_note.ForeColor = System.Drawing.SystemColors.HighlightText
+        Me.l_note.Location = New System.Drawing.Point(124, 491)
+        Me.l_note.Name = "l_note"
+        Me.l_note.Size = New System.Drawing.Size(318, 15)
+        Me.l_note.TabIndex = 31
+        Me.l_note.Text = "Please save your Config, bevore editing a new Folderpair!"
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 500)
+        Me.ClientSize = New System.Drawing.Size(454, 515)
+        Me.Controls.Add(Me.l_note)
         Me.Controls.Add(Me.lv_settings)
         Me.Controls.Add(Me.b_Remove_Folderpair)
         Me.Controls.Add(Me.b_showtimetable)
@@ -219,4 +233,5 @@ Private Sub InitializeComponent()
     Friend WithEvents ch_index As System.Windows.Forms.ColumnHeader
     Friend WithEvents ch_source As System.Windows.Forms.ColumnHeader
     Friend WithEvents ch_backup As System.Windows.Forms.ColumnHeader
+    Friend WithEvents l_note As Label
 End Class
