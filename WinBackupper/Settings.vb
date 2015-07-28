@@ -37,7 +37,6 @@ Public Class Settings
 
     'code executed when form closes
     Private Sub settings_close(sender As Object, e As EventArgs) Handles MyBase.FormClosed
-        'try to reload settings for home form (in gui)
         'when this form closes, all work should have been done
     End Sub
 
@@ -141,7 +140,6 @@ Public Class Settings
                 lvi.SubItems.Add(backupPatharray(i))
 
             Next
-
             'check if registry key for autostart exists -also set in the settings form
             Dim runkey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run")
             'checks if our valuename is within the run key
