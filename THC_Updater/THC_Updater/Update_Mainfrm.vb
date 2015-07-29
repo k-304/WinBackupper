@@ -1,10 +1,8 @@
 ﻿Imports System.Net
-Imports System.Object
-Imports System.Environment
 Imports System.IO
 Imports System.Xml
 
-''' Internal Version: 0.0.0.4 (this Form)
+''' Internal Version: 0.0.0.5 (this Form)
 ''' 
 ''' <summary>
 ''' 
@@ -24,18 +22,22 @@ Imports System.Xml
 
 Public Class Update_Mainfrm
     'global var's
-    Public Domain As String = "xcvi.ch" 'your domainname - nslookup needs to be able to get the IP from it!
-    Public Domainprojectdir As String = "/dload/winbackupper/" 'The Directory of the Webserver all Files are in, 
-    'Example Root/Application/UpdateInfo would look like =>  Public Domainprojectdir As String = "/Application/Portable_Helper/"
-    'Dont forget ending "/" !!!
+    Public Overridable Property AllowAutoRedirect As Boolean = True
+    Public PayloadsourceURL As String = "https://github.com/SnipeLike/WinBackupper/releases/download/v0.0.1.0/Winbackupper_v0.0.1.0.exe"
+    'since there is a different URL for the "Release" part i needed another var for that
+    'now it downloads everything correctly =)
+    Public Domain As String = "raw.githubusercontent.com" 'your domainname - nslookup needs to be able to get the IP from it!
+    Public Domainprojectdir As String = "/SnipeLike/WinBackupper/master/" 'The Directory of the Webserver
+    'Example Root/Application/UpdateInfo would look like =>  Public Domainprojectdir As String = " / Application / Portable_Helper / "
+    'Dont forget ending " / " !!!
     Public Deployname As String = "WinBackupper_v" ' without version nr!
     'Example Portable_Helper_v0.0.0.1  (while 0.0.0.1 is a changing variable - the version nr)
-    Public Deployfiletype As String = ".zip" 'Fileending
+    Public Deployfiletype As String = ".exe" 'Fileending
     Public DomainIP As String = "" 'DONT MANIPULATE!  If you want to bypass see next Variable.
-    Public DomainIPbypass As String = "80.242.195.230" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
+    Public DomainIPbypass As String = "" 'if entered it will bypass DNS - if there is need for it. (Sometime resolveFQDN seems to get the wrong ip)
     Shared fullpathofoldvers As String 'needed later to store IP of full path of old version
     Public lastdownloadstatupdate As DateTime 'date of last check
-    Public Logfile As String = "Changelog.log"
+    Public Logfile As String = "Changelog.txt"
     Public Logfolder As String = "/Logs/" 'Directory of Logfile (Empty if same directory as exe)
     'Dont forget ending "/" !!!
     Public dns1 As String = "8.8.8.8" 'google's public dns server
@@ -43,6 +45,7 @@ Public Class Update_Mainfrm
 
     ' Public downloadspeedHR As String = "N/A" 'not used yet
     Public alreadydownloadedHR As String = "N/A" 'default value for already downloaded label
+    Public localversnr = "uknown"
 
     'Delegate-stuff to update download status
     ' declare update download delegate
@@ -53,8 +56,6 @@ Public Class Update_Mainfrm
         Me.lbl_alreadydownloaded.Text = Megabytes
         Me.lbl_Downloadrate.Text = Speed
     End Sub
-
-    Public localversnr1 As String
 
     Private Sub Update_Mainfrm_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' Start BW to to Read Verison XML File
@@ -104,11 +105,11 @@ Public Class Update_Mainfrm
                 Try
                     File.Delete(Logfolder & Logfile)
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message & vbNewLine & "Error while deleting the old changelog - is the file open?", "FATAL ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(ex.Message & vbNewLine & "Error While deleting the old changelog - Is the file open?", "FATAL Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
             'download new changelog
-            downloadfileoverhttp(("http://" & DomainIP & Domainprojectdir & Logfile), getexedir() & Logfolder, Logfile)
+            downloadfileoverhttp(("http://" & Domain & Domainprojectdir & Logfile), getexedir() & Logfolder, Logfile)
             'initialize changelog textbox
             changelogtxtbox.Text = My.Computer.FileSystem.ReadAllText(getexedir() & Logfolder & Logfile)
         Catch ex As Exception
@@ -134,7 +135,7 @@ Public Class Update_Mainfrm
 
     Private Function getexedir()
         Dim path As String
-        path = System.IO.Path.GetDirectoryName( _
+        path = System.IO.Path.GetDirectoryName(
            System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)
         Return path.Substring(6, path.Length - 6)
     End Function
@@ -149,8 +150,15 @@ Public Class Update_Mainfrm
                 'If it's there, delete it
                 My.Computer.FileSystem.DeleteFile(fullfilepath)
             End If
+            Dim wclient As New System.Net.WebClient()
+            wclient.DownloadFile(New Uri(sourceturl), fullfilepath)
+
+            While (wclient.IsBusy)
+                Application.DoEvents()
+            End While
+            Return 0
             ' Download file again, with the link for the file
-            My.Computer.Network.DownloadFile(sourceturl, fullfilepath)
+            '  My.Computer.Network.DownloadFile(sourceturl, fullfilepath)
         Catch ex As Exception
             If ex.Message IsNot "" Then
                 Return -1
@@ -185,29 +193,29 @@ Public Class Update_Mainfrm
             'inform user
             loglbl.Text = "Checking for new version!"
             'get new Version Number
-            downloadfileoverhttp("http://" & DomainIP & Domainprojectdir & "/NewVersion.txt", getexedir() & Logfolder, "NewVersion.txt")
+            downloadfileoverhttp("https://" & Domain & Domainprojectdir & "NewVersion.txt", getexedir() & Logfolder, "NewVersion.txt")
 
             ' Get "new" Version Number fom txt File
-            Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "\NewVersion.txt", 0)
+            Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "NewVersion.txt", 0)
             ' localversnr1 getting in BW_getProgVersion out of XML File
 
             'check if local version is equal to "new" version
-            If localversnr1 < versnr Then
+            If localversnr < versnr Then
                 'inform user
                 loglbl.Text = "newer version detected!"
                 'Newer version availavle, start download?
                 If MessageBox.Show("A newer Version is detected. Start download now?", "New Version", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
                     '  Dim NewFile As String = getexedir() & "\" & "Portable_Helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
+                    downloadfilewithprogress(New Uri(PayloadsourceURL), getexedir() & " \ " & Deployname & versnr & Deployfiletype)
                 End If
             Else
-                loglbl.Text = "up-to-date! repair?"
-                If MessageBox.Show("Want to repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
+                loglbl.Text = "up-To-date! repair?"
+                If MessageBox.Show("Version is up-to-date!" &vbNewLine & "Want To repair (redownload) Application?", "redownload?", MessageBoxButtons.YesNo) = vbYes Then
                     'user said yes, redownload
                     ' Dim NewFile As String = getexedir() & "\" & "portable_helper_v" & versnr & ".exe"
                     'download new exe
-                    downloadfilewithprogress(New Uri("http://" & DomainIP & Domainprojectdir & Deployname & versnr & Deployfiletype), getexedir() & "\" & Deployname & versnr & Deployfiletype)
+                    downloadfilewithprogress(New Uri(PayloadsourceURL), getexedir() & "\" & Deployname & versnr & Deployfiletype)
                 End If
             End If
         Catch ex As Exception
@@ -263,7 +271,7 @@ Public Class Update_Mainfrm
             End If
         End If
         'start SW if user wished so
-        Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "\NewVersion.txt", 0)
+        Dim versnr As String = readtxtfileline(getexedir() & Logfolder & "NewVersion.txt", 0)
         Dim NewFile As String = getexedir() & "\" & Deployname & versnr & Deployfiletype
         Dim startswafterwards = MessageBox.Show("Update finished! Start Software now?", "Update finished!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If startswafterwards = Windows.Forms.DialogResult.Yes Then
@@ -291,7 +299,7 @@ Public Class Update_Mainfrm
                 If (type = XmlNodeType.Element) Then
                     ' Looking for "Version"
                     If (xmlReader.Name = "Version") Then
-                        localversnr1 = xmlReader.ReadInnerXml.ToString
+                        localversnr = xmlReader.ReadInnerXml.ToString
                     End If
                 End If
 

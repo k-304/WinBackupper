@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Timetable
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Timetable
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
         Me.b_stopediting = New System.Windows.Forms.Button()
@@ -49,7 +49,6 @@ Partial Class Timetable
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.fbd_editsource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_editbackup = New System.Windows.Forms.FolderBrowserDialog()
-        Me.b_exit = New System.Windows.Forms.Button()
         Me.gb_paths.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -80,11 +79,11 @@ Partial Class Timetable
         '
         Me.l_source.AutoSize = True
         Me.l_source.BackColor = System.Drawing.Color.Transparent
-        Me.l_source.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_source.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_source.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_source.Location = New System.Drawing.Point(6, 17)
         Me.l_source.Name = "l_source"
-        Me.l_source.Size = New System.Drawing.Size(90, 17)
+        Me.l_source.Size = New System.Drawing.Size(101, 20)
         Me.l_source.TabIndex = 35
         Me.l_source.Text = "Source Path:"
         '
@@ -92,11 +91,11 @@ Partial Class Timetable
         '
         Me.l_backup.AutoSize = True
         Me.l_backup.BackColor = System.Drawing.Color.Transparent
-        Me.l_backup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backup.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_backup.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_backup.Location = New System.Drawing.Point(6, 46)
         Me.l_backup.Name = "l_backup"
-        Me.l_backup.Size = New System.Drawing.Size(92, 17)
+        Me.l_backup.Size = New System.Drawing.Size(104, 20)
         Me.l_backup.TabIndex = 36
         Me.l_backup.Text = "Backup Path:"
         '
@@ -113,19 +112,19 @@ Partial Class Timetable
         'tb_showSource
         '
         Me.tb_showSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_showSource.Location = New System.Drawing.Point(104, 14)
+        Me.tb_showSource.Location = New System.Drawing.Point(116, 14)
         Me.tb_showSource.Name = "tb_showSource"
         Me.tb_showSource.ReadOnly = True
-        Me.tb_showSource.Size = New System.Drawing.Size(239, 23)
+        Me.tb_showSource.Size = New System.Drawing.Size(227, 23)
         Me.tb_showSource.TabIndex = 38
         '
         'tb_showBackup
         '
         Me.tb_showBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_showBackup.Location = New System.Drawing.Point(104, 43)
+        Me.tb_showBackup.Location = New System.Drawing.Point(116, 43)
         Me.tb_showBackup.Name = "tb_showBackup"
         Me.tb_showBackup.ReadOnly = True
-        Me.tb_showBackup.Size = New System.Drawing.Size(239, 23)
+        Me.tb_showBackup.Size = New System.Drawing.Size(227, 23)
         Me.tb_showBackup.TabIndex = 39
         '
         'b_editBackup
@@ -204,11 +203,11 @@ Partial Class Timetable
         '
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.Label2.Location = New System.Drawing.Point(101, 69)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(98, 17)
+        Me.Label2.Size = New System.Drawing.Size(107, 20)
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Intervall (in h):"
         '
@@ -236,11 +235,11 @@ Partial Class Timetable
         '
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.Label1.Location = New System.Drawing.Point(101, 46)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(68, 17)
+        Me.Label1.Size = New System.Drawing.Size(78, 20)
         Me.Label1.TabIndex = 27
         Me.Label1.Text = "Starttime:"
         '
@@ -267,11 +266,11 @@ Partial Class Timetable
         '
         Me.l_sourcePath.AutoSize = True
         Me.l_sourcePath.BackColor = System.Drawing.Color.Transparent
-        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_sourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
         Me.l_sourcePath.Location = New System.Drawing.Point(101, 16)
         Me.l_sourcePath.Name = "l_sourcePath"
-        Me.l_sourcePath.Size = New System.Drawing.Size(37, 17)
+        Me.l_sourcePath.Size = New System.Drawing.Size(41, 20)
         Me.l_sourcePath.TabIndex = 26
         Me.l_sourcePath.Text = "Day:"
         '
@@ -319,23 +318,12 @@ Partial Class Timetable
         'fbd_editbackup
         '
         '
-        'b_exit
-        '
-        Me.b_exit.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_exit.Location = New System.Drawing.Point(116, 625)
-        Me.b_exit.Name = "b_exit"
-        Me.b_exit.Size = New System.Drawing.Size(239, 36)
-        Me.b_exit.TabIndex = 34
-        Me.b_exit.Text = "Finish"
-        Me.b_exit.UseVisualStyleBackColor = True
-        '
         'Timetable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 673)
-        Me.Controls.Add(Me.b_exit)
+        Me.ClientSize = New System.Drawing.Size(454, 629)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.gb_paths)
         Me.Controls.Add(Me.l_settings)
@@ -377,5 +365,4 @@ Partial Class Timetable
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents fbd_editsource As FolderBrowserDialog
     Friend WithEvents fbd_editbackup As FolderBrowserDialog
-    Friend WithEvents b_exit As Button
 End Class

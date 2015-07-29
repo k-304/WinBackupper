@@ -244,9 +244,9 @@ Public Class Settings
     'Button Save defaults to own XML File
     Private Sub b_save_Click(sender As Object, e As EventArgs) Handles b_save.Click
         'delete default.xml if it exists already
-        If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
+        If System.IO.File.Exists(home.getexedir() & home.Settings_Directory & "default.xml") Then
             'delete it 
-            System.IO.File.Delete(home.getexedir() & "\default.xml")
+            System.IO.File.Delete(home.getexedir() & home.Settings_Directory & "default.xml")
         End If
         'start bw_writer which writes default.xml in backgournd (other thread)
         bw_writer.RunWorkerAsync()
@@ -262,9 +262,9 @@ Public Class Settings
 
         If resetchoice = vbYes Then
             'delete xml file - reset arrays
-            If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
+            If System.IO.File.Exists(home.getexedir() & home.Settings_Directory & "default.xml") Then
                 'delete it 
-                System.IO.File.Delete(home.getexedir() & "\default.xml")
+                System.IO.File.Delete(home.getexedir() & home.Settings_Directory & "default.xml")
             End If
             'Clear Array
             sourcepatharray.Clear()
@@ -339,6 +339,14 @@ Public Class Settings
                 'add it anyway, even if already existing in source list
                 'write value into Array!
                 sourcepatharray.Add(SourcePathresult)
+            Else
+                MessageBox.Show("Adding of Folderpair aborted!")
+                If DialogResult = Windows.Forms.DialogResult.OK Then
+                    'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
+                    'see further down
+                    DialogResult = DialogResult.None
+                End If
+                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -351,17 +359,26 @@ Public Class Settings
         fbd_searchDefaultBackup.RootFolder = Environment.SpecialFolder.MyComputer
         DialogResult = fbd_searchDefaultBackup.ShowDialog
         Dim BackupPathresult As String = fbd_searchDefaultBackup.SelectedPath.ToString
-        'do sanity check before adding (check if already existing?)
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
             Exit Sub
         End If
+        'do sanity check before adding (check if already existing?)
         If sourcepatharray.Contains(BackupPathresult) And DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok"
             Dim userchoice = MessageBox.Show("You want to save into a Folder which is getting back-upped itself" & vbNewLine & "Do you want to continue?", "Destination getting Backupped!", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If userchoice = vbYes Then
-                'add it anyway, even if user is saving data into a directory which is getting backed-up
+            If userchoice = vbYes Then                'add it anyway, even if user is saving data into a directory which is getting backed-up
                 'write value into Array!
                 backupPatharray.Add(BackupPathresult)
+            Else
+                MessageBox.Show("Adding of Folderpair aborted!")
+                'if aborted here - the source path s already in the array - so celan up
+                sourcepatharray.RemoveAt(sourcepatharray.Count - 1)
+                If DialogResult = Windows.Forms.DialogResult.OK Then
+                    'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
+                    'see further down
+                    DialogResult = DialogResult.None
+                End If
+                Exit Sub
             End If
         Else
             'sane string ...add it
@@ -436,7 +453,7 @@ Public Class Settings
         ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
         writerOption.Indent = True
-        Dim writerSettings As XmlWriter = XmlWriter.Create(home.getexedir() & "\default.xml", writerOption)
+        Dim writerSettings As XmlWriter = XmlWriter.Create(home.getexedir() & home.Settings_Directory & "default.xml", writerOption)
         'check if array's have unequal nr of members
         'maybe user closed box to choose backup path or didnt open it 
         If Not (sourcepatharray.Count = backupPatharray.Count) Then
@@ -497,9 +514,9 @@ Public Class Settings
 
 
         'start checking if settings are saved correctly!
-        If Not Dir(home.getexedir() & "\default.xml") = "" Then
+        If Not Dir(home.getexedir() & home.Settings_Directory & "default.xml") = "" Then
             ' Read XML File to check if it was written
-            Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & "\default.xml")
+            Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & home.Settings_Directory & "default.xml")
             'define var's used to compare saveddata to supposed data
             Dim sourcetargetdata As ArrayList = sourcepatharray
             Dim backuptargetdata As ArrayList = backupPatharray

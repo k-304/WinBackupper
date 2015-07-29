@@ -18,6 +18,7 @@ Public Class home
     Public silent As Boolean = False
     Public Logfilename_Prefix As String = "BackupLog_" 'only use filename - no / allowed!
     Public LogfileFolder = "/Logs/" 'enter / %dirname / ! Slashes are Needed in front and at the end of this string!
+    Public Settings_Directory As String = "\Settings\"
 
 #End Region
 
@@ -101,9 +102,9 @@ Public Class home
             bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
 
             ' Check if there is a "default.xml" File
-            If Not Dir(getexedir() & "\default.xml") = "" Then
+            If Not Dir(getexedir() & Settings_Directory & "default.xml") = "" Then
                 ' Read XML File to load defaults
-                Dim xmlReader2 As XmlReader = New XmlTextReader(getexedir() & "\default.xml")
+                Dim xmlReader2 As XmlReader = New XmlTextReader(getexedir() & Settings_Directory & "default.xml")
                 ' Loop through XML File
                 While (xmlReader2.Read())
                     Dim type = xmlReader2.NodeType
