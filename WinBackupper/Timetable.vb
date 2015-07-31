@@ -744,7 +744,7 @@ Public Class Timetable
     'Loading Timetable Form
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'check if there are any settings to prevent errors
-        If System.IO.File.Exists(home.getexedir() & "\default.xml") Then
+        If System.IO.File.Exists(home.getexedir() & home.Settings_Directory & "default.xml") Then
             Settings_Reload()
         End If
     End Sub
