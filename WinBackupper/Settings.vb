@@ -1,5 +1,4 @@
 ﻿Imports System.Xml
-Imports System.Threading
 Imports System.Reflection
 
 Public Class Settings
@@ -585,6 +584,7 @@ Public Class Settings
             xmlReader.Dispose()
         End If
     End Sub
+
 #End Region
 
 End Class
