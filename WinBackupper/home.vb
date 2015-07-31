@@ -101,6 +101,11 @@ Public Class home
             version = My.Application.Info.Version.ToString()
             bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
 
+            'Check if there is a "Settings" Folder
+            If Not (System.IO.Directory.Exists(getexedir() & Settings_Directory)) Then
+                System.IO.Directory.CreateDirectory(getexedir() & Settings_Directory)
+            End If
+
             ' Check if there is a "default.xml" File
             If Not Dir(getexedir() & Settings_Directory & "default.xml") = "" Then
                 ' Read XML File to load defaults
