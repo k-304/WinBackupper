@@ -11,21 +11,20 @@ This Document shall define How different Variables are named, How different elem
 | Save   | "Save" in this case refers to "Save what ever I changed since the last startup. ONLY happening by clicking the "save" button in the Settings Form!    |
 
 #Naming Convention
-| Object        | Naming Convetion  |
-| ------------- | -------------     |
-| Rich Text Box  | rtb_    |
-| Button   | b_      |
-| CheckBox   | cb_      |
-| Label   | l_      |
-| BackgroundWorker   | bw_      |
-| Textbox   | tb_      |
-| DateTimePicker   | dtp_      |
-| ListView   | lv_      |
-| ColumnHeader (listview)   | ch_      | 
-| ComboBox (DropDown)   | dd_      | 
-| TreeView   | tv_      | 
-
-(Not sure about the ComboBox (Dropdown) one but cb is already taken)
+| Object        | Naming Convetion  | Description | 
+| ------------- | -------------     | ------------- | 
+| Rich Text Box  | rtb_    | | 
+| Button   | b_      | | 
+| CheckBox   | cb_      | | 
+| Label   | l_      | | 
+| BackgroundWorker   | bw_      | | 
+| Textbox   | tb_      | | 
+| DateTimePicker   | dtp_      | | 
+| ListView   | lv_      | | 
+| ColumnHeader (listview)   | ch_      | | 
+| ComboBox (DropDown)   | dd_      | | 
+| TreeView   | tv_      | | 
+| LoadingCircle   | lc_      | the discussed loading circle from http://www.codeproject.com/Articles/14841/How-to-write-a-loading-circle-animation-in-NET. VERY easy to implement, I'll show you in school. It s a  thing for the toolbox. (To drag and drop) That dude who made that is awesome =) | 
 
 #Saving Data
 The only way how Data permanently get's saved - is with the "default.xml"file.
