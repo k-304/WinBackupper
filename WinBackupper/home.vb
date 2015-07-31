@@ -73,7 +73,7 @@ Public Class home
         End Try
     End Function
 
-    ' Main Form
+    'Main Form
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Hide SystemTray Icon at startup to prevent Bugs
         If Me.WindowState = FormWindowState.Normal Then
@@ -96,7 +96,7 @@ Public Class home
                 End If
             End If
 
-            ' Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
+            'Shows actual Version-Number from "Prokect -> Properties... -> Application -> Assambly Information..."
             l_version.Text = "Version: " + My.Application.Info.Version.ToString()
             version = My.Application.Info.Version.ToString()
             bw_versionControll.RunWorkerAsync() ' Start BW to write Version into XML File, see #Workers
@@ -106,7 +106,7 @@ Public Class home
                 System.IO.Directory.CreateDirectory(getexedir() & Settings_Directory)
             End If
 
-            ' Check if there is a "default.xml" File
+            'Check if there is a "default.xml" File
             If Not Dir(getexedir() & Settings_Directory & "default.xml") = "" Then
                 ' Read XML File to load defaults
                 Dim xmlReader2 As XmlReader = New XmlTextReader(getexedir() & Settings_Directory & "default.xml")
@@ -164,27 +164,27 @@ Public Class home
         Return 0
     End Function
 
-    ' TextBox for Source Path
+    'TextBox for Source Path
     Private Sub tb_sourcePath_TextChanged(sender As Object, e As EventArgs)
         'maybe check for max. character count to prevent possible overflow's? (if there are any)
     End Sub
 
-    ' FolderBrowserDialog to select Source Path
+    'FolderBrowserDialog to select Source Path
     Private Sub fbd_searchSource_HelpRequest(sender As Object, e As EventArgs) Handles fbd_searchSource.HelpRequest
 
     End Sub
 
-    ' TextBox for Backup Path
+    'TextBox for Backup Path
     Private Sub tb_backupPath_TextChanged(sender As Object, e As EventArgs)
 
     End Sub
 
-    ' FolderBrowserDialog to select Backup Path
+    'FolderBrowserDialog to select Backup Path
     Private Sub fbd_searchBackup_HelpRequest(sender As Object, e As EventArgs) Handles fbd_searchBackup.HelpRequest
 
     End Sub
 
-    ' Button Start Backup
+    'Button Start Backup
     Private Sub b_start_Click(sender As Object, e As EventArgs) Handles b_start.Click
         'Confirm & Start Backup-Progress
         ' Dim startResult = MessageBox.Show("Backingup from " + sourcePath + " to " + backupPath + " ? ", "Continue?", MessageBoxButtons.YesNo)
@@ -480,7 +480,7 @@ Public Class home
         End Try
     End Function
 
-    ' Button open Settings
+    'Button open Settings
     Private Sub b_settings_Click(sender As Object, e As EventArgs) Handles b_settings.Click
         'Show Settings Form and block home Form
         Settings.ShowDialog()
@@ -638,7 +638,7 @@ Public Class home
     '*-----Workers-----*'
     '*-----------------*'
 
-    ' Writes Version to XML File to get the actual Version in "THC_Updater.exe"
+    'Writes Version to XML File to get the actual Version in "THC_Updater.exe"
     Private Sub bw_versionControll_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_versionControll.DoWork
         ' Create XML Writer
         Dim writerOption As New XmlWriterSettings
