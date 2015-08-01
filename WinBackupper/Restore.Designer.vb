@@ -24,7 +24,7 @@ Partial Class Restore
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Restore))
         Me.l_restore = New System.Windows.Forms.Label()
-        Me.TreeView1 = New System.Windows.Forms.TreeView()
+        Me.tv_restore = New System.Windows.Forms.TreeView()
         Me.L_available_Datasets = New System.Windows.Forms.Label()
         Me.b_startrestore = New System.Windows.Forms.Button()
         Me.tb_targetdir = New System.Windows.Forms.TextBox()
@@ -47,12 +47,13 @@ Partial Class Restore
         Me.l_restore.TabIndex = 11
         Me.l_restore.Text = "Restore"
         '
-        'TreeView1
+        'tv_restore
         '
-        Me.TreeView1.Location = New System.Drawing.Point(26, 87)
-        Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.Size = New System.Drawing.Size(490, 323)
-        Me.TreeView1.TabIndex = 12
+        Me.tv_restore.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tv_restore.Location = New System.Drawing.Point(26, 87)
+        Me.tv_restore.Name = "tv_restore"
+        Me.tv_restore.Size = New System.Drawing.Size(490, 323)
+        Me.tv_restore.TabIndex = 12
         '
         'L_available_Datasets
         '
@@ -128,6 +129,9 @@ Partial Class Restore
         Me.L_status.TabIndex = 33
         Me.L_status.Text = "Status: Idle"
         '
+        'bw_Reload_Settings
+        '
+        '
         'Restore
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -140,7 +144,7 @@ Partial Class Restore
         Me.Controls.Add(Me.tb_targetdir)
         Me.Controls.Add(Me.b_startrestore)
         Me.Controls.Add(Me.L_available_Datasets)
-        Me.Controls.Add(Me.TreeView1)
+        Me.Controls.Add(Me.tv_restore)
         Me.Controls.Add(Me.l_restore)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -154,7 +158,7 @@ Partial Class Restore
     End Sub
 
     Friend WithEvents l_restore As Label
-    Friend WithEvents TreeView1 As TreeView
+    Friend WithEvents tv_restore As TreeView
     Friend WithEvents L_available_Datasets As Label
     Friend WithEvents b_startrestore As Button
     Friend WithEvents tb_targetdir As TextBox

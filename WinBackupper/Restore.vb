@@ -28,7 +28,7 @@ Public Class Restore
         lc_Restore.Active = True
 
         'call everything which consumes times within a seperate thread (Background worker)
-        ' Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
+        Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
 
         'disable the turning again of the "doing something"-indicator
         ' lc_Restore.Active = False
@@ -50,6 +50,28 @@ Public Class Restore
 
 #End Region
 
+#Region "Delegates"
+    '*-----------------*'
+    '*-----Delegates---*'
+    '*-----------------*'
+    Private Delegate Sub tvaddmainnodesDelegate(ByVal mainnodename As String)
+
+    ' declare an implmentation with matching signature
+    Private Sub addmainnode(ByVal mainnodename As String)
+        Dim Nodetoadd As TreeNode
+        Nodetoadd = tv_restore.Nodes.Add(mainnodename, mainnodename)
+    End Sub
+
+    Private Delegate Sub tvaddchildnodeDelegate(ByVal Mainnodename As String, byval Childnodename As String)
+    ' declare an implmentation with matching signature
+    Private Sub addchildnode(ByVal Mainnodename As String, ByVal Childnodename As String)
+        Dim Nodetomanipulate() As TreeNode
+        Nodetomanipulate = tv_restore.Nodes.Find(Mainnodename, True)
+        Nodetomanipulate(0).Nodes.Add(Childnodename)
+    End Sub
+
+#End Region
+
 #Region "Workers"
     '*-----------------*'
     '*-----Workers-----*'
@@ -60,37 +82,47 @@ Public Class Restore
     Private Sub bw_reload_settings_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_Reload_Settings.DoWork
         'reload settings here - a second worker will do the actual restore
 
+        'for now generate dummy entries
+        'use delegates to update GUI or program will crash
+        Dim Parentnodename = "2015-01-30"
+        Dim Pdel As tvaddmainnodesDelegate = AddressOf addmainnode
+        Me.Invoke(Pdel, Parentnodename)
+        Dim chilnodename = "Sourcefolder1"
+        Dim Cdel As tvaddchildnodeDelegate = AddressOf addchildnode
+        Me.Invoke(Cdel, Parentnodename, chilnodename)
+
+
         'first, loop through the backuplist file
         'then if at all needed, loop through the main backupdir. 
 
-        Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & home.Settings_Directory & "AvailableRestores.xml")
+        '' Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & home.Settings_Directory & "AvailableRestores.xml")
         ' Loop through XML File
-        While (xmlReader.Read())
-            Dim type = xmlReader.NodeType
-            Dim depth = xmlReader.Depth
+        ''  While (xmlReader.Read())
+        '' Dim type = xmlReader.NodeType
+        '' Dim depth = xmlReader.Depth
 
-            ' Find selected Paths in XML File and write them into Var
-            If (type = XmlNodeType.Element) Then
-                If (depth = 0) Then ' top level element
+        ' Find selected Paths in XML File and write them into Var
+        ''If (type = XmlNodeType.Element) Then
+        ''If (depth = 0) Then ' top level element
 
-                    'i thought a bit and i think - 
+        'i thought a bit and i think - 
 
-                    ' we would need to store MAC+Sourcepath in a File.
-                    'basically keep a list of all backups ever made.
-                    'But I guess it makes more sense, to only store it in the backupdir.
-                    'keep a list of all backups within that directory and update it accordingly.
-                    'Also folders will be named criptically (with short numbers)
-                    'too keep the char count short. 
-                    '(then it will be written in the availablerestore.xml where to get the restore from
-                    'we just need tos tore the original source/Destination/sourcepc and the current source to restore it from)
-                    'If we store a List of all backups made in a list - we laso don't need an ID I guess. we can just store as much information as we want in the xml
-                    'we can loop through the file to get the information back.
+        ' we would need to store MAC+Sourcepath in a File.
+        'basically keep a list of all backups ever made.
+        'But I guess it makes more sense, to only store it in the backupdir.
+        'keep a list of all backups within that directory and update it accordingly.
+        'Also folders will be named criptically (with short numbers)
+        'too keep the char count short. 
+        '(then it will be written in the availablerestore.xml where to get the restore from
+        'we just need tos tore the original source/Destination/sourcepc and the current source to restore it from)
+        'If we store a List of all backups made in a list - we laso don't need an ID I guess. we can just store as much information as we want in the xml
+        'we can loop through the file to get the information back.
 
 
-                End If
-            End If
+        ''   End If
+        '' End If
 
-        End While
+        ''  End While
 
     End Sub
 
