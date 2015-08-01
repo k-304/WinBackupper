@@ -29,9 +29,13 @@ Partial Class Restore
         Me.b_startrestore = New System.Windows.Forms.Button()
         Me.tb_targetdir = New System.Windows.Forms.TextBox()
         Me.L_targetpath = New System.Windows.Forms.Label()
-        Me.lc_Restore = New MRG.Controls.UI.LoadingCircle()
+        Me.lc_loading_datasets = New MRG.Controls.UI.LoadingCircle()
         Me.L_status = New System.Windows.Forms.Label()
         Me.bw_Reload_Settings = New System.ComponentModel.BackgroundWorker()
+        Me.l_log = New System.Windows.Forms.Label()
+        Me.rtb_log = New System.Windows.Forms.RichTextBox()
+        Me.l_restore_active = New System.Windows.Forms.Label()
+        Me.LoadingCircle1 = New MRG.Controls.UI.LoadingCircle()
         Me.SuspendLayout()
         '
         'l_restore
@@ -99,22 +103,22 @@ Partial Class Restore
         Me.L_targetpath.TabIndex = 31
         Me.L_targetpath.Text = "Target path for restored files:"
         '
-        'lc_Restore
+        'lc_loading_datasets
         '
-        Me.lc_Restore.Active = False
-        Me.lc_Restore.BackColor = System.Drawing.Color.Transparent
-        Me.lc_Restore.Color = System.Drawing.Color.WhiteSmoke
-        Me.lc_Restore.InnerCircleRadius = 8
-        Me.lc_Restore.Location = New System.Drawing.Point(26, 507)
-        Me.lc_Restore.Name = "lc_Restore"
-        Me.lc_Restore.NumberSpoke = 24
-        Me.lc_Restore.OuterCircleRadius = 9
-        Me.lc_Restore.RotationSpeed = 85
-        Me.lc_Restore.Size = New System.Drawing.Size(74, 62)
-        Me.lc_Restore.SpokeThickness = 4
-        Me.lc_Restore.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
-        Me.lc_Restore.TabIndex = 32
-        Me.lc_Restore.Text = "Wait while Content is loading...."
+        Me.lc_loading_datasets.Active = False
+        Me.lc_loading_datasets.BackColor = System.Drawing.Color.Transparent
+        Me.lc_loading_datasets.Color = System.Drawing.Color.WhiteSmoke
+        Me.lc_loading_datasets.InnerCircleRadius = 8
+        Me.lc_loading_datasets.Location = New System.Drawing.Point(26, 507)
+        Me.lc_loading_datasets.Name = "lc_loading_datasets"
+        Me.lc_loading_datasets.NumberSpoke = 24
+        Me.lc_loading_datasets.OuterCircleRadius = 9
+        Me.lc_loading_datasets.RotationSpeed = 85
+        Me.lc_loading_datasets.Size = New System.Drawing.Size(66, 58)
+        Me.lc_loading_datasets.SpokeThickness = 4
+        Me.lc_loading_datasets.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
+        Me.lc_loading_datasets.TabIndex = 32
+        Me.lc_loading_datasets.Text = "Wait while Content is loading...."
         '
         'L_status
         '
@@ -123,7 +127,7 @@ Partial Class Restore
         Me.L_status.BackColor = System.Drawing.Color.Transparent
         Me.L_status.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.L_status.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.L_status.Location = New System.Drawing.Point(93, 524)
+        Me.L_status.Location = New System.Drawing.Point(88, 522)
         Me.L_status.Name = "L_status"
         Me.L_status.Size = New System.Drawing.Size(100, 24)
         Me.L_status.TabIndex = 33
@@ -132,14 +136,70 @@ Partial Class Restore
         'bw_Reload_Settings
         '
         '
+        'l_log
+        '
+        Me.l_log.AutoSize = True
+        Me.l_log.BackColor = System.Drawing.Color.Transparent
+        Me.l_log.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_log.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_log.Location = New System.Drawing.Point(242, 544)
+        Me.l_log.Name = "l_log"
+        Me.l_log.Size = New System.Drawing.Size(47, 24)
+        Me.l_log.TabIndex = 35
+        Me.l_log.Text = "Log:"
+        '
+        'rtb_log
+        '
+        Me.rtb_log.BackColor = System.Drawing.SystemColors.Window
+        Me.rtb_log.Location = New System.Drawing.Point(26, 571)
+        Me.rtb_log.Name = "rtb_log"
+        Me.rtb_log.ReadOnly = True
+        Me.rtb_log.Size = New System.Drawing.Size(490, 55)
+        Me.rtb_log.TabIndex = 34
+        Me.rtb_log.Text = ""
+        '
+        'l_restore_active
+        '
+        Me.l_restore_active.AccessibleRole = System.Windows.Forms.AccessibleRole.None
+        Me.l_restore_active.AutoSize = True
+        Me.l_restore_active.BackColor = System.Drawing.Color.Transparent
+        Me.l_restore_active.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_restore_active.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_restore_active.Location = New System.Drawing.Point(366, 522)
+        Me.l_restore_active.Name = "l_restore_active"
+        Me.l_restore_active.Size = New System.Drawing.Size(158, 24)
+        Me.l_restore_active.TabIndex = 37
+        Me.l_restore_active.Text = "No Restore active"
+        '
+        'LoadingCircle1
+        '
+        Me.LoadingCircle1.Active = False
+        Me.LoadingCircle1.BackColor = System.Drawing.Color.Transparent
+        Me.LoadingCircle1.Color = System.Drawing.Color.WhiteSmoke
+        Me.LoadingCircle1.InnerCircleRadius = 8
+        Me.LoadingCircle1.Location = New System.Drawing.Point(304, 507)
+        Me.LoadingCircle1.Name = "LoadingCircle1"
+        Me.LoadingCircle1.NumberSpoke = 24
+        Me.LoadingCircle1.OuterCircleRadius = 9
+        Me.LoadingCircle1.RotationSpeed = 85
+        Me.LoadingCircle1.Size = New System.Drawing.Size(66, 58)
+        Me.LoadingCircle1.SpokeThickness = 4
+        Me.LoadingCircle1.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
+        Me.LoadingCircle1.TabIndex = 36
+        Me.LoadingCircle1.Text = "Wait while Content is loading...."
+        '
         'Restore
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(545, 602)
+        Me.ClientSize = New System.Drawing.Size(545, 630)
+        Me.Controls.Add(Me.l_restore_active)
+        Me.Controls.Add(Me.LoadingCircle1)
+        Me.Controls.Add(Me.l_log)
+        Me.Controls.Add(Me.rtb_log)
         Me.Controls.Add(Me.L_status)
-        Me.Controls.Add(Me.lc_Restore)
+        Me.Controls.Add(Me.lc_loading_datasets)
         Me.Controls.Add(Me.L_targetpath)
         Me.Controls.Add(Me.tb_targetdir)
         Me.Controls.Add(Me.b_startrestore)
@@ -163,7 +223,11 @@ Partial Class Restore
     Friend WithEvents b_startrestore As Button
     Friend WithEvents tb_targetdir As TextBox
     Friend WithEvents L_targetpath As Label
-    Friend WithEvents lc_Restore As MRG.Controls.UI.LoadingCircle
+    Friend WithEvents lc_loading_datasets As MRG.Controls.UI.LoadingCircle
     Friend WithEvents L_status As Label
     Friend WithEvents bw_Reload_Settings As System.ComponentModel.BackgroundWorker
+    Friend WithEvents l_log As Label
+    Friend WithEvents rtb_log As RichTextBox
+    Friend WithEvents l_restore_active As Label
+    Friend WithEvents LoadingCircle1 As MRG.Controls.UI.LoadingCircle
 End Class

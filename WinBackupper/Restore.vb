@@ -16,23 +16,14 @@ Public Class Restore
     'executed when settingsform is fully loaded (and therefore shown to the user)
     Private Sub Restore_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         'make the loading circle bigger - seems like gui is bugged (stays small if changed by gui)
-        lc_Restore.InnerCircleRadius = 12
-        lc_Restore.OuterCircleRadius = 15
-        lc_Restore.SpokeThickness = 3
-        lc_Restore.NumberSpoke = 25
-
-        'in the future the following line need to be added to make 
-        'the loading circle visible again => (the one commented with '')
-        ''lc_Restore.Visible = True
-        'activate the "turning" of the circle
-        lc_Restore.Active = True
-
+        lc_loading_datasets.InnerCircleRadius = 12
+        lc_loading_datasets.OuterCircleRadius = 15
+        lc_loading_datasets.SpokeThickness = 3
+        lc_loading_datasets.NumberSpoke = 25
+        'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
         Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
 
-        'disable the turning again of the "doing something"-indicator
-        ' lc_Restore.Active = False
-        '   lc_Restore.Visible = False
 
     End Sub
 
@@ -62,12 +53,36 @@ Public Class Restore
         Nodetoadd = tv_restore.Nodes.Add(mainnodename, mainnodename)
     End Sub
 
-    Private Delegate Sub tvaddchildnodeDelegate(ByVal Mainnodename As String, byval Childnodename As String)
+    Private Delegate Sub tvaddchildnodeDelegate(ByVal Mainnodename As String, ByVal Childnodename As String)
     ' declare an implmentation with matching signature
     Private Sub addchildnode(ByVal Mainnodename As String, ByVal Childnodename As String)
         Dim Nodetomanipulate() As TreeNode
         Nodetomanipulate = tv_restore.Nodes.Find(Mainnodename, True)
         Nodetomanipulate(0).Nodes.Add(Childnodename)
+    End Sub
+
+    Private Delegate Sub LogaddEntryDelegate(ByVal Linecontent As String)
+
+    ' declare an implmentation with matching signature
+    Private Sub Logaddentry(ByVal Linecontent As String)
+        rtb_log.AppendText(Linecontent)
+    End Sub
+
+    Private Delegate Sub Toggleloadingcirclestatedelegate(ByVal enabled As Boolean)
+
+    ' declare an implmentation with matching signature
+    Private Sub Toggleloadingcirclestate(ByVal enabled As Boolean)
+        If enabled = True Then
+            'enable loading circle
+            lc_loading_datasets.Visible = True
+            lc_loading_datasets.Active = True
+            L_status.Text = "Status: Loading Datasets"
+        Else
+            'disable it
+            lc_loading_datasets.Visible = False
+            lc_loading_datasets.Active = False
+            L_status.Text = "Status: Idle"
+        End If
     End Sub
 
 #End Region
@@ -84,12 +99,52 @@ Public Class Restore
 
         'for now generate dummy entries
         'use delegates to update GUI or program will crash
+
+        'first set loading indicator active
+        Dim loadingenabled = True
+        Dim logdel As Toggleloadingcirclestatedelegate = AddressOf Toggleloadingcirclestate
+        Me.Invoke(logdel, loadingenabled)
+
+
         Dim Parentnodename = "2015-01-30"
         Dim Pdel As tvaddmainnodesDelegate = AddressOf addmainnode
         Me.Invoke(Pdel, Parentnodename)
+
         Dim chilnodename = "Sourcefolder1"
         Dim Cdel As tvaddchildnodeDelegate = AddressOf addchildnode
         Me.Invoke(Cdel, Parentnodename, chilnodename)
+
+        Dim Logentry = "Dummyentry 1 added successfully" & vbNewLine
+        Dim Ldel As LogaddEntryDelegate = AddressOf Logaddentry
+        Me.Invoke(Ldel, Logentry)
+
+
+        System.Threading.Thread.Sleep(15000)
+
+
+        Parentnodename = "2014-06-30"
+        Me.Invoke(Pdel, Parentnodename)
+
+        chilnodename = "Sourcefolder2"
+        Me.Invoke(Cdel, Parentnodename, chilnodename)
+        Logentry = "Dummyentry 2 added successfully" & vbNewLine
+        Me.Invoke(Ldel, Logentry)
+
+
+        System.Threading.Thread.Sleep(15000)
+
+
+        Parentnodename = "2013-06-16"
+        Me.Invoke(Pdel, Parentnodename)
+
+        chilnodename = "Sourcefolder1"
+        Me.Invoke(Cdel, Parentnodename, chilnodename)
+        Logentry = "Dummyentry 3 added successfully" & vbNewLine
+        Me.Invoke(Ldel, Logentry)
+
+        'inactive loading circle again
+        loadingenabled = False
+        Me.Invoke(logdel, loadingenabled)
 
 
         'first, loop through the backuplist file
