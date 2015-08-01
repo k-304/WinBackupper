@@ -1,7 +1,35 @@
 #Workflows and explanation of Code
 
-This Document shall define How different Variables are named, How different element,objects shall be amnipulated  and explains the basic flow of code within the Software. 
+This Document shall define How different Variables are named, How different element, objects shall be manipulated  and explains the basic flow of code within the Software. It also describes several processes for the Dev's of this Software - it's basically a Wiki of our practices.
 
+
+#Creating a Release
+The following things have to be done when creating a Release => 
+
+1. Add Changes to the Changelog.txt File in the Github Source.
+2. Make Sure the Assembly Information is updated with correct Version. 
+3. Make Sure to only copy the needed Files into a Directory, and use the newest builds!
+
+  |Needed Files|
+  |-----|
+  |Winbackupper.exe|
+  |THC_Updater.exe|
+  |autorun.inf*|
+  |Startup_Silent.bat*|
+  |Settings\|
+  |Logs\Changelog.txt|
+  |Logs\NewVersion.txt|
+  |* File contents below in a seperate chapter|
+
+4. IF the Software is tested in this directory, make sure all created Logs are deleted again.
+
+5. Create an Self extracting Archive (exe) using 7zip or similar software.
+6. Upload this exe as "Winbackupper_v0.0.1.0"  to Github as a "Release" (https://github.com/SnipeLike/WinBackupper/releases)
+7. Make sure to replace the "V_0.0.1.0" with the Release Version number.
+8. Create a Tag which equals the VersionNR (In Github Release page - if no tag is specified this is the default tag)
+9. When the Release is public, change the "NewVersion.txt" File in the Github source, this will enebale Clients to Update. (And signal to them that a new Version is available)
+
+10. Have a beer and test the Update function =)
 
 #Common Words:
 
@@ -25,6 +53,32 @@ This Document shall define How different Variables are named, How different elem
 | ComboBox (DropDown)   | dd_      | | 
 | TreeView   | tv_      | | 
 | LoadingCircle   | lc_      | the discussed loading circle from http://www.codeproject.com/Articles/14841/How-to-write-a-loading-circle-animation-in-NET. VERY easy to implement, I'll show you in school. It s a  thing for the toolbox. (To drag and drop) That dude who made that is awesome =) | 
+
+#autorun.inf
+An autorun.inf File is used on USB Sticks. 
+Let's assume someone wants to build a "Backup stick". 
+He can copy this Software into the main dir, and if autorun isn't disabled, windows will immediatly ask to start the winbackupper exe. (not tested yet, but that s the theory of autorun.inf files)
+Contents of the file : 
+
+```
+[autorun] 
+open=WinBackupper.exe 
+icon=WinBackupper.exe,0
+label=WinBackupper
+```
+
+#Startup_Silent.bat
+Used to start the Software silently.
+Contents of the file : 
+
+```
+@echo off
+REM This script runs Winbackupper silently in the background.
+cmd.exe /c "%~dp0WinBackupper.exe -s"
+
+REM Alternative commands: -s /s /silent and -silent
+exit
+```
 
 #Saving Data
 The only way how Data permanently get's saved - is with the "default.xml"file.
