@@ -1,0 +1,4 @@
+[autorun] 
+open=WinBackupper.exe 
+icon=WinBackupper.exe,0
+label=WinBackupper
