@@ -510,6 +510,11 @@ Public Class home
         Return day
     End Function
 
+    'executed when restore buttonis clicked
+    Private Sub btn_Restore_Click(sender As Object, e As EventArgs) Handles btn_Restore.Click
+        Restore.ShowDialog()
+    End Sub
+
     Public Function getdayofweek() As String
         Dim day = DateTime.Now.DayOfWeek
         If day = 0 Then
@@ -658,6 +663,8 @@ Public Class home
         writerSettings.Close()
         writerSettings.Dispose()
     End Sub
+
+
 #End Region
 
 End Class
