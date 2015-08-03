@@ -232,66 +232,28 @@ Public Class home
                 End If
             End If
         End If
+        'check if user has selected a specific folderpair to backup. If not asum he wants to backup all of them
+
+        'create arraylist to store folderpairid's which should be backed up
+        Dim templist = New ArrayList
+        If lv_overview.SelectedItems.Count = "0" Then
+            'no lines selected, assume all pairs should be backed up
+            For i = 0 To lv_overview.Items.Count - 1
+                'loop through all of them and add their index to the list
+                templist.Add(i)
+            Next
+        Else
+            'only backup selected line
+            For Each lvitem As ListViewItem In lv_overview.SelectedItems
+                'loop through the selected and add their index
+                templist.Add(lv_overview.Items.IndexOf(lvitem))
+            Next
+        End If
         If startResult = Windows.Forms.DialogResult.Yes Then
-            start_backup(backuptype)
+            ' start_backup(templist)
+            bw_dobackup.RunWorkerAsync(templist)
         End If
     End Sub
-
-    'function to encapsulate the actual backup process
-    'eccepted params are "Full | Incr | Diff"  
-    Function start_backup(Optional backuptype As String = "Full")
-        Try
-            'start backup processes
-            'first define the starttime - and therefore the subfolder name for the backup
-            starttime = GetDate()
-
-            'Messege Box for System-Tray
-            If Me.Visible = False Then
-                'Show Notification
-                startnotification()
-            Else
-                'Cursor "Loading"
-                Me.Cursor = Cursors.WaitCursor
-            End If
-
-            'log it
-            rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
-            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
-            For i = 0 To sourcepatharray.Count - 1 Step 1
-                'define current directories if needed/wanted (will unecessaraly need calc power)
-                Dim currsourcepath As String = sourcepatharray(i)
-                Dim currbackuppath As String = backupPatharray(i)
-                Dim tempstartResult
-                If silent Then 'if silent start directly - if not ask user
-                    tempstartResult = Windows.Forms.DialogResult.Yes 'directly set var to yes without asking user
-                Else
-                    tempstartResult = MessageBox.Show("Backingup from " + currsourcepath + " to " + currbackuppath + " ? ", "Continue?", MessageBoxButtons.YesNo)
-                End If
-                If tempstartResult = Windows.Forms.DialogResult.Yes Then
-                    'log start of specific folderpair
-                    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine)
-                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False, backuptype) 'more arguments can be added like incremental/not etc...
-                    'log success
-                    rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & backuptype & vbNewLine)
-
-                    'Message Box for System-Tray
-                    If Me.Visible = False Then
-                        'Show Notification
-                        finishnotification()
-                    Else
-                        'Cursor "Default"
-                        Me.Cursor = Cursors.Default
-                    End If
-
-                End If
-            Next
-            Return 0
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return -1
-        End Try
-    End Function
 
     'executed when the minutely timer ticks+
     Private Sub Timer_per_Minute_Tick(sender As Object, e As EventArgs) Handles Timer_per_Minute.Tick
@@ -342,12 +304,12 @@ Public Class home
                             rtb_log.AppendText("The Following Backup Process was autostarted:" & vbNewLine)
                             'before starting set "silent" var to true- so no msgbox pooops up to ask user
                             silent = True
-                            'hours AND Minutes are the same - start backup 
-                            start_backup()
-                            'after autobackup- set silent to false again!
-                            silent = False
+                            'start backup. only for current dir
+                            bw_dobackup.RunWorkerAsync(i)
+                                'after autobackup- set silent to false again!
+                                silent = False
+                            End If
                         End If
-                    End If
 
                 Next
             Next
@@ -455,7 +417,7 @@ Public Class home
                             End If
                         Catch ex As Exception
                             'if single files fail - maybe make a list? How do we log?
-                            rtb_log.AppendText("The following File could not be backed-up - is it opened?" & vbNewLine & filepath)
+                            ''Not thread safe yet - need to make a delegate for it   rtb_log.AppendText("The following File could not be backed-up - is it opened?" & vbNewLine & filepath)
                         End Try
                     Next 'for each filepath end
 
@@ -501,8 +463,7 @@ Public Class home
         Dim day = getday()
         Dim month = DateTime.Now.ToString("MM")
         Dim year = DateTime.Now.ToString("yyyy")
-        Dim time = GetTime()
-        Return (year & month & day & time)
+        Return (year & month & day)
     End Function
 
     Public Function getday() As String
@@ -662,6 +623,176 @@ Public Class home
         End With
         writerSettings.Close()
         writerSettings.Dispose()
+    End Sub
+
+    Private Sub bw_dobackup_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_dobackup.DoWork
+        'This backgroundworker does the actual backup
+        'also it writes an overview xml file into the backuproot
+        'from there it can read restore information about it.
+        '' Try
+        'this is needed to get "arguments" in a backgroundworker
+        'passed by "runworkerasync(param)"
+        'we cannot specify it in the sub as usual in a function
+        Dim param1 = DirectCast(e.Argument, ArrayList)
+            'param 1 stores all FP Id's which should be backed up.
+            'loop thourgh them, get all settings and start the backup.
+            Dim currsourcepath As String
+            Dim currbackuppath As String
+            Dim currbackuptype As String
+
+            'define the starttime 
+            starttime = GetDate()
+
+
+
+        'starting actual backup
+        For Each FPID As Integer In param1      'get all FP specific variables
+            currsourcepath = sourcepatharray(FPID)
+            currbackuppath = backupPatharray(FPID)
+            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getday, timesettingsforcurrentfolderpair)
+            For Each time As String In timesarrayforcurrentpair
+                If time = "N" Then 'this happens if "Nothing configured"
+                    'somehow pass the userinput about type here?
+                    currbackuptype = "Full"
+                    Exit For
+                Else
+                    If (time.Substring(0, 2) & time.Substring(3, 2)) = GetHour() & GetMinutes() Then
+                        'this is the time of the current pair, with the current setting.
+                        currbackuptype = time.Substring(6, 4)
+                    End If
+
+                End If
+            Next
+
+            'check if overview xml already exists in targetpath
+            If Not File.Exists(currbackuppath & "\RestoreOverview.xml") Then
+                'write file and close it again for editing next time
+                Dim writerOption As New XmlWriterSettings
+                writerOption.Indent = True
+                Dim writerSettings As XmlWriter = XmlWriter.Create(currbackuppath & "\RestoreOverview.xml", writerOption)
+
+                With writerSettings
+                    .WriteStartDocument()
+                    .WriteStartElement("Overview")
+
+                    .WriteStartElement("Date")
+                    .WriteStartElement("_" & GetDate())
+
+                    .WriteStartElement("Folderpair")
+                    .WriteStartElement("_" & FPID)
+
+                    .WriteStartElement("_" & GetHour() & GetMinutes())
+
+                    .WriteStartElement("Source")
+                    .WriteString("_" & currsourcepath)
+                    .WriteEndElement()
+
+                    .WriteStartElement("Backup")
+                    .WriteString("_" & currbackuppath)
+                    .WriteEndElement()
+
+                    .WriteStartElement("Type")
+                    .WriteString(currbackuptype)
+                    .WriteEndElement()
+
+
+                    .WriteEndElement()
+                    .WriteEndElement()
+                    .WriteEndElement()
+                    .WriteEndElement()
+                    .WriteEndElement()
+
+
+                    'write ending "<default>" tag
+                    .WriteEndElement()
+                    .WriteEndDocument()
+                    .Close()
+                    .Dispose()
+                End With
+                'close file again - prevent file IO exceptions
+                writerSettings.Close()
+                writerSettings.Dispose()
+
+            End If
+
+            'load file
+            Dim myXmlDocument As XmlDocument = New XmlDocument()
+            myXmlDocument.Load(currbackuppath & "\RestoreOverview.xml")
+
+            'loop through 
+            Dim datedescnode As XmlNode = myXmlDocument.DocumentElement.FirstChild
+            For Each datenode As XmlNode In datedescnode.ChildNodes
+                If datenode.Name = "_" & GetDate() Then
+                    'append entry, entry for this date already exists
+                    For Each folderpairnode As XmlNode In datenode.FirstChild.ChildNodes
+
+                        If folderpairnode.Name = "_" & FPID Then
+                            'entry for this FP already exists append
+
+                            'create node for current FP with time as name
+                            Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetHour() & GetMinutes())
+                            folderpairnode.AppendChild(mainnodetoadd)
+
+                            'add source tag
+                            Dim srcnode As XmlElement = myXmlDocument.CreateElement("Source")
+                            srcnode.InnerText = currsourcepath
+                            mainnodetoadd.AppendChild(srcnode)
+
+                            Dim bcknode As XmlElement = myXmlDocument.CreateElement("Backup")
+                            bcknode.InnerText = currbackuppath
+                            mainnodetoadd.AppendChild(bcknode)
+
+                            Dim typenode As XmlElement = myXmlDocument.CreateElement("Type")
+                            typenode.InnerText = currbackuptype
+                            mainnodetoadd.AppendChild(typenode)
+
+                        End If
+                    Next
+                End If
+            Next
+            myXmlDocument.Save(currbackuppath & "\RestoreOverview.xml")
+            'start backup processes
+
+            'Message Box for System-Tray
+            If Me.Visible = False Then
+                'Show Notification
+                startnotification()
+            Else
+                'Cursor "Loading"
+                ''Me.Cursor = Cursors.WaitCursor
+            End If
+
+            'log it
+            ''Not thread safe yet - need to make a delegate for it    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
+            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
+            For i = 0 To sourcepatharray.Count - 1 Step 1
+                If FPID = i Then
+                    'define current directories if needed/wanted (will unecessaraly need calc power)
+                    'log start of specific folderpair
+                    ''Not thread safe yet - need to make a delegate for it    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
+                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False, currbackuptype) 'more arguments can be added like incremental/not etc...
+                    'log success
+                    ''Not thread safe yet - need to make a delegate for it      rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & backuptype & vbNewLine)
+
+                    'Message Box for System-Tray
+                    If Me.Visible = False Then
+                        'Show Notification
+                        finishnotification()
+                    Else
+                        'Cursor "Default"
+                        '   Me.Cursor = Cursors.Default
+                    End If
+                End If
+            Next
+
+
+
+            'end of current folderpair - next one if there is any
+        Next
+        ''  Catch ex As Exception
+        ''  MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        ''  End Try
     End Sub
 
 

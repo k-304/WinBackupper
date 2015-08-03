@@ -46,6 +46,7 @@ Partial Class home
         Me.ch_nextstarttime = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
         Me.cb_defaultmanualbackup = New System.Windows.Forms.CheckBox()
         Me.btn_Restore = New System.Windows.Forms.Button()
+        Me.bw_dobackup = New System.ComponentModel.BackgroundWorker()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -223,6 +224,9 @@ Partial Class home
         Me.btn_Restore.Text = "Restore"
         Me.btn_Restore.UseVisualStyleBackColor = True
         '
+        'bw_dobackup
+        '
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -271,4 +275,5 @@ End Sub
     Friend WithEvents ch_nextstarttime As System.Windows.Forms.ColumnHeader
     Friend WithEvents cb_defaultmanualbackup As System.Windows.Forms.CheckBox
     Friend WithEvents btn_Restore As Button
+    Friend WithEvents bw_dobackup As System.ComponentModel.BackgroundWorker
 End Class
