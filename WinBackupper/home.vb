@@ -626,6 +626,7 @@ Public Class home
     End Sub
 
     Private Sub bw_dobackup_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_dobackup.DoWork
+
         'This backgroundworker does the actual backup
         'also it writes an overview xml file into the backuproot
         'from there it can read restore information about it.
@@ -633,19 +634,42 @@ Public Class home
         'this is needed to get "arguments" in a backgroundworker
         'passed by "runworkerasync(param)"
         'we cannot specify it in the sub as usual in a function
-        Dim param1 = DirectCast(e.Argument, ArrayList)
-            'param 1 stores all FP Id's which should be backed up.
-            'loop thourgh them, get all settings and start the backup.
-            Dim currsourcepath As String
+        Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
+        'loop thourgh them, get all settings and start the backup.
+        Dim currsourcepath As String
             Dim currbackuppath As String
-            Dim currbackuptype As String
+        Dim currbackuptype As String
+        'define the starttime 
+        starttime = GetDate()
 
-            'define the starttime 
-            starttime = GetDate()
+        'load xml file file
+        If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
+            Dim writerOption As New XmlWriterSettings
+            writerOption.Indent = True
+            Dim writerSettings As XmlWriter = XmlWriter.Create(getexedir() & "\RestoreOverview.xml", writerOption)
+
+            With writerSettings
+                .WriteStartDocument()
+                .WriteStartElement("Overview")
+                .WriteStartElement("Date")
+                .WriteStartElement("_" & GetDate())
+                .WriteStartElement("Folderpair")
+                .WriteEndElement()
+                .WriteEndElement()
+                .WriteEndElement()
+                .WriteEndElement()
+                .WriteEndDocument()
+                .Close()
+                .Dispose()
+            End With
+            'close file again - prevent file IO exceptions
+            writerSettings.Close()
+            writerSettings.Dispose()
+        End If
+        Dim myXmlDocument As XmlDocument = New XmlDocument()
+        myXmlDocument.Load(getexedir() & "\RestoreOverview.xml")
 
 
-
-        'starting actual backup
         For Each FPID As Integer In param1      'get all FP specific variables
             currsourcepath = sourcepatharray(FPID)
             currbackuppath = backupPatharray(FPID)
@@ -666,11 +690,11 @@ Public Class home
             Next
 
             'check if overview xml already exists in targetpath
-            If Not File.Exists(currbackuppath & "\RestoreOverview.xml") Then
+            If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
                 'write file and close it again for editing next time
                 Dim writerOption As New XmlWriterSettings
                 writerOption.Indent = True
-                Dim writerSettings As XmlWriter = XmlWriter.Create(currbackuppath & "\RestoreOverview.xml", writerOption)
+                Dim writerSettings As XmlWriter = XmlWriter.Create(getexedir() & "\RestoreOverview.xml", writerOption)
 
                 With writerSettings
                     .WriteStartDocument()
@@ -704,7 +728,6 @@ Public Class home
                     .WriteEndElement()
 
 
-                    'write ending "<default>" tag
                     .WriteEndElement()
                     .WriteEndDocument()
                     .Close()
@@ -716,18 +739,38 @@ Public Class home
 
             End If
 
-            'load file
-            Dim myXmlDocument As XmlDocument = New XmlDocument()
-            myXmlDocument.Load(currbackuppath & "\RestoreOverview.xml")
+            'before that , make sure needed stucture is in the xml
+            'search the current date node
+            Dim xmlDatenodeNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate())
+            ' Dim tempnode As XmlNode = myXmlDocument.DocumentElement.FirstChild.Attributes("_" & GetDate())
+            If xmlDatenodeNode Is Nothing Then
+                'doesnte xist xreate it
+                Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetDate())
+                myXmlDocument.DocumentElement.FirstChild.AppendChild(mainnodetoadd)
+            End If
 
-            'loop through 
+            'search the current folderpair node
+            Dim xmlFPNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair/_" & FPID.ToString)
+            Dim nodetofind = myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.Attributes("_" & FPID.ToString)
+            '  nodeToFind = myXmlDocument.DocumentElement.FirstChild.Attributes("_" & GetDate()).FirstChild.Attributes("_" & FPID)
+            If xmlFPNode Is Nothing Then
+                'doesnte xist xreate it
+                Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & FPID)
+                myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.AppendChild(mainnodetoadd)
+            End If
+            'the rest is done further down
+
+
+            'loop through to append where needed
             Dim datedescnode As XmlNode = myXmlDocument.DocumentElement.FirstChild
             For Each datenode As XmlNode In datedescnode.ChildNodes
                 If datenode.Name = "_" & GetDate() Then
                     'append entry, entry for this date already exists
-                    For Each folderpairnode As XmlNode In datenode.FirstChild.ChildNodes
+                    Dim folderpairdecnodehaschildren = datenode.HasChildNodes
+                    Dim folderpairdecnode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair")
+                    For Each folderpairnode As XmlNode In folderpairdecnode.ChildNodes
 
-                        If folderpairnode.Name = "_" & FPID Then
+                        If folderpairnode.Name = ("_" & FPID.ToString) Then
                             'entry for this FP already exists append
 
                             'create node for current FP with time as name
@@ -746,12 +789,12 @@ Public Class home
                             Dim typenode As XmlElement = myXmlDocument.CreateElement("Type")
                             typenode.InnerText = currbackuptype
                             mainnodetoadd.AppendChild(typenode)
-
                         End If
                     Next
+
                 End If
             Next
-            myXmlDocument.Save(currbackuppath & "\RestoreOverview.xml")
+            myXmlDocument.Save(getexedir() & "\RestoreOverview.xml")
             'start backup processes
 
             'Message Box for System-Tray
