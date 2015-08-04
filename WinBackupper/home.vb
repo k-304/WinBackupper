@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.IO.Compression
 Imports System.Xml
 
@@ -17,6 +18,14 @@ Public Class home
         rtb_log.AppendText(Linecontent)
     End Sub
 
+    Private Delegate Sub togllecursorDelegate(ByVal cursor As Cursor)
+
+
+    ' declare an implmentation with matching signature
+    Private Sub togllecursor(ByVal cursortype As Cursor)
+        Cursor = cursortype
+    End Sub
+
 #End Region
 
 #Region "Variables"
@@ -25,6 +34,7 @@ Public Class home
     '*------------------------*'
     'delegate var's 
     Dim Ldel As LogaddEntryDelegate = AddressOf Logaddentry
+    Dim CSdel As togllecursorDelegate = AddressOf togllecursor
     Public Shared sourcepatharray As New ArrayList 'public array so other form can access it too
     Public Shared backupPatharray As New ArrayList 'public array so other form can access it too
     Public Shared timesettingsarray As New ArrayList 'public array filled by timetable.vb on formclosed event...
@@ -323,10 +333,10 @@ Public Class home
                             silent = True
                             'start backup. only for current dir
                             bw_dobackup.RunWorkerAsync(i)
-                                'after autobackup- set silent to false again!
-                                silent = False
-                            End If
+                            'after autobackup- set silent to false again!
+                            silent = False
                         End If
+                    End If
 
                 Next
             Next
@@ -664,10 +674,22 @@ Public Class home
         Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
         'loop thourgh them, get all settings and start the backup.
         Dim currsourcepath As String
-            Dim currbackuppath As String
+        Dim currbackuppath As String
         Dim currbackuptype As String
         'define the starttime 
         starttime = GetDate()
+
+
+        'Message Box for System-Tray
+        If Me.Visible = False Then
+            'Show Notification
+            startnotification()
+        Else
+            'Cursor "Loading"
+            Dim cursorstate = Cursors.WaitCursor
+            Me.Invoke(CSdel, cursorstate)
+        End If
+
 
         'load xml file file
         If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
@@ -822,15 +844,7 @@ Public Class home
             myXmlDocument.Save(getexedir() & "\RestoreOverview.xml")
             'start backup processes
 
-            'Message Box for System-Tray
-            If Me.Visible = False Then
-                'Show Notification
-                startnotification()
-            Else
-                'Cursor "Loading"
-                'not thread save yet =(
-                ''Me.Cursor = Cursors.WaitCursor
-            End If
+
 
             'log it
             Dim Logentry = DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine
@@ -847,14 +861,7 @@ Public Class home
                     Dim Logentryfinished = DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & vbNewLine
                     Me.Invoke(Ldel, Logentryfinished)
 
-                    'Message Box for System-Tray
-                    If Me.Visible = False Then
-                        'Show Notification
-                        finishnotification()
-                    Else
-                        'Cursor "Default"
-                        '   Me.Cursor = Cursors.Default
-                    End If
+
                 End If
             Next
 
@@ -865,6 +872,20 @@ Public Class home
         ''  Catch ex As Exception
         ''  MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         ''  End Try
+    End Sub
+
+    Private Sub bw_dobackup_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bw_dobackup.RunWorkerCompleted
+        'runs when worker is finished - cannot run code above because bw runs in another thread - rest of code continues
+        'if called abovem it would immediatly get executed
+
+        'Message Box for System-Tray
+        If Me.Visible = False Then
+            'Show Notification
+            finishnotification()
+        Else
+            Dim cursorstate = Cursors.Default
+            Me.Invoke(CSdel, cursorstate)
+        End If
     End Sub
 
 
