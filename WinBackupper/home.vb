@@ -4,10 +4,27 @@ Imports System.Xml
 
 Public Class home
 
+#Region "Delegates"
+    '*------------------------*'
+    '*----Global Variables----*'
+    '*------------------------*'
+
+    Private Delegate Sub LogaddEntryDelegate(ByVal Linecontent As String)
+
+
+    ' declare an implmentation with matching signature
+    Private Sub Logaddentry(ByVal Linecontent As String)
+        rtb_log.AppendText(Linecontent)
+    End Sub
+
+#End Region
+
 #Region "Variables"
     '*------------------------*'
     '*----Global Variables----*'
     '*------------------------*'
+    'delegate var's 
+    Dim Ldel As LogaddEntryDelegate = AddressOf Logaddentry
     Public Shared sourcepatharray As New ArrayList 'public array so other form can access it too
     Public Shared backupPatharray As New ArrayList 'public array so other form can access it too
     Public Shared timesettingsarray As New ArrayList 'public array filled by timetable.vb on formclosed event...
@@ -410,14 +427,24 @@ Public Class home
                                     Proc.Start() 'after defining everythig start the process
                                     'then wait for it to exit to continue with the next file
                                     Proc.WaitForExit()
-
+                                    'getting errorcode - the catch block wouldn't get a file error.
+                                    '(the code isn't failing - the cmd would. so get code from cmd)
+                                    Dim exitcode = Proc.ExitCode
+                                    If exitcode = "0" Then
+                                        'assume success
+                                    Else
+                                        'assume problem
+                                        Dim Logentry = "The following File could not be backed-up - is it opened?" & vbNewLine & filepath & vbNewLine
+                                        Me.Invoke(Ldel, Logentry)
+                                    End If
                                 Else
                                     'log it already exists or overwrite if timestamp changed
                                 End If
                             End If
                         Catch ex As Exception
                             'if single files fail - maybe make a list? How do we log?
-                            ''Not thread safe yet - need to make a delegate for it   rtb_log.AppendText("The following File could not be backed-up - is it opened?" & vbNewLine & filepath)
+                            Dim Logentry = "There was some Issue within the BackupDirectory() Function. See Information below:" & vbNewLine & ex.StackTrace & vbNewLine
+                            Me.Invoke(Ldel, Logentry)
                         End Try
                     Next 'for each filepath end
 
@@ -739,12 +766,12 @@ Public Class home
 
             End If
 
-            'before that , make sure needed stucture is in the xml
+
             'search the current date node
             Dim xmlDatenodeNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate())
-            ' Dim tempnode As XmlNode = myXmlDocument.DocumentElement.FirstChild.Attributes("_" & GetDate())
+            ' If it's nothing, try to create it (should be created above)
             If xmlDatenodeNode Is Nothing Then
-                'doesnte xist xreate it
+                'doesnt exist create it
                 Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetDate())
                 myXmlDocument.DocumentElement.FirstChild.AppendChild(mainnodetoadd)
             End If
@@ -752,13 +779,11 @@ Public Class home
             'search the current folderpair node
             Dim xmlFPNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair/_" & FPID.ToString)
             Dim nodetofind = myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.Attributes("_" & FPID.ToString)
-            '  nodeToFind = myXmlDocument.DocumentElement.FirstChild.Attributes("_" & GetDate()).FirstChild.Attributes("_" & FPID)
             If xmlFPNode Is Nothing Then
-                'doesnte xist xreate it
+                'doesnte eist create it
                 Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & FPID)
                 myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.AppendChild(mainnodetoadd)
             End If
-            'the rest is done further down
 
 
             'loop through to append where needed
@@ -803,20 +828,24 @@ Public Class home
                 startnotification()
             Else
                 'Cursor "Loading"
+                'not thread save yet =(
                 ''Me.Cursor = Cursors.WaitCursor
             End If
 
             'log it
-            ''Not thread safe yet - need to make a delegate for it    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine)
+            Dim Logentry = DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine
+            Me.Invoke(Ldel, Logentry)
+
             'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
             For i = 0 To sourcepatharray.Count - 1 Step 1
                 If FPID = i Then
-                    'define current directories if needed/wanted (will unecessaraly need calc power)
                     'log start of specific folderpair
-                    ''Not thread safe yet - need to make a delegate for it    rtb_log.AppendText(DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
+                    Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
+                    Me.Invoke(Ldel, Logentrystart)
                     BackupDirectory(sourcepatharray(i), backupPatharray(i), False, currbackuptype) 'more arguments can be added like incremental/not etc...
-                    'log success
-                    ''Not thread safe yet - need to make a delegate for it      rtb_log.AppendText(DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & backuptype & vbNewLine)
+                    'log success 
+                    Dim Logentryfinished = DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & vbNewLine
+                    Me.Invoke(Ldel, Logentryfinished)
 
                     'Message Box for System-Tray
                     If Me.Visible = False Then
