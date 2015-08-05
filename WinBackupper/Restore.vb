@@ -20,28 +20,25 @@ Public Class Restore
         lc_loading_datasets.InnerCircleRadius = 12
         lc_loading_datasets.OuterCircleRadius = 15
         lc_loading_datasets.SpokeThickness = 3
-        lc_loading_datasets.NumberSpoke = 25
+        lc_loading_datasets.NumberSpoke = 35
+
+        lc_restore_active.InnerCircleRadius = 12
+        lc_restore_active.OuterCircleRadius = 15
+        lc_restore_active.SpokeThickness = 3
+        lc_restore_active.NumberSpoke = 35
 
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
-        Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
-
+        ''  Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
+        bw_Reload_Settings.RunWorkerAsync()
+        While bw_Reload_Settings.IsBusy
+            Application.DoEvents()
+        End While
 
 
     End Sub
 
 
-    Function Reload_Settings()
-        Try
-            bw_Reload_Settings.RunWorkerAsync()
-            While bw_Reload_Settings.IsBusy
-                Application.DoEvents()
-            End While
-            Return 0
-        Catch ex As Exception
-            Return -1
-        End Try
-    End Function
 
 
 
@@ -88,11 +85,13 @@ Public Class Restore
             lc_loading_datasets.Visible = True
             lc_loading_datasets.Active = True
             L_status.Text = "Status: Loading Datasets"
+            rtb_log.AppendText("Started loading available Datasets in background Thread." & vbNewLine)
         Else
             'disable it
             lc_loading_datasets.Visible = False
             lc_loading_datasets.Active = False
             L_status.Text = "Status: Idle"
+            rtb_log.AppendText("Finished loading available Datasets in background Thread." & vbNewLine)
         End If
     End Sub
 
@@ -108,8 +107,9 @@ Public Class Restore
     Private Sub bw_reload_settings_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_Reload_Settings.DoWork
         'reload settings here - a second worker will do the actual restore
 
-        Dim Logentrystart = "Started loading available Datasets in background Thread." & vbNewLine
-        Me.Invoke(Ldel, Logentrystart)
+
+        Me.Invoke(logdel, True)
+
 
 
         'load entries from restoreoverview.xml
@@ -141,13 +141,17 @@ Public Class Restore
                         'call delegate with the key of its parent node and its name
                         Me.Invoke(Cdel, addeddatenode & addedfpnode, fptimenode_Cname2)
                     Next
+
+                    'testing only to test if GUI hangs under load
+                    Threading.Thread.Sleep(200)
+
                 Next
             Next
 
         End If
 
         Dim Logentryfinished = "Finished loading available Datasets in background Thread." & vbNewLine
-        Me.Invoke(Ldel, Logentryfinished)
+        Me.Invoke(logdel, False)
 
 
 
