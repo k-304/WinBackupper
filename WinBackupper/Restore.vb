@@ -1,4 +1,5 @@
 ﻿Imports System.Xml
+Imports System.IO
 
 Public Class Restore
 
@@ -20,9 +21,12 @@ Public Class Restore
         lc_loading_datasets.OuterCircleRadius = 15
         lc_loading_datasets.SpokeThickness = 3
         lc_loading_datasets.NumberSpoke = 25
+
+        Threading.Thread.Sleep(1000)
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
         Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
+
 
 
     End Sub
@@ -31,6 +35,9 @@ Public Class Restore
     Function Reload_Settings()
         Try
             bw_Reload_Settings.RunWorkerAsync()
+            While bw_Reload_Settings.IsBusy
+                Application.DoEvents()
+            End While
             Return 0
         Catch ex As Exception
             Return -1
@@ -45,7 +52,9 @@ Public Class Restore
     '*-----------------*'
     '*-----Delegates---*'
     '*-----------------*'
+
     Private Delegate Sub tvaddmainnodesDelegate(ByVal mainnodename As String)
+    Dim Pdel As tvaddmainnodesDelegate = AddressOf addmainnode
 
     ' declare an implmentation with matching signature
     Private Sub addmainnode(ByVal mainnodename As String)
@@ -53,15 +62,17 @@ Public Class Restore
         Nodetoadd = tv_restore.Nodes.Add(mainnodename, mainnodename)
     End Sub
 
-    Private Delegate Sub tvaddchildnodeDelegate(ByVal Mainnodename As String, ByVal Childnodename As String)
+    Private Delegate Sub tvaddchildnodeDelegate(ByVal Mainnodekey As String, ByVal Childnodename As String)
+    Dim Cdel As tvaddchildnodeDelegate = AddressOf addchildnode
     ' declare an implmentation with matching signature
-    Private Sub addchildnode(ByVal Mainnodename As String, ByVal Childnodename As String)
+    Private Sub addchildnode(ByVal Mainnodekey As String, ByVal Childnodename As String)
         Dim Nodetomanipulate() As TreeNode
-        Nodetomanipulate = tv_restore.Nodes.Find(Mainnodename, True)
-        Nodetomanipulate(0).Nodes.Add(Childnodename)
+        Nodetomanipulate = tv_restore.Nodes.Find(Mainnodekey, True)
+        Nodetomanipulate(0).Nodes.Add(Mainnodekey & Childnodename, Childnodename)
     End Sub
 
     Private Delegate Sub LogaddEntryDelegate(ByVal Linecontent As String)
+    Dim Ldel As LogaddEntryDelegate = AddressOf Logaddentry
 
     ' declare an implmentation with matching signature
     Private Sub Logaddentry(ByVal Linecontent As String)
@@ -69,6 +80,7 @@ Public Class Restore
     End Sub
 
     Private Delegate Sub Toggleloadingcirclestatedelegate(ByVal enabled As Boolean)
+    Dim logdel As Toggleloadingcirclestatedelegate = AddressOf Toggleloadingcirclestate
 
     ' declare an implmentation with matching signature
     Private Sub Toggleloadingcirclestate(ByVal enabled As Boolean)
@@ -97,103 +109,51 @@ Public Class Restore
     Private Sub bw_reload_settings_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_Reload_Settings.DoWork
         'reload settings here - a second worker will do the actual restore
 
+        Dim Logentrystart = "Started loading available Datasets in background Thread." & vbNewLine
+        Me.Invoke(Ldel, Logentrystart)
+
 
         'load entries from restoreoverview.xml
+        If File.Exists(home.getexedir() & "\RestoreOverview.xml") Then
+            Dim myXmlDocument As XmlDocument = New XmlDocument()
+            myXmlDocument.Load(home.getexedir() & "\RestoreOverview.xml")
 
 
 
 
+            Dim xmlDatedescnodeNode = myXmlDocument.SelectSingleNode("/Overview/Date")
+
+            'loop through all dates - dispaly them as available dataset
+
+            'each date (the _%date% one )
+            For Each datenode As XmlNode In xmlDatedescnodeNode
+                Dim datenode_PName = datenode.Name
+                Me.Invoke(Pdel, datenode_PName)
+
+                'each Folderpair of that date (_%FPID%)
+                For Each fpnode As XmlNode In myXmlDocument.SelectSingleNode("/Overview/Date/" & datenode_PName & "/Folderpair")
+
+                    Dim addeddatenode = fpnode.ParentNode.ParentNode.Name
+                    Dim fpnode_Cname = fpnode.Name
+                    Me.Invoke(Cdel, addeddatenode, fpnode_Cname)
+
+                    'each time of that folderpair, again the _%time% one
+                    For Each fptimenode As XmlNode In myXmlDocument.SelectSingleNode("/Overview/Date/" & datenode_PName & "/Folderpair/" & fpnode_Cname)
+
+                        Dim addedfpnode = fptimenode.ParentNode.Name
+                        Dim fptimenode_Cname2 = fptimenode.Name
+                        'call delegate with the key of its parent node and its name
+                        Me.Invoke(Cdel, addeddatenode & addedfpnode, fptimenode_Cname2)
+                    Next
+                Next
+            Next
+
+        End If
+
+        Dim Logentryfinished = "Finished loading available Datasets in background Thread." & vbNewLine
+        Me.Invoke(Ldel, Logentryfinished)
 
 
-
-
-
-
-
-
-
-
-        'for now generate dummy entries
-        'use delegates to update GUI or program will crash
-
-        'first set loading indicator active
-        Dim loadingenabled = True
-        Dim logdel As Toggleloadingcirclestatedelegate = AddressOf Toggleloadingcirclestate
-        Me.Invoke(logdel, loadingenabled)
-
-
-        Dim Parentnodename = "2015-01-30"
-        Dim Pdel As tvaddmainnodesDelegate = AddressOf addmainnode
-        Me.Invoke(Pdel, Parentnodename)
-
-        Dim chilnodename = "Sourcefolder1"
-        Dim Cdel As tvaddchildnodeDelegate = AddressOf addchildnode
-        Me.Invoke(Cdel, Parentnodename, chilnodename)
-
-        Dim Logentry = "Dummyentry 1 added successfully" & vbNewLine
-        Dim Ldel As LogaddEntryDelegate = AddressOf Logaddentry
-        Me.Invoke(Ldel, Logentry)
-
-
-        System.Threading.Thread.Sleep(15000)
-
-
-        Parentnodename = "2014-06-30"
-        Me.Invoke(Pdel, Parentnodename)
-
-        chilnodename = "Sourcefolder2"
-        Me.Invoke(Cdel, Parentnodename, chilnodename)
-        Logentry = "Dummyentry 2 added successfully" & vbNewLine
-        Me.Invoke(Ldel, Logentry)
-
-
-        System.Threading.Thread.Sleep(15000)
-
-
-        Parentnodename = "2013-06-16"
-        Me.Invoke(Pdel, Parentnodename)
-
-        chilnodename = "Sourcefolder1"
-        Me.Invoke(Cdel, Parentnodename, chilnodename)
-        Logentry = "Dummyentry 3 added successfully" & vbNewLine
-        Me.Invoke(Ldel, Logentry)
-
-        'inactive loading circle again
-        loadingenabled = False
-        Me.Invoke(logdel, loadingenabled)
-
-
-        'first, loop through the backuplist file
-        'then if at all needed, loop through the main backupdir. 
-
-        '' Dim xmlReader As XmlReader = New XmlTextReader(home.getexedir() & home.Settings_Directory & "AvailableRestores.xml")
-        ' Loop through XML File
-        ''  While (xmlReader.Read())
-        '' Dim type = xmlReader.NodeType
-        '' Dim depth = xmlReader.Depth
-
-        ' Find selected Paths in XML File and write them into Var
-        ''If (type = XmlNodeType.Element) Then
-        ''If (depth = 0) Then ' top level element
-
-        'i thought a bit and i think - 
-
-        ' we would need to store MAC+Sourcepath in a File.
-        'basically keep a list of all backups ever made.
-        'But I guess it makes more sense, to only store it in the backupdir.
-        'keep a list of all backups within that directory and update it accordingly.
-        'Also folders will be named criptically (with short numbers)
-        'too keep the char count short. 
-        '(then it will be written in the availablerestore.xml where to get the restore from
-        'we just need tos tore the original source/Destination/sourcepc and the current source to restore it from)
-        'If we store a List of all backups made in a list - we laso don't need an ID I guess. we can just store as much information as we want in the xml
-        'we can loop through the file to get the information back.
-
-
-        ''   End If
-        '' End If
-
-        ''  End While
 
     End Sub
 

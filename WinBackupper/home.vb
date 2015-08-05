@@ -685,13 +685,13 @@ Public Class home
                 'Show Notification
                 startnotification()
             Else
-                'Cursor "Loading"
+                'Cursor " ing"
                 Dim cursorstate = Cursors.WaitCursor
                 Me.Invoke(CSdel, cursorstate)
             End If
 
             Dim myXmlDocument As XmlDocument = New XmlDocument()
-            myXmlDocument.Load(getexedir() & "\RestoreOverview.xml")
+            myXmlDocument.Load(getexedir() & " \ RestoreOverview.xml")
 
 
             For Each FPID As Integer In param1      'get all FP specific variables
