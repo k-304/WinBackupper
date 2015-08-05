@@ -22,7 +22,6 @@ Public Class Restore
         lc_loading_datasets.SpokeThickness = 3
         lc_loading_datasets.NumberSpoke = 25
 
-        Threading.Thread.Sleep(1000)
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
         Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
@@ -117,9 +116,6 @@ Public Class Restore
         If File.Exists(home.getexedir() & "\RestoreOverview.xml") Then
             Dim myXmlDocument As XmlDocument = New XmlDocument()
             myXmlDocument.Load(home.getexedir() & "\RestoreOverview.xml")
-
-
-
 
             Dim xmlDatedescnodeNode = myXmlDocument.SelectSingleNode("/Overview/Date")
 
