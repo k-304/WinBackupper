@@ -97,6 +97,22 @@ Public Class Restore
     Private Sub bw_reload_settings_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_Reload_Settings.DoWork
         'reload settings here - a second worker will do the actual restore
 
+
+        'load entries from restoreoverview.xml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         'for now generate dummy entries
         'use delegates to update GUI or program will crash
 
