@@ -40,6 +40,26 @@ Public Class Restore
     End Sub
 
 
+    Sub tv_restore_NodeMouseClick(ByVal sender As Object,
+    ByVal e As TreeNodeMouseClickEventArgs) _
+    Handles tv_restore.NodeMouseClick
+        'maybe we could use this event to only load the files when the user clicks on a specific folderpair
+        'we would need to use another bw though. (backups may be huge - loading them into the GUI while take 'a while')
+
+        Dim currnodename = e.Node.Text
+        Dim currnodeisfolderpairnode As Boolean = False
+        For i = 0 To home.lv_overview.Items.Count - 1
+            'check if the name of current node is matching any folderpairnode name "_FPID" (f.E _0)
+            If currnodename = "_" & i Then
+                currnodeisfolderpairnode = True
+            End If
+        Next
+        If currnodeisfolderpairnode Then
+            'Release the Krakken. (Load all Dirs/Files of that backup into the Treeview)
+        End If
+
+    End Sub
+
 
 
 
@@ -96,26 +116,6 @@ Public Class Restore
         End If
     End Sub
 
-    Sub tv_restore_NodeMouseClick(ByVal sender As Object,
-    ByVal e As TreeNodeMouseClickEventArgs) _
-    Handles tv_restore.NodeMouseClick
-        'maybe we could use this event to only load the files when the user clicks on a specific folderpair
-        'we would need to use another bw though. (backups may be huge - loading them into the GUI while take 'a while')
-
-        Dim currnodename = e.Node.Text
-        Dim currnodeisfolderpairnode As Boolean = False
-        For i = 0 To home.lv_overview.Items.Count - 1
-            'check if the name of current node is matching any folderpairnode name "_FPID" (f.E _0)
-            If currnodename = "_" & i Then
-                currnodeisfolderpairnode = True
-            End If
-        Next
-        If currnodeisfolderpairnode Then
-            'Release the Krakken. (Load all Dirs/Files of that backup into the Treeview)
-        End If
-
-    End Sub
-
 
 #End Region
 
@@ -129,10 +129,8 @@ Public Class Restore
     Private Sub bw_reload_settings_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bw_Reload_Settings.DoWork
         'reload settings here - a second worker will do the actual restore
 
-
+        'incoke gui function to show that SW is doing something
         Me.Invoke(logdel, True)
-
-
 
         'load entries from restoreoverview.xml
         If File.Exists(home.getexedir() & "\RestoreOverview.xml") Then
@@ -172,7 +170,7 @@ Public Class Restore
 
         End If
 
-        Dim Logentryfinished = "Finished loading available Datasets in background Thread." & vbNewLine
+        'incoke gui function to show that SW is doing something
         Me.Invoke(logdel, False)
 
     End Sub
