@@ -12,6 +12,7 @@ Public Class Restore
     Private Sub Restore_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Dont do heavy coding here
         'load icon wouldnt be displayed!
+        tv_restore.Nodes.Clear()
     End Sub
 
     'executed when settingsform is fully loaded (and therefore shown to the user)

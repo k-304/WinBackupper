@@ -348,11 +348,11 @@ Public Class home
 
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
-    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
+    Private Function BackupDirectory(sourcepath As String, targetpath As String, ByVal FPID As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
         'check if targetpath already contains date information . if not add it
         If Not targetpath.Contains(starttime) Then
             'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
-            targetpath = targetpath & "\" & starttime
+            targetpath = targetpath & "\" & starttime & "\_" & FPID & "\_" & GetHour() & GetMinutes()
         End If
 
         'check if Source dir exists
@@ -464,9 +464,9 @@ Public Class home
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
                         'call routine to delete subfiles
                         If simulate_mode_active = True Then
-                            BackupDirectory(dir, targetpath & relpath, True, backuptype)
+                            BackupDirectory(dir, targetpath & relpath, FPID, True, backuptype)
                         Else
-                            BackupDirectory(dir, targetpath & relpath, False, backuptype)
+                            BackupDirectory(dir, targetpath & relpath, FPID, False, backuptype)
                         End If
                     Next
                 End If
@@ -837,7 +837,7 @@ Public Class home
                         'log start of specific folderpair
                         Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
                         Me.Invoke(Ldel, Logentrystart)
-                        BackupDirectory(sourcepatharray(i), backupPatharray(i), False, currbackuptype) 'more arguments can be added like incremental/not etc...
+                        BackupDirectory(sourcepatharray(i), backupPatharray(i), FPID, False, currbackuptype) 'more arguments can be added like incremental/not etc...
                         'log success 
                         Dim Logentryfinished = DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & vbNewLine
                         Me.Invoke(Ldel, Logentryfinished)
