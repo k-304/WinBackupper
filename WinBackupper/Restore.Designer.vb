@@ -187,6 +187,7 @@ Partial Class Restore
         Me.lc_restore_active.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
         Me.lc_restore_active.TabIndex = 36
         Me.lc_restore_active.Text = "Wait while Content is loading...."
+        Me.lc_restore_active.Visible = False
         '
         'Restore
         '

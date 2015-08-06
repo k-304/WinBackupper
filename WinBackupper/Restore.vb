@@ -153,8 +153,6 @@ Public Class Restore
         Dim Logentryfinished = "Finished loading available Datasets in background Thread." & vbNewLine
         Me.Invoke(logdel, False)
 
-
-
     End Sub
 
 

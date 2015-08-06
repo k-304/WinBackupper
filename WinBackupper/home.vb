@@ -691,7 +691,7 @@ Public Class home
             End If
 
             Dim myXmlDocument As XmlDocument = New XmlDocument()
-            myXmlDocument.Load(getexedir() & " \ RestoreOverview.xml")
+            myXmlDocument.Load(getexedir() & "\RestoreOverview.xml")
 
 
             For Each FPID As Integer In param1      'get all FP specific variables
