@@ -225,6 +225,7 @@ Public Class home
             'if user wants to abort abort directly
             If startResult = Windows.Forms.DialogResult.No Then
                 MessageBox.Show("Cancled Backup!")
+                Exit Sub
             End If
             If cb_defaultmanualbackup.Checked = True Then
                 'do a full backup without asking user
@@ -667,11 +668,11 @@ Public Class home
         'This backgroundworker does the actual backup
         'also it writes an overview xml file into the backuproot
         'from there it can read restore information about it.
-        Try
-            'this is needed to get "arguments" in a backgroundworker
-            'passed by "runworkerasync(param)"
-            'we cannot specify it in the sub as usual in a function
-            Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
+        ''  Try
+        'this is needed to get "arguments" in a backgroundworker
+        'passed by "runworkerasync(param)"
+        'we cannot specify it in the sub as usual in a function
+        Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
             'loop thourgh them, get all settings and start the backup.
             Dim currsourcepath As String
             Dim currbackuppath As String
@@ -698,8 +699,8 @@ Public Class home
                 currsourcepath = sourcepatharray(FPID)
                 currbackuppath = backupPatharray(FPID)
                 Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-                Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getday, timesettingsforcurrentfolderpair)
-                For Each time As String In timesarrayforcurrentpair
+            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
+            For Each time As String In timesarrayforcurrentpair
                     If time = "N" Then 'this happens if "Nothing configured"
                         'somehow pass the userinput about type here?
                         currbackuptype = "Full"
@@ -849,9 +850,9 @@ Public Class home
 
                 'end of current folderpair - next one if there is any
             Next
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+            ''  Catch ex As Exception
+        ''     MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        ''  End Try
     End Sub
 
     Private Sub bw_dobackup_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bw_dobackup.RunWorkerCompleted
