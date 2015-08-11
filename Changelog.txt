@@ -12,12 +12,19 @@ Examples:
 -B Changelog is now loading correctly!
 -RW GetDate function - Reason: Datetime Bug - wrong Date was calculated
 
+Please note that not every Minor Version change there will be an entry. 
+There will be entries for all Release Candidates for sure though. (Keeping track of everything between them)
 -------------------------------------------------------------------------------------------
 
-Current Version: 0.0.1.0 
+Current Version: 0.0.1.X (Testbuild)
+-<NF Restore Logic> = 		Restores are now possible over the GUI. (In work)
+-NF Restoreoverview.xml		An XML File is written to keep track of all backups done.
+-B IndexoutofRange		Fixxed several IndexoutofRange Exceptions (while deleting multiple FolderPairs in the settings form)
+-RW Backup function(s)		Rewrote Backup function(s) into 1 function and a backgroundworker to support heavy load.
+
+
+Depricated Version: 0.0.1.0 
 -NF Inital Release Draft of Version 0.0.1.0 RC (Release Candidate)
 	For Information before this Version and for minor Changes please visit the official Github Page:
 	https://github.com/SnipeLike/WinBackupper
 	
-
-
