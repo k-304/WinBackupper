@@ -20,6 +20,7 @@ A simple and automated Backup-Tool for Windows.
 
 After Startup of the Software, Click on "Configuration" to configure your Folderpairs which should be backed-up.
 (This Screenshot Illustrates the first Form showing after starting this Software. Later Reffered to as "home"  or "Main" Form!)
+
 ![alt tag](https://raw.github.com/T0mH4rr1s0n/WinBackupper/master/Documentation/V0.0.1.0/Home.png)
 
 After clicking on "Configuration" you are presented with the following form, which gives you an overview about all currently configured Folderpairs, and gives you the ability to delete them, or add new ones.
