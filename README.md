@@ -2,7 +2,8 @@
 # Table of content
 - [Features](#Features)
 - [How to use](#How to use)
-- [Section 2](#id-section2)
+- [Bugs](#Bugs)
+- [Next Update](#Next Update)
 
 A simple and automated Backup-Tool for Windows.
 
@@ -16,10 +17,12 @@ A simple and automated Backup-Tool for Windows.
 <div id='How to use'/>
 ## How to use?
 
-# Bugs
+<div id='Bugs'/>
+## Bugs
 https://github.com/SnipeLike/WinBackupper/issues
 
-# Next Update
+<div id='Next Update'/>
+## Next Update
 Many new Features!
 
 # Credits
