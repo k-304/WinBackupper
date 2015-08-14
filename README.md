@@ -1,4 +1,5 @@
 # WinBackupper
+
 # Table of content
 - [Features](#Features)
 - [How to use](#How to use)
@@ -16,6 +17,7 @@ A simple and automated Backup-Tool for Windows.
 
 <div id='How to use'/>
 ## How to use?
+
 
 <div id='Bugs'/>
 ## Bugs
