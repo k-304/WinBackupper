@@ -25,6 +25,7 @@ After Startup of the Software, Click on "Configuration" to configure your Folder
 
 After clicking on "Configuration" you are presented with the following form, which gives you an overview about all currently configured Folderpairs, and gives you the ability to delete them, or add new ones.
 Later reffered to as the "Settings" Form
+
 ![alt tag](https://raw.github.com/T0mH4rr1s0n/WinBackupper/master/Documentation/V0.0.1.0/settings.png)
 
 If you want to add a Foldeprair simply click on "Add Directory" and you will get prompted to enter the source path, then the destination path and finaly to choose a Time schedule for the Folderpair, If you don't want to Backup the Folder automatically, simply leave the times empty! 
