@@ -35,7 +35,7 @@ Partial Class Restore
         Me.l_log = New System.Windows.Forms.Label()
         Me.rtb_log = New System.Windows.Forms.RichTextBox()
         Me.l_restore_active = New System.Windows.Forms.Label()
-        Me.LoadingCircle1 = New MRG.Controls.UI.LoadingCircle()
+        Me.lc_restore_active = New MRG.Controls.UI.LoadingCircle()
         Me.SuspendLayout()
         '
         'l_restore
@@ -171,22 +171,23 @@ Partial Class Restore
         Me.l_restore_active.TabIndex = 37
         Me.l_restore_active.Text = "No Restore active"
         '
-        'LoadingCircle1
+        'lc_restore_active
         '
-        Me.LoadingCircle1.Active = False
-        Me.LoadingCircle1.BackColor = System.Drawing.Color.Transparent
-        Me.LoadingCircle1.Color = System.Drawing.Color.WhiteSmoke
-        Me.LoadingCircle1.InnerCircleRadius = 8
-        Me.LoadingCircle1.Location = New System.Drawing.Point(304, 507)
-        Me.LoadingCircle1.Name = "LoadingCircle1"
-        Me.LoadingCircle1.NumberSpoke = 24
-        Me.LoadingCircle1.OuterCircleRadius = 9
-        Me.LoadingCircle1.RotationSpeed = 85
-        Me.LoadingCircle1.Size = New System.Drawing.Size(66, 58)
-        Me.LoadingCircle1.SpokeThickness = 4
-        Me.LoadingCircle1.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
-        Me.LoadingCircle1.TabIndex = 36
-        Me.LoadingCircle1.Text = "Wait while Content is loading...."
+        Me.lc_restore_active.Active = False
+        Me.lc_restore_active.BackColor = System.Drawing.Color.Transparent
+        Me.lc_restore_active.Color = System.Drawing.Color.WhiteSmoke
+        Me.lc_restore_active.InnerCircleRadius = 8
+        Me.lc_restore_active.Location = New System.Drawing.Point(304, 507)
+        Me.lc_restore_active.Name = "lc_restore_active"
+        Me.lc_restore_active.NumberSpoke = 24
+        Me.lc_restore_active.OuterCircleRadius = 9
+        Me.lc_restore_active.RotationSpeed = 85
+        Me.lc_restore_active.Size = New System.Drawing.Size(66, 58)
+        Me.lc_restore_active.SpokeThickness = 4
+        Me.lc_restore_active.StylePreset = MRG.Controls.UI.LoadingCircle.StylePresets.IE7
+        Me.lc_restore_active.TabIndex = 36
+        Me.lc_restore_active.Text = "Wait while Content is loading...."
+        Me.lc_restore_active.Visible = False
         '
         'Restore
         '
@@ -195,7 +196,7 @@ Partial Class Restore
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(545, 630)
         Me.Controls.Add(Me.l_restore_active)
-        Me.Controls.Add(Me.LoadingCircle1)
+        Me.Controls.Add(Me.lc_restore_active)
         Me.Controls.Add(Me.l_log)
         Me.Controls.Add(Me.rtb_log)
         Me.Controls.Add(Me.L_status)
@@ -229,5 +230,5 @@ Partial Class Restore
     Friend WithEvents l_log As Label
     Friend WithEvents rtb_log As RichTextBox
     Friend WithEvents l_restore_active As Label
-    Friend WithEvents LoadingCircle1 As MRG.Controls.UI.LoadingCircle
+    Friend WithEvents lc_restore_active As MRG.Controls.UI.LoadingCircle
 End Class

@@ -225,6 +225,7 @@ Public Class home
             'if user wants to abort abort directly
             If startResult = Windows.Forms.DialogResult.No Then
                 MessageBox.Show("Cancled Backup!")
+                Exit Sub
             End If
             If cb_defaultmanualbackup.Checked = True Then
                 'do a full backup without asking user
@@ -348,11 +349,11 @@ Public Class home
 
     'backup function - accepting different arguments - called in "backup start button"
     'If 'simulate_mode' is true it will not backup anything! can be used to only log.
-    Private Function BackupDirectory(sourcepath As String, targetpath As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
+    Private Function BackupDirectory(sourcepath As String, targetpath As String, ByVal FPID As String, Optional simulate_mode_active As Boolean = True, Optional backuptype As String = "Full")
         'check if targetpath already contains date information . if not add it
         If Not targetpath.Contains(starttime) Then
             'add the date as a subfolder to the targetpath - and check if it exists (and create it if neded)
-            targetpath = targetpath & "\" & starttime
+            targetpath = targetpath & "\" & starttime & "\_" & FPID & "\_" & GetHour() & GetMinutes()
         End If
 
         'check if Source dir exists
@@ -464,9 +465,9 @@ Public Class home
                         Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
                         'call routine to delete subfiles
                         If simulate_mode_active = True Then
-                            BackupDirectory(dir, targetpath & relpath, True, backuptype)
+                            BackupDirectory(dir, targetpath & relpath, FPID, True, backuptype)
                         Else
-                            BackupDirectory(dir, targetpath & relpath, False, backuptype)
+                            BackupDirectory(dir, targetpath & relpath, FPID, False, backuptype)
                         End If
                     Next
                 End If
@@ -667,210 +668,190 @@ Public Class home
         'This backgroundworker does the actual backup
         'also it writes an overview xml file into the backuproot
         'from there it can read restore information about it.
-        '' Try
+        ''  Try
         'this is needed to get "arguments" in a backgroundworker
         'passed by "runworkerasync(param)"
         'we cannot specify it in the sub as usual in a function
         Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
-        'loop thourgh them, get all settings and start the backup.
-        Dim currsourcepath As String
-        Dim currbackuppath As String
-        Dim currbackuptype As String
-        'define the starttime 
-        starttime = GetDate()
+            'loop thourgh them, get all settings and start the backup.
+            Dim currsourcepath As String
+            Dim currbackuppath As String
+            Dim currbackuptype As String
+            'define the starttime 
+            starttime = GetDate()
 
 
-        'Message Box for System-Tray
-        If Me.Visible = False Then
-            'Show Notification
-            startnotification()
-        Else
-            'Cursor "Loading"
-            Dim cursorstate = Cursors.WaitCursor
-            Me.Invoke(CSdel, cursorstate)
-        End If
+            'Message Box for System-Tray
+            If Me.Visible = False Then
+                'Show Notification
+                startnotification()
+            Else
+                'Cursor " ing"
+                Dim cursorstate = Cursors.WaitCursor
+                Me.Invoke(CSdel, cursorstate)
+            End If
+
+            Dim myXmlDocument As XmlDocument = New XmlDocument()
+            myXmlDocument.Load(getexedir() & "\RestoreOverview.xml")
 
 
-        'load xml file file
-        If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
-            Dim writerOption As New XmlWriterSettings
-            writerOption.Indent = True
-            Dim writerSettings As XmlWriter = XmlWriter.Create(getexedir() & "\RestoreOverview.xml", writerOption)
-
-            With writerSettings
-                .WriteStartDocument()
-                .WriteStartElement("Overview")
-                .WriteStartElement("Date")
-                .WriteStartElement("_" & GetDate())
-                .WriteStartElement("Folderpair")
-                .WriteEndElement()
-                .WriteEndElement()
-                .WriteEndElement()
-                .WriteEndElement()
-                .WriteEndDocument()
-                .Close()
-                .Dispose()
-            End With
-            'close file again - prevent file IO exceptions
-            writerSettings.Close()
-            writerSettings.Dispose()
-        End If
-        Dim myXmlDocument As XmlDocument = New XmlDocument()
-        myXmlDocument.Load(getexedir() & "\RestoreOverview.xml")
-
-
-        For Each FPID As Integer In param1      'get all FP specific variables
-            currsourcepath = sourcepatharray(FPID)
-            currbackuppath = backupPatharray(FPID)
-            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getday, timesettingsforcurrentfolderpair)
+            For Each FPID As Integer In param1      'get all FP specific variables
+                currsourcepath = sourcepatharray(FPID)
+                currbackuppath = backupPatharray(FPID)
+                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
             For Each time As String In timesarrayforcurrentpair
-                If time = "N" Then 'this happens if "Nothing configured"
-                    'somehow pass the userinput about type here?
-                    currbackuptype = "Full"
-                    Exit For
-                Else
-                    If (time.Substring(0, 2) & time.Substring(3, 2)) = GetHour() & GetMinutes() Then
-                        'this is the time of the current pair, with the current setting.
-                        currbackuptype = time.Substring(6, 4)
-                    End If
-
-                End If
-            Next
-
-            'check if overview xml already exists in targetpath
-            If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
-                'write file and close it again for editing next time
-                Dim writerOption As New XmlWriterSettings
-                writerOption.Indent = True
-                Dim writerSettings As XmlWriter = XmlWriter.Create(getexedir() & "\RestoreOverview.xml", writerOption)
-
-                With writerSettings
-                    .WriteStartDocument()
-                    .WriteStartElement("Overview")
-
-                    .WriteStartElement("Date")
-                    .WriteStartElement("_" & GetDate())
-
-                    .WriteStartElement("Folderpair")
-                    .WriteStartElement("_" & FPID)
-
-                    .WriteStartElement("_" & GetHour() & GetMinutes())
-
-                    .WriteStartElement("Source")
-                    .WriteString("_" & currsourcepath)
-                    .WriteEndElement()
-
-                    .WriteStartElement("Backup")
-                    .WriteString("_" & currbackuppath)
-                    .WriteEndElement()
-
-                    .WriteStartElement("Type")
-                    .WriteString(currbackuptype)
-                    .WriteEndElement()
-
-
-                    .WriteEndElement()
-                    .WriteEndElement()
-                    .WriteEndElement()
-                    .WriteEndElement()
-                    .WriteEndElement()
-
-
-                    .WriteEndElement()
-                    .WriteEndDocument()
-                    .Close()
-                    .Dispose()
-                End With
-                'close file again - prevent file IO exceptions
-                writerSettings.Close()
-                writerSettings.Dispose()
-
-            End If
-
-
-            'search the current date node
-            Dim xmlDatenodeNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate())
-            ' If it's nothing, try to create it (should be created above)
-            If xmlDatenodeNode Is Nothing Then
-                'doesnt exist create it
-                Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetDate())
-                myXmlDocument.DocumentElement.FirstChild.AppendChild(mainnodetoadd)
-            End If
-
-            'search the current folderpair node
-            Dim xmlFPNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair/_" & FPID.ToString)
-            Dim nodetofind = myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.Attributes("_" & FPID.ToString)
-            If xmlFPNode Is Nothing Then
-                'doesnte eist create it
-                Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & FPID)
-                myXmlDocument.DocumentElement.FirstChild.FirstChild.FirstChild.AppendChild(mainnodetoadd)
-            End If
-
-
-            'loop through to append where needed
-            Dim datedescnode As XmlNode = myXmlDocument.DocumentElement.FirstChild
-            For Each datenode As XmlNode In datedescnode.ChildNodes
-                If datenode.Name = "_" & GetDate() Then
-                    'append entry, entry for this date already exists
-                    Dim folderpairdecnodehaschildren = datenode.HasChildNodes
-                    Dim folderpairdecnode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair")
-                    For Each folderpairnode As XmlNode In folderpairdecnode.ChildNodes
-
-                        If folderpairnode.Name = ("_" & FPID.ToString) Then
-                            'entry for this FP already exists append
-
-                            'create node for current FP with time as name
-                            Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetHour() & GetMinutes())
-                            folderpairnode.AppendChild(mainnodetoadd)
-
-                            'add source tag
-                            Dim srcnode As XmlElement = myXmlDocument.CreateElement("Source")
-                            srcnode.InnerText = currsourcepath
-                            mainnodetoadd.AppendChild(srcnode)
-
-                            Dim bcknode As XmlElement = myXmlDocument.CreateElement("Backup")
-                            bcknode.InnerText = currbackuppath
-                            mainnodetoadd.AppendChild(bcknode)
-
-                            Dim typenode As XmlElement = myXmlDocument.CreateElement("Type")
-                            typenode.InnerText = currbackuptype
-                            mainnodetoadd.AppendChild(typenode)
+                    If time = "N" Then 'this happens if "Nothing configured"
+                        'somehow pass the userinput about type here?
+                        currbackuptype = "Full"
+                        Exit For
+                    Else
+                        If (time.Substring(0, 2) & time.Substring(3, 2)) = GetHour() & GetMinutes() Then
+                            'this is the time of the current pair, with the current setting.
+                            currbackuptype = time.Substring(6, 4)
                         End If
-                    Next
+
+                    End If
+                Next
+
+                'check if overview xml already exists in targetpath - if not create initial file.
+                If Not File.Exists(getexedir() & "\RestoreOverview.xml") Then
+                    'write file and close it again for editing next time
+                    Dim writerOption As New XmlWriterSettings
+                    writerOption.Indent = True
+                    Dim writerSettings As XmlWriter = XmlWriter.Create(getexedir() & "\RestoreOverview.xml", writerOption)
+
+                    With writerSettings
+                        .WriteStartDocument()
+                        .WriteStartElement("Overview")
+
+                        .WriteStartElement("Date")
+                        .WriteStartElement("_" & GetDate())
+
+                        .WriteStartElement("Folderpair")
+                        .WriteStartElement("_" & FPID)
+
+                        .WriteStartElement("_" & GetHour() & GetMinutes())
+
+                        .WriteStartElement("Source")
+                        .WriteString("_" & currsourcepath)
+                        .WriteEndElement()
+
+                        .WriteStartElement("Backup")
+                        .WriteString("_" & currbackuppath)
+                        .WriteEndElement()
+
+                        .WriteStartElement("Type")
+                        .WriteString(currbackuptype)
+                        .WriteEndElement()
+
+
+                        .WriteEndElement()
+                        .WriteEndElement()
+                        .WriteEndElement()
+                        .WriteEndElement()
+                        .WriteEndElement()
+
+
+                        .WriteEndElement()
+                        .WriteEndDocument()
+                        .Close()
+                        .Dispose()
+                    End With
+                    'close file again - prevent file IO exceptions
+                    writerSettings.Close()
+                    writerSettings.Dispose()
 
                 End If
-            Next
-            myXmlDocument.Save(getexedir() & "\RestoreOverview.xml")
-            'start backup processes
 
 
-
-            'log it
-            Dim Logentry = DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine
-            Me.Invoke(Ldel, Logentry)
-
-            'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
-            For i = 0 To sourcepatharray.Count - 1 Step 1
-                If FPID = i Then
-                    'log start of specific folderpair
-                    Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
-                    Me.Invoke(Ldel, Logentrystart)
-                    BackupDirectory(sourcepatharray(i), backupPatharray(i), False, currbackuptype) 'more arguments can be added like incremental/not etc...
-                    'log success 
-                    Dim Logentryfinished = DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & vbNewLine
-                    Me.Invoke(Ldel, Logentryfinished)
-
-
+                'search the current date node
+                Dim xmlDatenodeNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate())
+                ' If it's nothing, try to create it (should be created above)
+                If xmlDatenodeNode Is Nothing Then
+                    'doesnt exist create it
+                    Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetDate())
+                    myXmlDocument.DocumentElement.FirstChild.AppendChild(mainnodetoadd)
                 End If
+
+                'search the current folderpairdesc node
+                Dim xmlFPdescNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair")
+                If xmlFPdescNode Is Nothing Then
+                    'doesnte eist create it
+                    Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("Folderpair")
+                    Dim Datenodetomanipulate = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate())
+                    Datenodetomanipulate.AppendChild(mainnodetoadd)
+                End If
+
+                'search the current folderpair node
+                Dim xmlFPNode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair/_" & FPID.ToString)
+                If xmlFPNode Is Nothing Then
+                    'doesnte eist create it
+                    Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & FPID)
+                    Dim Datenodetomanipulate = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair")
+                    Datenodetomanipulate.AppendChild(mainnodetoadd)
+                End If
+
+                'loop through dates and check if we need to create node for current node
+                Dim datedescnode As XmlNode = myXmlDocument.DocumentElement.FirstChild
+
+                For Each datenode As XmlNode In datedescnode.ChildNodes
+                    If datenode.Name = "_" & GetDate() Then
+                        'append entry, entry for this date already exists
+                        Dim folderpairdecnodehaschildren = datenode.HasChildNodes
+                        Dim folderpairdecnode = myXmlDocument.SelectSingleNode("/Overview/Date/_" & GetDate() & "/Folderpair")
+                        For Each folderpairnode As XmlNode In folderpairdecnode.ChildNodes
+
+                            If folderpairnode.Name = ("_" & FPID.ToString) Then
+                                'entry for this FP already exists append
+
+                                'create node for current FP with time as name
+                                Dim mainnodetoadd As XmlElement = myXmlDocument.CreateElement("_" & GetHour() & GetMinutes())
+                                folderpairnode.AppendChild(mainnodetoadd)
+
+                                'add source tag
+                                Dim srcnode As XmlElement = myXmlDocument.CreateElement("Source")
+                                srcnode.InnerText = currsourcepath
+                                mainnodetoadd.AppendChild(srcnode)
+
+                                Dim bcknode As XmlElement = myXmlDocument.CreateElement("Backup")
+                                bcknode.InnerText = currbackuppath
+                                mainnodetoadd.AppendChild(bcknode)
+
+                                Dim typenode As XmlElement = myXmlDocument.CreateElement("Type")
+                                typenode.InnerText = currbackuptype
+                                mainnodetoadd.AppendChild(typenode)
+                            End If
+                        Next
+
+                    End If
+                Next
+                myXmlDocument.Save(getexedir() & "\RestoreOverview.xml")
+                'start backup processes
+                'log it
+                Dim Logentry = DateTime.Now.ToString & ": Starting Backup Process" & vbNewLine
+                Me.Invoke(Ldel, Logentry)
+
+                'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
+                For i = 0 To sourcepatharray.Count - 1 Step 1
+                    If FPID = i Then
+                        'log start of specific folderpair
+                        Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
+                        Me.Invoke(Ldel, Logentrystart)
+                        BackupDirectory(sourcepatharray(i), backupPatharray(i), FPID, False, currbackuptype) 'more arguments can be added like incremental/not etc...
+                        'log success 
+                        Dim Logentryfinished = DateTime.Now.ToString & ": Finished Backup of Folderpair: '" & sourcepatharray(i) & "' - '" & backupPatharray(i) & " witch Backuptype: " & vbNewLine
+                        Me.Invoke(Ldel, Logentryfinished)
+
+                    End If
+                Next
+
+
+
+                'end of current folderpair - next one if there is any
             Next
-
-
-
-            'end of current folderpair - next one if there is any
-        Next
-        ''  Catch ex As Exception
-        ''  MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in start_backup Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ''  Catch ex As Exception
+        ''     MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         ''  End Try
     End Sub
 

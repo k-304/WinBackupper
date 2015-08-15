@@ -226,14 +226,16 @@ Public Class Settings
     'Button to Remove selected Folder Pair
     Private Sub b_Remove_Folderpair_Click(sender As Object, e As EventArgs) Handles b_Remove_Folderpair.Click
         'loop through selected lines
+        Dim tmpcounter As Integer = 0
         For Each item As ListViewItem In lv_settings.SelectedItems
             'Remove from timesettingsarray
-            home.timesettingsarray.RemoveAt(item.Index)
+            home.timesettingsarray.RemoveAt(item.Index - tmpcounter)
             'remove from source/backup array
-            home.sourcepatharray.RemoveAt(item.Index)
-            home.backupPatharray.RemoveAt(item.Index)
+            home.sourcepatharray.RemoveAt(item.Index - tmpcounter)
+            home.backupPatharray.RemoveAt(item.Index - tmpcounter)
             'delete rtb time text
             RTB_timesettings.Text = ""
+            tmpcounter = tmpcounter + 1
         Next
         Settings_Reload()
         'also call settings_reload for home form
