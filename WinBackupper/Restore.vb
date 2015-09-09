@@ -38,7 +38,6 @@ Public Class Restore
 
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
-        ''  Reload_Settings() '(The function calls the backgroundworker which reloads the settings async)
         bw_Reload_Settings.RunWorkerAsync()
         While bw_Reload_Settings.IsBusy
             Application.DoEvents()
@@ -142,20 +141,28 @@ Public Class Restore
             Dim currentnsourcedirectory As String = home.backupPatharray(folderpairIDtoedit) 'dir where those source files are now. 
             Dim Directory_additions As String = "\" & e.Node.Parent.Parent.Text.Substring(1, e.Node.Parent.Parent.Text.Length - 1) & "\" & e.Node.Parent.Text & "\" & e.Node.Text
             Dim fulldir As String = currentnsourcedirectory & Directory_additions
-            ''' Try
-            Logaddentry(home.GetDate & "Start loading of available Datasets of the following path:" & fulldir & vbNewLine)
-            loaddatasetintotreeview(e.Node, folderpairIDtoedit)
-            Logaddentry(home.GetDate & "Finished loading of available Datasets of the following path:" & fulldir & vbNewLine)
+            Try
+                Logaddentry(home.GetDate & "Start loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                loaddatasetintotreeview(e.Node, folderpairIDtoedit)
+                Logaddentry(home.GetDate & "Finished loading of available Datasets of the following path:" & fulldir & vbNewLine)
                 home.Treenode_Already_Filled_Datasets.Add(fulldir)
 
-            '''   Catch ex As Exception
-            '''    MsgBox(ex.Message)
-            '''    End Try
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
         End If
 
     End Sub
 
 
+    Private Sub b_startrestore_Click(sender As Object, e As EventArgs) Handles b_startrestore.Click
+        'get selected node.
+
+        'calculate fullpath for sourcefile
+
+        'use "restore_Directory" function to restore files (Copy&paste of backup dir function)
+
+    End Sub
 
 
 #End Region
@@ -269,6 +276,7 @@ Public Class Restore
         Me.Invoke(logdel, False)
 
     End Sub
+
 
 
 #End Region
