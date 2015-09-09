@@ -46,6 +46,7 @@ Public Class home
     Public Logfilename_Prefix As String = "BackupLog_" 'only use filename - no / allowed!
     Public LogfileFolder = "/Logs/" 'enter / %dirname / ! Slashes are Needed in front and at the end of this string!
     Public Settings_Directory As String = "\Settings\"
+    Public Treenode_Already_Filled_Datasets As New ArrayList
 
 #End Region
 
@@ -53,6 +54,23 @@ Public Class home
     '*-----------------*'
     '*----Main Code----*'
     '*-----------------*'
+
+    Public Function ReverseString(ByVal InputString As String) _
+  As String
+
+        Dim lLen As Long, lCtr As Long
+        Dim sChar As String
+        Dim sAns As String
+
+        lLen = Len(InputString)
+        For lCtr = lLen To 1 Step -1
+            sChar = Mid(InputString, lCtr, 1)
+            sAns = sAns & sChar
+        Next
+
+        ReverseString = sAns
+
+    End Function
 
     'Sub executed when Form is closed
     Private Sub home_Formclosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed

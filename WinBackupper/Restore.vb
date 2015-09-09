@@ -2,6 +2,14 @@
 Imports System.IO
 
 Public Class Restore
+#Region "Global Var's"
+    '*-----------------*'
+    '*----Global Var's----*'
+    '*-----------------*'
+
+    Dim alreadyloadednodes As New ArrayList
+
+#End Region
 
 #Region "MainCode"
     '*-----------------*'
@@ -39,23 +47,110 @@ Public Class Restore
 
     End Sub
 
+    Function loaddatasetintotreeview(passednode As TreeNode, folderpairIDtoedit As Integer, Optional Passed_Directory As String = Nothing)
+        Dim originalsourcedirectory As String = home.sourcepatharray(folderpairIDtoedit) 'dir where file was originally.
+        Dim currentnsourcedirectory As String = home.backupPatharray(folderpairIDtoedit) 'dir where those source files are now. 
+        'used to load  aspecific dataset (including all available files) into treeview
+        'get fulldir only valid if first time call!
+        If alreadyloadednodes.Contains(passednode) Then
+            Return 1 'already loaded - quit the function - prevent double adding
+        End If
+
+        Dim fullpath As String = ""
+        Dim originalpassednode As TreeNode = passednode
+
+        If Passed_Directory = Nothing Then
+            fullpath = currentnsourcedirectory & "\"
+            For i = 0 To 255
+                fullpath = fullpath & passednode.Text & "\"
+                If passednode.Parent Is Nothing Then
+                    Exit For
+                End If
+                passednode = passednode.Parent
+            Next
+            'after that the treenodes are wrong way around (last 3 dirs inf ullpath)
+
+            'so switch last 3 dirs right way
+            Dim tmparray As New ArrayList
+            tmparray = home.StringtoArray(fullpath, "\")
+            Dim str1 As String
+            Dim str3 As String
+            Dim arraycounter = tmparray.Count
+            str1 = tmparray(arraycounter - 1)
+            str1 = str1.Substring(1, str1.Length - 1)
+            str3 = tmparray(arraycounter - 3)
+            tmparray(arraycounter - 3) = str1
+            tmparray(arraycounter - 1) = str3
+            Dim finalfullpath = ""
+            For Each str As String In tmparray
+                finalfullpath = finalfullpath & str & "\"
+            Next
+            fullpath = finalfullpath
+        Else
+            fullpath = Passed_Directory
+        End If
+
+        'adding files
+        For Each filepath As String In Directory.GetFiles(fullpath)
+            Dim filename As String = Path.GetFileName(filepath)
+            originalpassednode.Nodes.Add(filename, filename)
+        Next
+
+        'now call itself with newly created node as reference, and the working dir
+        'adding dirs
+        For Each folderpath As String In Directory.GetDirectories(fullpath)
+            '"loop" thorugh all dirs from right to left to get dirname (how I love the stringtoarray function :3 )
+            Dim tmparray As New ArrayList
+            tmparray = home.StringtoArray(folderpath & "\", "\") '& "\" needed to get array correctly
+            Dim Fodlername As String = tmparray(tmparray.Count - 1)
+            Dim addednode = originalpassednode.Nodes.Add(Fodlername, Fodlername)
+
+            'call function itself with added node
+            loaddatasetintotreeview(addednode, folderpairIDtoedit, folderpath)
+        Next
+
+        'add node to array to prevent loading again
+        alreadyloadednodes.Add(originalpassednode)
+
+    End Function
 
     Sub tv_restore_NodeMouseClick(ByVal sender As Object,
     ByVal e As TreeNodeMouseClickEventArgs) _
     Handles tv_restore.NodeMouseClick
-        'maybe we could use this event to only load the files when the user clicks on a specific folderpair
-        'we would need to use another bw though. (backups may be huge - loading them into the GUI while take 'a while')
 
+        Dim currnodeistimenode As Boolean
         Dim currnodename = e.Node.Text
-        Dim currnodeisfolderpairnode As Boolean = False
+
         For i = 0 To home.lv_overview.Items.Count - 1
+            'reset varaibles
+            currnodeistimenode = False
             'check if the name of current node is matching any folderpairnode name "_FPID" (f.E _0)
-            If currnodename = "_" & i Then
-                currnodeisfolderpairnode = True
+
+            If currnodename.Length >= 5 Then
+                'calculate substring to check if time is valid (if only 4 numbers)
+                Dim timestring As String = currnodename.Substring(1, 4)
+                If IsNumeric(timestring) And currnodename.Length = 5 Then
+                    currnodeistimenode = True
+                End If
             End If
+
         Next
-        If currnodeisfolderpairnode Then
-            'Release the Krakken. (Load all Dirs/Files of that backup into the Treeview)
+        If currnodeistimenode Then
+            'calculate directory based on FPID
+            Dim folderpairIDtoedit = e.Node.Parent.Text.Substring(1, 1)
+            Dim originalsourcedirectory As String = home.sourcepatharray(folderpairIDtoedit) 'dir where file was originally.
+            Dim currentnsourcedirectory As String = home.backupPatharray(folderpairIDtoedit) 'dir where those source files are now. 
+            Dim Directory_additions As String = "\" & e.Node.Parent.Parent.Text.Substring(1, e.Node.Parent.Parent.Text.Length - 1) & "\" & e.Node.Parent.Text & "\" & e.Node.Text
+            Dim fulldir As String = currentnsourcedirectory & Directory_additions
+            ''' Try
+            Logaddentry(home.GetDate & "Start loading of available Datasets of the following path:" & fulldir & vbNewLine)
+            loaddatasetintotreeview(e.Node, folderpairIDtoedit)
+            Logaddentry(home.GetDate & "Finished loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                home.Treenode_Already_Filled_Datasets.Add(fulldir)
+
+            '''   Catch ex As Exception
+            '''    MsgBox(ex.Message)
+            '''    End Try
         End If
 
     End Sub
