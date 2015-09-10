@@ -26,7 +26,7 @@ Partial Class Restore
         Me.l_restore = New System.Windows.Forms.Label()
         Me.tv_restore = New System.Windows.Forms.TreeView()
         Me.L_available_Datasets = New System.Windows.Forms.Label()
-        Me.b_startrestore = New System.Windows.Forms.Button()
+        Me.btn_startrestore = New System.Windows.Forms.Button()
         Me.tb_targetdir = New System.Windows.Forms.TextBox()
         Me.L_targetpath = New System.Windows.Forms.Label()
         Me.lc_loading_datasets = New MRG.Controls.UI.LoadingCircle()
@@ -72,15 +72,15 @@ Partial Class Restore
         Me.L_available_Datasets.TabIndex = 13
         Me.L_available_Datasets.Text = "Available Datasets: (Choose the one to restore)"
         '
-        'b_startrestore
+        'btn_startrestore
         '
-        Me.b_startrestore.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_startrestore.Location = New System.Drawing.Point(26, 466)
-        Me.b_startrestore.Name = "b_startrestore"
-        Me.b_startrestore.Size = New System.Drawing.Size(490, 35)
-        Me.b_startrestore.TabIndex = 29
-        Me.b_startrestore.Text = "Start Restore"
-        Me.b_startrestore.UseVisualStyleBackColor = True
+        Me.btn_startrestore.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_startrestore.Location = New System.Drawing.Point(26, 466)
+        Me.btn_startrestore.Name = "btn_startrestore"
+        Me.btn_startrestore.Size = New System.Drawing.Size(490, 35)
+        Me.btn_startrestore.TabIndex = 29
+        Me.btn_startrestore.Text = "Start Restore"
+        Me.btn_startrestore.UseVisualStyleBackColor = True
         '
         'tb_targetdir
         '
@@ -203,7 +203,7 @@ Partial Class Restore
         Me.Controls.Add(Me.lc_loading_datasets)
         Me.Controls.Add(Me.L_targetpath)
         Me.Controls.Add(Me.tb_targetdir)
-        Me.Controls.Add(Me.b_startrestore)
+        Me.Controls.Add(Me.btn_startrestore)
         Me.Controls.Add(Me.L_available_Datasets)
         Me.Controls.Add(Me.tv_restore)
         Me.Controls.Add(Me.l_restore)
@@ -221,7 +221,7 @@ Partial Class Restore
     Friend WithEvents l_restore As Label
     Friend WithEvents tv_restore As TreeView
     Friend WithEvents L_available_Datasets As Label
-    Friend WithEvents b_startrestore As Button
+    Friend WithEvents btn_startrestore As Button
     Friend WithEvents tb_targetdir As TextBox
     Friend WithEvents L_targetpath As Label
     Friend WithEvents lc_loading_datasets As MRG.Controls.UI.LoadingCircle

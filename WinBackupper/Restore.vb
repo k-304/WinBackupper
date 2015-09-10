@@ -8,6 +8,10 @@ Public Class Restore
     '*-----------------*'
 
     Dim alreadyloadednodes As New ArrayList
+    Dim currentlyselectedtreenode_Fullsourcepath As String 'filled later in the load dataset function
+    Dim currentlyselectedtreenode_Fulltargetpath As String 'loaded there to prevent double caluclation.
+    Dim currentlyselectedtreenode_FolderpairID As Integer 'dataset has to be loaded anyway to restore it - so I save the calculated paths there already.
+    'so those "Currentlyselectedtreenode" vars are fille later in the add dataset function
 
 #End Region
 
@@ -45,6 +49,101 @@ Public Class Restore
 
 
     End Sub
+
+    Private Function RestoreDirectory(ByRef selectednode As TreeNode, ByVal sourcepath As String, ByVal targetpath As String, ByVal FPID As String, ByVal backuptype As String, Optional simulate_mode_active As Boolean = True)
+
+        Try
+            For Each filepath In Directory.GetFiles(sourcepath)
+
+                Try
+                    Dim processname As String = "robocopy.exe"
+                    Dim filestocopy As String = "*.*" 'used in the robocopy command to only copy that file
+                    Dim ARGFull As String = "/A-:A"
+                    Dim ARGdifferential As String = "/A"
+                    Dim ARGincremental As String = "/M"
+
+                    Dim Proc As New System.Diagnostics.Process
+                    Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
+                    Proc.StartInfo.UseShellExecute = False
+                    Proc.StartInfo.CreateNoWindow = True
+
+                    Select Case backuptype
+                        Case "full"
+                            'do backup logic for full backup
+                            'no need to restore multiple datasets
+                            'only copy all files of this source to the target dir
+                            Proc.StartInfo.Arguments = "/C " & processname & " " & currentlyselectedtreenode_Fullsourcepath & " " _
+                                                        & currentlyselectedtreenode_Fulltargetpath & " " & filestocopy & " " & ARGFull
+
+                        Case "Incr"
+
+                            'copy all files of this incremental, and all last incremental backups (up to the last full backup)
+                            ' - maybe check which backup Is the full first - And then copy full backup first. (reverse order - to overwrite files ocrrectly
+
+                            'get all time nodes -get a backuptype node (name) first - then take the parent of it. 
+                            'take parent again and its the "_0" node (FOID NodE) - from there, select the last available time, check the backuptype.
+                            'repeat until all needed Nodes are found.
+                            For Each tnode As TreeNode In selectednode.Parent.Nodes
+                                If tnode.Name = "backuptype" Then
+                                    'get parent parent node
+                                    Dim overviewnode = tnode.Parent.Parent
+                                    Dim timenode = tnode.Parent
+                                    Dim nextnode = timenode.NextNode
+                                    For Each tnode2 As TreeNode In nextnode.Nodes
+                                        If tnode2.Name = "backuptype" Then
+                                            If tnode2.Text = "Full" Then
+                                                'full backup found - if not repeat until found. 
+
+                                            End If
+                                        End If
+                                    Next
+
+                                End If
+                            Next
+                        Case "Diff"
+                            'copy all files of this differential, and ONLY the files of the last Full!
+                    End Select
+
+                    Proc.Start() 'after defining everythig start the process
+                    'then wait for it to exit to continue with the next file
+                    Proc.WaitForExit()
+                    'getting errorcode - the catch block wouldn't get a file error.
+                    '(the code isn't failing - the cmd would. so get code from cmd)
+                    Dim exitcode = Proc.ExitCode
+                    If exitcode = "0" Or exitcode = "1" Then 'no files were copied (becuase no need for it) or all copied succesfully!
+                        'assume success
+                    Else
+                        'assume problem
+                        Dim Logentry = "The following File could not be backed-up - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine
+                        Me.Invoke(Ldel, Logentry)
+                    End If
+                Catch ex As Exception
+                    'if single files fail - maybe make a list? How do we log?
+                    Dim Logentry = "There was some Issue within the RestoreDirectory() Function. See Information below:" & vbNewLine & ex.StackTrace & vbNewLine
+                    Me.Invoke(Ldel, Logentry)
+                End Try
+            Next
+
+
+            'get Subdirectories and repeat process
+            For Each dir As String In Directory.GetDirectories(sourcepath)
+                'calculate the relative path
+                Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
+                'call routine to delete subfiles
+                If simulate_mode_active = True Then
+                    RestoreDirectory(selectednode, dir, targetpath & relpath, FPID, True, backuptype)
+                Else
+                    RestoreDirectory(selectednode, dir, targetpath & relpath, FPID, False, backuptype)
+                End If
+            Next
+
+            Return (0) 'return code "0" if everything went ok - without breaking code anywhere
+        Catch ex As Exception
+            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Restore_Directory Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1 'return code "-1" to indicate an unknown/unhandlet error 
+        End Try
+
+    End Function
 
     Function loaddatasetintotreeview(passednode As TreeNode, folderpairIDtoedit As Integer, Optional Passed_Directory As String = Nothing)
         Dim originalsourcedirectory As String = home.sourcepatharray(folderpairIDtoedit) 'dir where file was originally.
@@ -111,6 +210,12 @@ Public Class Restore
         'add node to array to prevent loading again
         alreadyloadednodes.Add(originalpassednode)
 
+        'fill global vars - to use in restore function later 
+        currentlyselectedtreenode_Fullsourcepath = fullpath
+        currentlyselectedtreenode_Fulltargetpath = tb_targetdir.Text
+        currentlyselectedtreenode_FolderpairID = folderpairIDtoedit
+
+
     End Function
 
     Sub tv_restore_NodeMouseClick(ByVal sender As Object,
@@ -155,13 +260,45 @@ Public Class Restore
     End Sub
 
 
-    Private Sub b_startrestore_Click(sender As Object, e As EventArgs) Handles b_startrestore.Click
-        'get selected node.
-
-        'calculate fullpath for sourcefile
-
+    Private Sub b_startrestore_Click(sender As Object, e As EventArgs) Handles btn_startrestore.Click
+        If tb_targetdir.Text = "" Then
+            'ask user to provide targetpath. (ask with dialogbox instead of aborting) 
+        End If
+        Dim Overviewarray_src As New ArrayList
+        Dim Overviewarray_bck As New ArrayList
+        Dim Overviewarray_type As New ArrayList
         'use "restore_Directory" function to restore files (Copy&paste of backup dir function)
+        'get backuptype - therefore get Parent time node 
+        Dim backuptype As String = ""
+        Dim selectednode As TreeNode = tv_restore.SelectedNode
+        Dim timeparentnode As TreeNode
+        'get current node informtion
+        Dim origselectednode = selectednode
 
+        'check all ndoes of the selected one - is backuptypenode one of them?
+        For Each tnode As TreeNode In selectednode.Nodes
+            If tnode.Name = "backuptype" Then
+                Dim ttimenode = tnode.Parent
+                For Each detailsnode As TreeNode In ttimenode
+                    Select Case detailsnode.Name
+                        Case "Source"
+                            Overviewarray_src.Add(detailsnode.Text)
+                        Case "Backup"
+                            Overviewarray_bck.Add(detailsnode.Text)
+                        Case "Type"
+                            Overviewarray_type.Add(detailsnode.Text)
+                    End Select
+                Next
+
+            End If
+        Next
+        Dim datasetstoload As New ArrayList
+        For Each btypestr As String In Overviewarray_type
+
+        Next
+
+        RestoreDirectory(selectednode, currentlyselectedtreenode_Fullsourcepath, currentlyselectedtreenode_Fulltargetpath, currentlyselectedtreenode_FolderpairID, backuptype, False)
+        'backuptype, full source and targetpath needed
     End Sub
 
 
