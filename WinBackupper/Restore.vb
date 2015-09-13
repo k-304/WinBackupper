@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Public Class Restore
 #Region "Global Var's"
@@ -261,43 +262,150 @@ Public Class Restore
 
 
     Private Sub b_startrestore_Click(sender As Object, e As EventArgs) Handles btn_startrestore.Click
+        Dim relevantsrcarray As New ArrayList
+        Dim relevantbckarray As New ArrayList
+        Dim relevanttypearray As New ArrayList
+        Dim currsrcarray As New ArrayList
+        Dim currbckarray As New ArrayList
+        Dim currtypearray As New ArrayList
+
+        If tv_restore.SelectedNode Is Nothing Then
+            MsgBox("No node selected")
+            Exit Sub
+        End If
         If tb_targetdir.Text = "" Then
             'ask user to provide targetpath. (ask with dialogbox instead of aborting) 
+            MsgBox("No targetpath selected")
+            Exit Sub
         End If
-        Dim Overviewarray_src As New ArrayList
-        Dim Overviewarray_bck As New ArrayList
-        Dim Overviewarray_type As New ArrayList
-        'use "restore_Directory" function to restore files (Copy&paste of backup dir function)
-        'get backuptype - therefore get Parent time node 
-        Dim backuptype As String = ""
+        'get backuptype - therefore get Parent time node     
         Dim selectednode As TreeNode = tv_restore.SelectedNode
         Dim timeparentnode As TreeNode
-        'get current node informtion
-        Dim origselectednode = selectednode
 
-        'check all ndoes of the selected one - is backuptypenode one of them?
-        For Each tnode As TreeNode In selectednode.Nodes
-            If tnode.Name = "backuptype" Then
-                Dim ttimenode = tnode.Parent
-                For Each detailsnode As TreeNode In ttimenode
-                    Select Case detailsnode.Name
-                        Case "Source"
-                            Overviewarray_src.Add(detailsnode.Text)
-                        Case "Backup"
-                            Overviewarray_bck.Add(detailsnode.Text)
-                        Case "Type"
-                            Overviewarray_type.Add(detailsnode.Text)
-                    End Select
-                Next
+        'get timenode
+        Dim timenodefound As Boolean = False
+        Dim virtualloopnode As TreeNode = selectednode
+        Dim timenode As TreeNode
+        While timenodefound = False
 
+            'loop thorugh all parent nodes to find the timenode
+            'this is the node clicked on, when loading the dataset
+            'it's a known refernece point to navigate further
+            'utilize the level property of nodes to determin if it's a usercreated folder or ours.
+            'not htat the user has a "_####" folder too. (where #### stands for random numbers)          
+            Dim rgx As New Regex("[0-9]{4,4}")
+            If virtualloopnode.Text.Length >= 4 Then
+                If rgx.IsMatch(virtualloopnode.Text.Substring(1, 4)) And virtualloopnode.Level = 2 Then
+                    'check with regex expression and node level if its our time node
+                    timenode = virtualloopnode
+                    timenodefound = True
+                End If
             End If
-        Next
-        Dim datasetstoload As New ArrayList
-        For Each btypestr As String In Overviewarray_type
 
+            virtualloopnode = virtualloopnode.Parent
+        End While
+
+        'when timenode is known, get the ID (parent node ) 
+        Dim folderidnode = timenode.Parent
+        Dim datenode = folderidnode.Parent
+        'then get the needed information out of restoreoverview.xml
+        'fill according overview variables if mutiple backups are needed
+
+
+
+
+        Dim ROXMLDoc As XmlDocument = New XmlDocument()
+        ROXMLDoc.Load(home.getexedir() & "\" & "RestoreOverview.xml")
+        Dim node As XmlNode
+        node = ROXMLDoc.DocumentElement
+        'descriptionndoe
+        Dim virtnodelvl0 As XmlNode 'Used for internal loop.
+        'descriptionndoe
+        For Each virtnodelvl0 In node.ChildNodes
+            'descriptionndoe
+            For Each virtnodelvl1 In virtnodelvl0.ChildNodes
+                'descriptionndoe
+                For Each virtnodelvl2 As XmlNode In virtnodelvl1.ChildNodes
+                    'dateenode
+                    For Each virtnodelvl3 As XmlNode In virtnodelvl2.ChildNodes
+                        'descriptionndoe
+                        For Each virtnodelvl4 As XmlNode In virtnodelvl3.ChildNodes
+                            'fpid node
+
+                            If virtnodelvl4.Name = timenode.Text Then
+                                'timenode
+
+                                'this is the xml node, which contains all data for this dataset
+                                For Each infonode As XmlNode In virtnodelvl4.ChildNodes
+                                    Dim tmpsrc
+                                    Dim tmpbck
+                                    Dim tmptype
+                                    Select Case infonode.Name
+                                        Case "Source"
+                                            tmpsrc = infonode.InnerText
+                                        Case "Backup"
+                                            tmpbck = infonode.InnerText
+                                        Case "Type"
+                                            tmptype = infonode.InnerText
+                                            If tmptype = "Full" Then
+                                                'full backup, no other backups needed, clear arrays and only fill in current entry
+                                                relevantsrcarray.Clear()
+                                                relevantbckarray.Clear()
+                                                relevanttypearray.Clear()
+                                                relevantsrcarray.Add(tmpsrc)
+                                                relevantbckarray.Add(tmpbck)
+                                                relevanttypearray.Add(tmptype)
+                                            Else
+                                                'add member to array without reseting it
+                                                relevantsrcarray.Add(tmpsrc)
+                                                relevantbckarray.Add(tmpbck)
+                                                relevanttypearray.Add(tmptype)
+                                            End If
+                                    End Select
+
+                                Next
+                            Else
+                                'is not current timenode, but maybe a relevant one (backup before the selected one -save if in array
+                                'reset array everytime a "full" backup is reached - only backups since last full until selected are store din array
+                                For Each infonode2 As XmlNode In virtnodelvl4.ChildNodes
+                                    Select Case infonode2.Name
+                                        Case "Source"
+                                            relevantsrcarray.Add(infonode2.InnerText)
+                                        Case "Backup"
+                                            relevantbckarray.Add(infonode2.InnerText)
+                                        Case "Type"
+                                            'if full reset array and only store current entry (full has to be ina rray to)
+                                            If infonode2.InnerText = "Full" Then
+                                                Dim currentsrcentry = relevantsrcarray(relevantsrcarray.Count - 1) 'last member
+                                                Dim currentbckentry = relevantbckarray(relevantsrcarray.Count - 1) 'last member
+                                                relevantsrcarray.Clear()
+                                                relevantbckarray.Clear()
+                                                relevanttypearray.Clear()
+                                                relevantsrcarray.Add(currentsrcentry)
+                                                relevantbckarray.Add(currentbckentry)
+                                                relevanttypearray.Add(infonode2.InnerText)
+                                            Else
+                                                'add member to array without reseting it
+                                                relevanttypearray.Add(infonode2.InnerText)
+                                            End If
+
+                                    End Select
+                                Next
+                            End If
+
+                        Next
+                    Next
+                Next
+            Next
         Next
 
-        RestoreDirectory(selectednode, currentlyselectedtreenode_Fullsourcepath, currentlyselectedtreenode_Fulltargetpath, currentlyselectedtreenode_FolderpairID, backuptype, False)
+
+        For i = 0 To relevantsrcarray.Count - 1
+            MessageBox.Show("Src: " & relevantsrcarray(i) & vbNewLine _
+                            & "Type: " & relevanttypearray(i))
+        Next
+
+        '    RestoreDirectory(selectednode, currentlyselectedtreenode_Fullsourcepath, currentlyselectedtreenode_Fulltargetpath, currentlyselectedtreenode_FolderpairID, backuptype, False)
         'backuptype, full source and targetpath needed
     End Sub
 
