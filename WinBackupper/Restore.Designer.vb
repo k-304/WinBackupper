@@ -36,6 +36,7 @@ Partial Class Restore
         Me.rtb_log = New System.Windows.Forms.RichTextBox()
         Me.l_restore_active = New System.Windows.Forms.Label()
         Me.lc_restore_active = New MRG.Controls.UI.LoadingCircle()
+        Me.fbd_searchRestoretargetpath = New System.Windows.Forms.FolderBrowserDialog()
         Me.SuspendLayout()
         '
         'l_restore
@@ -231,4 +232,5 @@ Partial Class Restore
     Friend WithEvents rtb_log As RichTextBox
     Friend WithEvents l_restore_active As Label
     Friend WithEvents lc_restore_active As MRG.Controls.UI.LoadingCircle
+    Friend WithEvents fbd_searchRestoretargetpath As FolderBrowserDialog
 End Class
