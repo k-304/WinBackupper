@@ -587,6 +587,14 @@ Public Class Settings
         End If
     End Sub
 
+    Private Sub cb_Debugmode_CheckedChanged(sender As Object, e As EventArgs) Handles cb_Debugmode.CheckedChanged
+        If Me.cb_Debugmode.Enabled = True Then
+            home.DebugmodeOn = True
+        Else
+            home.DebugmodeOn = False
+        End If
+    End Sub
+
 #End Region
 
 End Class

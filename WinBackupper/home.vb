@@ -9,6 +9,7 @@ Public Class home
     '*------------------------*'
     '*----Global Variables----*'
     '*------------------------*'
+    Public DebugmodeOn As Boolean = False
 
     Private Delegate Sub LogaddEntryDelegate(ByVal Linecontent As String)
 

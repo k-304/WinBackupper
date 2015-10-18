@@ -12,6 +12,7 @@ Public Class Restore
     Dim currentlyselectedtreenode_Fullsourcepath As String 'filled later in the load dataset function
     Dim currentlyselectedtreenode_Fulltargetpath As String 'loaded there to prevent double caluclation.
     Dim currentlyselectedtreenode_FolderpairID As Integer 'dataset has to be loaded anyway to restore it - so I save the calculated paths there already.
+    Dim AlltimenodesinTreeviewarray As New ArrayList
     'so those "Currentlyselectedtreenode" vars are fille later in the add dataset function
 
 #End Region
@@ -51,7 +52,7 @@ Public Class Restore
 
     End Sub
 
-    Private Function RestoreDirectory(ByRef selectednode As TreeNode, ByVal sourcepath As String, ByVal targetpath As String, ByVal FPID As String, ByVal backuptype As String, Optional simulate_mode_active As Boolean = True)
+    Private Function RestoreDirectory(ByRef selectednode As TreeNode, ByVal sourcepath As String, ByVal targetpath As String, ByVal backuptype As String, Optional simulate_mode_active As Boolean = True)
 
         Try
             For Each filepath In Directory.GetFiles(sourcepath)
@@ -59,51 +60,16 @@ Public Class Restore
                 Try
                     Dim processname As String = "robocopy.exe"
                     Dim filestocopy As String = "*.*" 'used in the robocopy command to only copy that file
-                    Dim ARGFull As String = "/A-:A"
-                    Dim ARGdifferential As String = "/A"
-                    Dim ARGincremental As String = "/M"
-
+                    ' Dim ARGFull As String = "/A-:A"
                     Dim Proc As New System.Diagnostics.Process
                     Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
                     Proc.StartInfo.UseShellExecute = False
                     Proc.StartInfo.CreateNoWindow = True
 
-                    Select Case backuptype
-                        Case "full"
-                            'do backup logic for full backup
-                            'no need to restore multiple datasets
-                            'only copy all files of this source to the target dir
-                            Proc.StartInfo.Arguments = "/C " & processname & " " & currentlyselectedtreenode_Fullsourcepath & " " _
-                                                        & currentlyselectedtreenode_Fulltargetpath & " " & filestocopy & " " & ARGFull
+                    Proc.StartInfo.Arguments = "/C " & processname & " " & currentlyselectedtreenode_Fullsourcepath & " " _
+                                                    & currentlyselectedtreenode_Fulltargetpath & " " & filestocopy & " /E /Z" '& ARGFull
 
-                        Case "Incr"
 
-                            'copy all files of this incremental, and all last incremental backups (up to the last full backup)
-                            ' - maybe check which backup Is the full first - And then copy full backup first. (reverse order - to overwrite files ocrrectly
-
-                            'get all time nodes -get a backuptype node (name) first - then take the parent of it. 
-                            'take parent again and its the "_0" node (FOID NodE) - from there, select the last available time, check the backuptype.
-                            'repeat until all needed Nodes are found.
-                            For Each tnode As TreeNode In selectednode.Parent.Nodes
-                                If tnode.Name = "backuptype" Then
-                                    'get parent parent node
-                                    Dim overviewnode = tnode.Parent.Parent
-                                    Dim timenode = tnode.Parent
-                                    Dim nextnode = timenode.NextNode
-                                    For Each tnode2 As TreeNode In nextnode.Nodes
-                                        If tnode2.Name = "backuptype" Then
-                                            If tnode2.Text = "Full" Then
-                                                'full backup found - if not repeat until found. 
-
-                                            End If
-                                        End If
-                                    Next
-
-                                End If
-                            Next
-                        Case "Diff"
-                            'copy all files of this differential, and ONLY the files of the last Full!
-                    End Select
 
                     Proc.Start() 'after defining everythig start the process
                     'then wait for it to exit to continue with the next file
@@ -115,7 +81,7 @@ Public Class Restore
                         'assume success
                     Else
                         'assume problem
-                        Dim Logentry = "The following File could not be backed-up - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine
+                        Dim Logentry = "The following File could not be restored - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine
                         Me.Invoke(Ldel, Logentry)
                     End If
                 Catch ex As Exception
@@ -132,9 +98,9 @@ Public Class Restore
                 Dim relpath As String = dir.Substring(sourcepath.Length, dir.Length - sourcepath.Length)
                 'call routine to delete subfiles
                 If simulate_mode_active = True Then
-                    RestoreDirectory(selectednode, dir, targetpath & relpath, FPID, True, backuptype)
+                    RestoreDirectory(selectednode, dir, targetpath & relpath, backuptype, True)
                 Else
-                    RestoreDirectory(selectednode, dir, targetpath & relpath, FPID, False, backuptype)
+                    RestoreDirectory(selectednode, dir, targetpath & relpath, backuptype, False)
                 End If
             Next
 
@@ -269,6 +235,12 @@ Public Class Restore
         Dim currbckarray As New ArrayList
         Dim currtypearray As New ArrayList
         Dim tmpbck As String = "" ' later used to restore files
+        Dim timenodectr As Long = 0
+
+        Dim timenodefound As Boolean = False
+        For Each tvn As TreeNode In tv_restore.Nodes
+            GetallTimenodesoftreeview(tvn)
+        Next
 
         If tv_restore.SelectedNode Is Nothing Then
             MsgBox("No node selected")
@@ -292,43 +264,29 @@ Public Class Restore
 
             End If
         End If
-        'get backuptype - therefore get Parent time node     
+
+
+        'get selected node
         Dim selectednode As TreeNode = tv_restore.SelectedNode
-        Dim timeparentnode As TreeNode
-
-        'get timenode
-        Dim timenodefound As Boolean = False
-        Dim virtualloopnode As TreeNode = selectednode
-        Dim timenode As TreeNode
-        Dim fullpath_Treeviewpart As String = ""
-        While timenodefound = False
-            fullpath_Treeviewpart = virtualloopnode.Text & "\" & fullpath_Treeviewpart
-            'loop thorugh all parent nodes to find the timenode
-            'this is the node clicked on, when loading the dataset
-            'it's a known refernece point to navigate further
-            'utilize the level property of nodes to determin if it's a usercreated folder or ours.
-            'not htat the user has a "_####" folder too. (where #### stands for random numbers)          
-            Dim rgx As New Regex("[0-9]{4,4}")
-            If virtualloopnode.Text.Length >= 4 Then
-                If rgx.IsMatch(virtualloopnode.Text.Substring(1, 4)) And virtualloopnode.Level = 2 Then
-                    'check with regex expression and node level if its our time node
-                    timenode = virtualloopnode
-                    timenodefound = True
-                End If
-            End If
-
-            virtualloopnode = virtualloopnode.Parent
-        End While
-
-        'when timenode is known, get the ID (parent node ) 
-        Dim folderidnode = timenode.Parent
-        Dim datenode = folderidnode.Parent
-        'then get the needed information out of restoreoverview.xml
-        'fill according overview variables if mutiple backups are needed
-        fullpath_Treeviewpart = "\" & datenode.Text & "\" & folderidnode.Text & "\" & fullpath_Treeviewpart
 
 
+        'define array used to store all relevant information
+        Dim folderIDnodearray As New ArrayList
+        Dim datenodearray As New ArrayList
+        'calculate according values for each of the read timenodes. (yes VERY ressource intensive)
+        For i = 0 To AlltimenodesinTreeviewarray.Count - 1
 
+            Dim timenode As TreeNode
+            timenode = AlltimenodesinTreeviewarray(i) '
+            'when timenode is known, get the ID (parent node ) 
+            folderIDnodearray.Add(timenode.Parent)
+            datenodearray.Add(folderIDnodearray(folderIDnodearray.Count - 1).Parent) 'the middle parenthes are to get newly added member of that array (part added last line) 
+
+        Next
+
+        Dim xmlloopctr = 0
+        'load xml doc and loop through all nodes
+        'store important nodes in an array - later access information out of array. (Needed to calc full paths of all needed files)
         Dim ROXMLDoc As XmlDocument = New XmlDocument()
         ROXMLDoc.Load(home.getexedir() & "\" & "RestoreOverview.xml")
         Dim node As XmlNode
@@ -336,7 +294,6 @@ Public Class Restore
         node = ROXMLDoc.DocumentElement
         'descriptionndoe
         Dim virtnodelvl0 As XmlNode 'Used for internal loop.
-        'descriptionndoe
         For Each virtnodelvl0 In node.ChildNodes
             'descriptionndoe
             For Each virtnodelvl1 In virtnodelvl0.ChildNodes
@@ -346,12 +303,12 @@ Public Class Restore
 
                     For Each virtnodelvl3 As XmlNode In virtnodelvl2.ChildNodes
                         'fpid node
-                        For Each virtnodelvl4 As XmlNode In virtnodelvl3.ChildNodes
-                            'timenode
-                            Dim currtimenode = virtnodelvl4
-                            Dim currtimenodetext = virtnodelvl4.InnerText
 
+                        For Each virtnodelvl4 As XmlNode In virtnodelvl3.ChildNodes
+
+                            'timenode 
                             'contentnode (all nodes under "time" node
+
 
                             'this is the xml node, which contains all data for this dataset
                             For Each infonode As XmlNode In virtnodelvl4.ChildNodes
@@ -362,12 +319,22 @@ Public Class Restore
                                         tmpsrc = infonode.InnerText 'take backuppath of xml (where files are backed up to) as restore source!
                                         tmpbck = tb_targetdir.Text
                                     Case "Type"
+
+                                        'put time array entry at the ned?
+
+                                        'calculate the part of the treeview path and indrement counter
+                                        'forgive me that horroble looking declaration - quick and dirty
+                                        Dim fullpath_Treeviewpart = "\" & datenodearray(datenodearray.Count - xmlloopctr - 1).text.substring(1, datenodearray(datenodearray.Count - xmlloopctr - 1).text.length - 1) & "\" & folderIDnodearray(folderIDnodearray.Count - xmlloopctr - 1).text & "\" & AlltimenodesinTreeviewarray(datenodearray.Count - xmlloopctr - 1).text
+                                        xmlloopctr += 1
+
+
                                         tmptype = infonode.InnerText
                                         If tmptype = "Full" Then 'if It s a full backup, clear the array- currently ALL (Exapnded?) nodes are filled into the array, and then it's cleared each time a "full" backup is detected.
                                             'full backup, no other backups needed, clear arrays and only fill in current entry
                                             relevantsrcarray.Clear()
                                             relevantbckarray.Clear()
                                             relevanttypearray.Clear()
+
                                             'add the real sourcepath - take  aparth from it of the treeview, and the begginin of the xml
                                             relevantsrcarray.Add(tmpsrc & fullpath_Treeviewpart)
                                             relevantbckarray.Add(tmpbck)
@@ -377,6 +344,7 @@ Public Class Restore
                                             relevantsrcarray.Add(tmpsrc & fullpath_Treeviewpart)
                                             relevantbckarray.Add(tmpbck)
                                             relevanttypearray.Add(tmptype)
+                                            xmlloopctr = 0
                                         End If
                                 End Select
 
@@ -387,18 +355,45 @@ Public Class Restore
             Next
         Next
 
-        MsgBox("The following Files would be restored:")
+
+
+
+
+        If home.DebugmodeOn = True Then
+            Dim logentry1 = "The following Files are restored:"
+            Me.Invoke(Ldel, logentry1)
+
+            For i = 0 To relevantsrcarray.Count - 1
+                Dim Logentry = ("Src: " & relevantsrcarray(i) & vbNewLine _
+                   & "Target: " & relevantbckarray(i) & vbNewLine _
+                                & "Type: " & relevanttypearray(i))
+                Me.Invoke(Ldel, Logentry)
+            Next
+        End If
         For i = 0 To relevantsrcarray.Count - 1
-            MessageBox.Show("Src: " & relevantsrcarray(i) & vbNewLine _
-               & "Target: " & relevantbckarray(i) & vbNewLine _
-                            & "Type: " & relevanttypearray(i))
+            RestoreDirectory(selectednode, relevantsrcarray(i), relevantbckarray(i), relevanttypearray(i), False)
+
         Next
 
-        'not calling actual restore function yet -testing first. (i think src path is laways the same? - have to test more)
-        '    RestoreDirectory(selectednode, currentlyselectedtreenode_Fullsourcepath, currentlyselectedtreenode_Fulltargetpath, currentlyselectedtreenode_FolderpairID, backuptype, False)
-        'backuptype, full source and targetpath needed
+        MessageBox.Show("Restore completed!", "Restore completed!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Me.Close()
     End Sub
 
+
+    Public Sub GetallTimenodesoftreeview(ByVal tvn As TreeNode)
+
+        Dim rgx As New Regex("[0-9]{4,4}")
+        If tvn.Text.Length >= 4 Then
+            If rgx.IsMatch(tvn.Text.Substring(1, 4)) And tvn.Level = 2 Then
+                AlltimenodesinTreeviewarray.Add(tvn)
+            End If
+        End If
+
+        Dim tvNode As TreeNode
+        For Each tvNode In tvn.Nodes
+            GetallTimenodesoftreeview(tvNode)
+        Next
+    End Sub
 
 #End Region
 
