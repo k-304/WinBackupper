@@ -214,9 +214,13 @@ Public Class Restore
             Dim Directory_additions As String = "\" & e.Node.Parent.Parent.Text.Substring(1, e.Node.Parent.Parent.Text.Length - 1) & "\" & e.Node.Parent.Text & "\" & e.Node.Text
             Dim fulldir As String = currentnsourcedirectory & Directory_additions
             Try
-                Logaddentry(home.GetDate & "Start loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                If home.DebugmodeOn = True Then
+                    Logaddentry(home.GetDate & "Start loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                End If
                 loaddatasetintotreeview(e.Node, folderpairIDtoedit)
-                Logaddentry(home.GetDate & "Finished loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                If home.DebugmodeOn = True Then
+                    Logaddentry(home.GetDate & "Finished loading of available Datasets of the following path:" & fulldir & vbNewLine)
+                End If
                 home.Treenode_Already_Filled_Datasets.Add(fulldir)
 
             Catch ex As Exception
@@ -376,7 +380,7 @@ Public Class Restore
         Next
 
         MessageBox.Show("Restore completed!", "Restore completed!", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Me.Close()
+
     End Sub
 
 
@@ -438,13 +442,17 @@ Public Class Restore
             lc_loading_datasets.Visible = True
             lc_loading_datasets.Active = True
             L_status.Text = "Status: Loading Datasets"
-            rtb_log.AppendText("Started loading available Datasets in background Thread." & vbNewLine)
+            If home.DebugmodeOn = True Then
+                rtb_log.AppendText("Started loading available Datasets in background Thread." & vbNewLine)
+            End If
         Else
             'disable it
             lc_loading_datasets.Visible = False
             lc_loading_datasets.Active = False
             L_status.Text = "Status: Idle"
-            rtb_log.AppendText("Finished loading available Datasets in background Thread." & vbNewLine)
+            If home.DebugmodeOn = True Then
+                rtb_log.AppendText("Finished loading available Datasets in background Thread." & vbNewLine)
+            End If
         End If
     End Sub
 
