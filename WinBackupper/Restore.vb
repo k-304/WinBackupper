@@ -380,6 +380,7 @@ Public Class Restore
         Next
 
         MessageBox.Show("Restore completed!", "Restore completed!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        home.WriteLogfile(home.getexedir() & home.LogfileFolder & home.Logfilename_Prefix & home.GetDate() & "_" & home.GetTime() & "_Restore.txt", rtb_log, True) 'writes logfile and overwrites axisting ones with the same name
 
     End Sub
 
