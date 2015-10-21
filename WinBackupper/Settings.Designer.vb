@@ -40,12 +40,13 @@ Private Sub InitializeComponent()
         Me.ch_source = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ch_backup = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.l_note = New System.Windows.Forms.Label()
+        Me.cb_Debugmode = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'b_save
         '
         Me.b_save.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_save.Location = New System.Drawing.Point(201, 453)
+        Me.b_save.Location = New System.Drawing.Point(201, 475)
         Me.b_save.Name = "b_save"
         Me.b_save.Size = New System.Drawing.Size(241, 35)
         Me.b_save.TabIndex = 18
@@ -87,7 +88,7 @@ Private Sub InitializeComponent()
         '
         Me.b_reset.BackColor = System.Drawing.Color.LightCoral
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(12, 453)
+        Me.b_reset.Location = New System.Drawing.Point(12, 475)
         Me.b_reset.Name = "b_reset"
         Me.b_reset.Size = New System.Drawing.Size(183, 35)
         Me.b_reset.TabIndex = 23
@@ -125,7 +126,7 @@ Private Sub InitializeComponent()
         Me.cb_Autostart.BackColor = System.Drawing.Color.Transparent
         Me.cb_Autostart.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_Autostart.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_Autostart.Location = New System.Drawing.Point(12, 408)
+        Me.cb_Autostart.Location = New System.Drawing.Point(12, 399)
         Me.cb_Autostart.Name = "cb_Autostart"
         Me.cb_Autostart.Size = New System.Drawing.Size(400, 28)
         Me.cb_Autostart.TabIndex = 27
@@ -184,11 +185,24 @@ Private Sub InitializeComponent()
         Me.l_note.BackColor = System.Drawing.Color.Transparent
         Me.l_note.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_note.ForeColor = System.Drawing.SystemColors.HighlightText
-        Me.l_note.Location = New System.Drawing.Point(124, 491)
+        Me.l_note.Location = New System.Drawing.Point(124, 513)
         Me.l_note.Name = "l_note"
         Me.l_note.Size = New System.Drawing.Size(318, 15)
         Me.l_note.TabIndex = 31
         Me.l_note.Text = "Please save your Config, bevore editing a new Folderpair!"
+        '
+        'cb_Debugmode
+        '
+        Me.cb_Debugmode.AutoSize = True
+        Me.cb_Debugmode.BackColor = System.Drawing.Color.Transparent
+        Me.cb_Debugmode.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_Debugmode.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.cb_Debugmode.Location = New System.Drawing.Point(12, 433)
+        Me.cb_Debugmode.Name = "cb_Debugmode"
+        Me.cb_Debugmode.Size = New System.Drawing.Size(224, 28)
+        Me.cb_Debugmode.TabIndex = 32
+        Me.cb_Debugmode.Text = "Debug Mode enabled?"
+        Me.cb_Debugmode.UseVisualStyleBackColor = False
         '
         'Settings
         '
@@ -196,7 +210,8 @@ Private Sub InitializeComponent()
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 515)
+        Me.ClientSize = New System.Drawing.Size(454, 537)
+        Me.Controls.Add(Me.cb_Debugmode)
         Me.Controls.Add(Me.l_note)
         Me.Controls.Add(Me.lv_settings)
         Me.Controls.Add(Me.b_Remove_Folderpair)
@@ -234,4 +249,5 @@ Private Sub InitializeComponent()
     Friend WithEvents ch_source As System.Windows.Forms.ColumnHeader
     Friend WithEvents ch_backup As System.Windows.Forms.ColumnHeader
     Friend WithEvents l_note As Label
+    Friend WithEvents cb_Debugmode As CheckBox
 End Class

@@ -9,6 +9,7 @@ Public Class home
     '*------------------------*'
     '*----Global Variables----*'
     '*------------------------*'
+    Public DebugmodeOn As Boolean = False
 
     Private Delegate Sub LogaddEntryDelegate(ByVal Linecontent As String)
 
@@ -75,12 +76,12 @@ Public Class home
     'Sub executed when Form is closed
     Private Sub home_Formclosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
         'write Log here?
-        WriteLogfile(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt", True) 'writes logfile and overwrites axisting ones with the same name
+        WriteLogfile(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & "_" & GetTime() & ".txt", rtb_log, True) 'writes logfile and overwrites axisting ones with the same name
     End Sub
 
     'Function to write a Logfile
     'accepts filepath and a boolead (true/false) if the file should be overwritten.
-    Public Function WriteLogfile(filepath As String, Optional overwrite As Boolean = False)
+    Public Function WriteLogfile(filepath As String, sourcerichtextbox As RichTextBox, Optional overwrite As Boolean = False)
         Try
             'check if file already exists
             If File.Exists(filepath) Then
@@ -91,7 +92,7 @@ Public Class home
             End If
 
             'open the file
-            Using w As StreamWriter = File.AppendText(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & ".txt")
+            Using w As StreamWriter = File.AppendText(filepath)
                 'write some header information first - then write all RTB_log text into it
                 Dim headermsg As String = "Logfile of Winbackupper for " & GetDate() & " on" & GetTime()
                 For Each Character As Char In headermsg
@@ -102,7 +103,7 @@ Public Class home
 
                 'now start to write the actual logfile
                 'loop through all line of the log richtextbox and then loop thorugh al chars of that line
-                For Each line As String In rtb_log.Lines ' get each line of rtb
+                For Each line As String In sourcerichtextbox.Lines ' get each line of rtb
                     For Each character As Char In line
                         w.Write(character) 'write current character into file
                     Next
@@ -118,7 +119,7 @@ Public Class home
         End Try
     End Function
 
-    'Main Form
+    'Main Formwri
     Private Sub home_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Hide SystemTray Icon at startup to prevent Bugs
         If Me.WindowState = FormWindowState.Normal Then
