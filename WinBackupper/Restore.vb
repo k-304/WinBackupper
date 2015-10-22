@@ -59,15 +59,15 @@ Public Class Restore
 
                 Try
                     Dim processname As String = "robocopy.exe"
-                    Dim filestocopy As String = "*.*" 'used in the robocopy command to only copy that file
+                    Dim filestocopy As String = Path.GetFileName(filepath) 'used in the robocopy command to only copy that file
                     ' Dim ARGFull As String = "/A-:A"
-                    Dim Proc As New System.Diagnostics.Process
+                    Dim Proc As New Process
                     Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
                     Proc.StartInfo.UseShellExecute = False
                     Proc.StartInfo.CreateNoWindow = True
 
                     Proc.StartInfo.Arguments = "/C " & processname & " " & currentlyselectedtreenode_Fullsourcepath & " " _
-                                                    & currentlyselectedtreenode_Fulltargetpath & " " & filestocopy & " /E /Z" '& ARGFull
+                                                    & targetpath & " " & filestocopy & " /Z" '& ARGFull
 
 
 
@@ -81,7 +81,7 @@ Public Class Restore
                         'assume success
                     Else
                         'assume problem
-                        Dim Logentry = "The following File could not be restored - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine
+                        Dim Logentry = "The following File could not be restored - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine & Proc.StartInfo.Arguments.ToString & vbNewLine
                         Me.Invoke(Ldel, Logentry)
                     End If
                 Catch ex As Exception
