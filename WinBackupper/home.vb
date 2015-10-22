@@ -173,6 +173,9 @@ Public Class home
                         If (xmlReader2.Name = "StartTimes") Then
                             home.timesettingsarray.Add(xmlReader2.ReadInnerXml.ToString)
                         End If
+                        If (xmlReader2.Name = "Debugmode_Enabled") Then
+                            DebugmodeOn = xmlReader2.ReadInnerXml.ToString
+                        End If
                     End If
 
                 End While
@@ -194,6 +197,10 @@ Public Class home
     Public Function Settings_reload()
         'reset the content of the listview (lv_overview) (the .items. is important! otherwise it deletes the columns to!
         lv_overview.Items.Clear()
+        'set debug mode checkbox
+        If Me.DebugmodeOn = True Then
+            Settings.cb_Debugmode.Checked = True
+        End If
         'loop through all source/dest. path's (Display in form Richtextbox)
         For i = 0 To sourcepatharray.Count - 1 Step 1
             'first, fill in the index, the "main item" (look at the code and you ll understand)

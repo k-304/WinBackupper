@@ -502,8 +502,26 @@ Public Class Settings
                 .WriteEndElement()
             Next
 
+            'write second "options" element.
+            .WriteStartElement("options")
+            .WriteStartElement("Debugmode_Enabled")
+            If (cb_Debugmode.Checked = True) Then
+                .WriteString("true")
+            Else
+                .WriteString("false")
+            End If
+
+            .WriteEndElement()
+            'end options element
+            .WriteEndElement()
+
             'write ending "<default>" tag
             .WriteEndElement()
+
+
+
+
+
             .WriteEndDocument()
             .Close()
             .Dispose()
