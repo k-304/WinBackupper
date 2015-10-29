@@ -354,6 +354,7 @@ Public Class home
                     Dim backuptype = time.Substring(5, 4) ' get chars 5-8 which re the backuptype as a 4 char code (Full Diff and Incr)
                     If checkhour = currhour Then
                         If checkMinute = currmin Then
+
                             'log the auto start
                             rtb_log.AppendText("The Following Backup Process was autostarted:" & vbNewLine)
                             'before starting set "silent" var to true- so no msgbox pooops up to ask user
@@ -864,6 +865,43 @@ Public Class home
                 'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
                 For i = 0 To sourcepatharray.Count - 1 Step 1
                     If fpid = i Then
+                        'check if the Referenced Drive letters are available. 
+                        'prevent major exception which prevents backup of further Folderpairs. 
+
+                        'first get drive letter
+                        Dim srcdrvletter = sourcepatharray(i).substring(0, 3)
+                        Dim bckdrvletter = backupPatharray(i).substring(0, 3)
+
+                        'then check if it's availlable. 
+
+                        If IO.Directory.Exists(srcdrvletter) Then
+                            If DebugmodeOn = True Then
+                                Dim Logentrysrcdrvok = DateTime.Now.ToString & ": BACKUP CANCELED! Source Drive exists and is responding." & vbNewLine
+                                Me.Invoke(Ldel, Logentrysrcdrvok)
+
+                            End If
+                        Else
+                            If DebugmodeOn = True Then
+                                Dim LogentrysrcdrvNOTok = (DateTime.Now.ToString & ": BACKUP CANCELED! Source Drive DOES NOT exists and is NOT responding." & vbNewLine)
+                                Me.Invoke(Ldel, LogentrysrcdrvNOTok)
+
+                            End If
+                            Exit For
+                        End If
+
+                        If IO.Directory.Exists(bckdrvletter) Then
+                            If DebugmodeOn = True Then
+                                Dim Logentrybckdrvok = (DateTime.Now.ToString & ": BACKUP CANCELED! Backup Drive exists and is responding." & vbNewLine)
+                                Me.Invoke(Ldel, Logentrybckdrvok)
+                            End If
+                        Else
+                            If DebugmodeOn = True Then
+                                Dim LogentrybckdrvNOTok = (DateTime.Now.ToString & ": BACKUP CANCELED!  Backup Drive DOES NOT exists and is NOT responding." & vbNewLine)
+                                Me.Invoke(Ldel, LogentrybckdrvNOTok)
+                            End If
+                            Exit For
+                        End If
+
                         'log start of specific folderpair
                         Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
                         Me.Invoke(Ldel, Logentrystart)
