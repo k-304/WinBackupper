@@ -82,9 +82,15 @@ Public Class Settings
                 linecurrentlyedited = item.Index
                 Timetable.ShowDialog()
             Next
+
+
         Else
             MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
+        'reload settings of settings form
+        Settings_Reload()
+        'reload settings of home form
+        home.Settings_reload()
 
     End Sub
 
@@ -109,12 +115,13 @@ Public Class Settings
                 'Value seems to be wrong - rewrite it (Consider to keep the startup argument!)
                 'delete the value
                 runkey.DeleteValue("Winbackupper_Autostart")
-                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", _
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
                                               "Winbackupper_Autostart", home.getexedir() & Assembly.GetEntryAssembly().ToString & parameters)
                 Return 0
             Else
                 'the value is already correct - exe name/location didn't change.               
             End If
+
             'function didn't return a excpected value - return -1 as error code  
             Return -1
         Catch ex As Exception
@@ -388,6 +395,8 @@ Public Class Settings
 
             'Refresh Richtextbox by simply reloading settings (array is filled now)
             Settings_Reload()
+            'refresh settings of home form
+            home.Settings_reload()
         End If
 
         'if added source and backup folder =>
