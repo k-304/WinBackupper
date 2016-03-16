@@ -294,7 +294,7 @@ Public Class home
             'no lines selected, assume all pairs should be backed up
             For i = 0 To lv_overview.Items.Count - 1
                 'loop through all of them and add their index to the list
-                templist.Add(i & "\" & backuptype & "\")
+                templist.Add(i.ToString & "\" & backuptype & "\")
             Next
         Else
             'only backup selected line
@@ -345,7 +345,7 @@ Public Class home
                     'check if nothing is configured for this day
                     'this string will be returned by the settings_of_day_n function if no settings are configured for that day
                     If time.Substring(0, 7) = "Nothing" Then
-                        Exit Sub
+                        Exit For
                     End If
                     'time is written like HH:MM
                     'so get hours and minutes
@@ -360,9 +360,19 @@ Public Class home
                             'before starting set "silent" var to true- so no msgbox pooops up to ask user
                             silent = True
                             'start backup. only for current dir
-                            bw_dobackup.RunWorkerAsync(i)
+
+                            Dim templist = New ArrayList
+                            For i2 = 0 To lv_overview.Items.Count - 1
+                                If i2 = i Then
+                                    templist.Add(i.ToString & "\" & backuptype & "\")
+                                End If
+
+                            Next
+                            bw_dobackup.RunWorkerAsync(templist)
+                            ''''''''''''''''''    bw_dobackup.RunWorkerAsync(i)
                             'after autobackup- set silent to false again!
                             silent = False
+
                         End If
                     End If
 
@@ -695,13 +705,15 @@ Public Class home
         'This backgroundworker does the actual backup
         'also it writes an overview xml file into the backuproot
         'from there it can read restore information about it.
-        Try
-            'this is needed to get "arguments" in a backgroundworker
-            'passed by "runworkerasync(param)"
-            'we cannot specify it in the sub as usual in a function
-            Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
-            'loop thourgh them, get all settings and start the backup.
-            Dim currsourcepath As String
+        ''''''''  Try
+        'this is needed to get "arguments" in a backgroundworker
+        'passed by "runworkerasync(param)"
+        'we cannot specify it in the sub as usual in a function
+        ''''''''''''''  Dim param1 = DirectCast(e.Argument, ArrayList)
+        Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
+
+        'loop thourgh them, get all settings and start the backup.
+        Dim currsourcepath As String
             Dim currbackuppath As String
             Dim currbackuptype As String
             'define the starttime 
@@ -876,8 +888,8 @@ Public Class home
 
                         If IO.Directory.Exists(srcdrvletter) Then
                             If DebugmodeOn = True Then
-                                Dim Logentrysrcdrvok = DateTime.Now.ToString & ": BACKUP CANCELED! Source Drive exists and is responding." & vbNewLine
-                                Me.Invoke(Ldel, Logentrysrcdrvok)
+                            Dim Logentrysrcdrvok = DateTime.Now.ToString & ": Source Drive exists and is responding." & vbNewLine
+                            Me.Invoke(Ldel, Logentrysrcdrvok)
 
                             End If
                         Else
@@ -891,8 +903,8 @@ Public Class home
 
                         If IO.Directory.Exists(bckdrvletter) Then
                             If DebugmodeOn = True Then
-                                Dim Logentrybckdrvok = (DateTime.Now.ToString & ": BACKUP CANCELED! Backup Drive exists and is responding." & vbNewLine)
-                                Me.Invoke(Ldel, Logentrybckdrvok)
+                            Dim Logentrybckdrvok = (DateTime.Now.ToString & ": Backup Drive exists and is responding." & vbNewLine)
+                            Me.Invoke(Ldel, Logentrybckdrvok)
                             End If
                         Else
                             If DebugmodeOn = True Then
@@ -917,9 +929,9 @@ Public Class home
 
                 'end of current folderpair - next one if there is any
             Next
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+            '      Catch ex As Exception
+        '        MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '   End Try
     End Sub
 
     Private Sub bw_dobackup_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bw_dobackup.RunWorkerCompleted

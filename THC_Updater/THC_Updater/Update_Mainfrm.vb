@@ -23,7 +23,7 @@ Imports System.Xml
 Public Class Update_Mainfrm
     'global var's
     Public Overridable Property AllowAutoRedirect As Boolean = True
-    Public PayloadsourceURL As String = "https://github.com/SnipeLike/WinBackupper/releases/download/v0.0.1.0/Winbackupper_v0.0.1.0.exe"
+    Public PayloadsourceURL As String = "https://github.com/SnipeLike/WinBackupper/releases/download/v0.0.1.4/Winbackupper_v0.0.1.4.exe"
     'since there is a different URL for the "Release" part i needed another var for that
     'now it downloads everything correctly =)
     Public Domain As String = "raw.githubusercontent.com" 'your domainname - nslookup needs to be able to get the IP from it!

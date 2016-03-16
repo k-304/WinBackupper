@@ -101,6 +101,8 @@ Public Class Timetable
     'ComboBox Day
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles dd_Day.SelectedIndexChanged
 
+
+
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
         'use this to reread all settings when user changes to another Day
 
@@ -146,7 +148,9 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Tue = temparray
                 End If
-                temparray = Nothing
+
+
+
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -345,7 +349,7 @@ Public Class Timetable
             If Not lv_timetable.SelectedItems.Count = 0 Then
                 For Each item As ListViewItem In lv_timetable.SelectedItems
                     'loop thourgh each selected item and change backuptype
-                    Select Case item.SubItems(1).Text
+                    Select Case item.SubItems(1).Text.Substring(0, 4)
                         Case "Full"
                             item.SubItems(1).Text = "Diff"
                         Case "Diff"
@@ -380,44 +384,48 @@ Public Class Timetable
             'check if last and current char are ":" => this is the seperator
             If currchar = ":" And lastchar = ":" Then
                 'remeber start point in loop for segment. (the index of first char after seperator!)
-                startpoints(Daysalreadyscanned) = i + 1
+                If Not Daysalreadyscanned = 6 Then
+                    startpoints(Daysalreadyscanned) = i + 1
+                Else
+                    endpoints(Daysalreadyscanned) = i + 10
+                End If
+
                 If (Daysalreadyscanned >= 1) Then
-                    'notice the endpoint too (startpoint already found)
-                    endpoints(Daysalreadyscanned - 1) = i - 5 'the startpoint may also be an endpoint except the first one! minus 5 because "MON::" does not count!
+                        'notice the endpoint too (startpoint already found)
+                        endpoints(Daysalreadyscanned - 1) = i - 5 'the startpoint may also be an endpoint except the first one! minus 5 because "MON::" does not count!
                     'set 1 "lower"(-1) in array because it s in the next loop
+
                 End If
 
 
                 'check if there is any data left to extract? (maybe only 1 day is filled)
-                If Not contentextracted + 35 = settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
+                If Not contentextracted + 35 > settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
                     '35 is the nr of chars needed for all Day seperators (MON:: = 5 chars * 7 days = 35 chars)
                     If Not Daysalreadyscanned = 0 Then 'fires when i is not 0 => the first loop (i=0) will contain "MON::"
                         Dim currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
                         Dim currendpoint = endpoints(Daysalreadyscanned - 1)
                         daystring(Daysalreadyscanned - 1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
                         contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
-                        ''msgboxes only for debugging...
-                        '  MsgBox(daystring(Daysalreadyscanned - 1)) => returns the string from the array (daystring array)
-                        ' MsgBox("Real Day : " & Daysalreadyscanned - 1) '-1because the seperator comes first (MON::%DATA%) => returns ht eactual day (0 = monday)
-
                     End If
+
 
                 End If
 
-
+                daystring(6) = settingsstringserialized.Substring(settingsstringserialized.Length - 10, 10)
                 'reset charssincelasttoplevelseparator variable
                 charssincelasttoplevelseperator = 0
 
-                'next day is reached - put in the end that the first "MON::" is not counted - otherwise it would produce errors
-                Daysalreadyscanned += 1
+                    'next day is reached - put in the end that the first "MON::" is not counted - otherwise it would produce errors
+                    Daysalreadyscanned += 1
 
-            End If
-            'no sperator found - increase counter
-            charssincelasttoplevelseperator += 1
+                End If
+                'no sperator found - increase counter
+                charssincelasttoplevelseperator += 1
 
             'set the last char variable for next loop
             lastchar = currchar
         Next
+
         If daystring(day) Is Nothing Then
             Return "Nothing Configured" & seperator 'This will be used to fill a array - and the string to array function needs the seperator to work correctly
         End If
@@ -438,6 +446,7 @@ Public Class Timetable
                 Return daystring(6)
         End Select
         Return -1
+
     End Function
 
     Private Sub b_add_Click(sender As Object, e As EventArgs) Handles b_add.Click
@@ -472,20 +481,66 @@ Public Class Timetable
                 finalarray.Add(i)
             Next
 
-            'add all members 
-            For Each hourentry As String In finalarray
-                'recreating time structure ( HH:MM )
-                Dim finalentry = hourentry & ":" & seltimeminutes
-                Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
-                'assume the backuptype is full - make another dropdowm in gui for that?
-                tempitem.SubItems.Add("Full")
-            Next
+            dd_Day.SelectedIndex = 0
+            If cb_addforalldays.Checked = True Then
+                For i = 1 To 7
+                    'add all members for all days
+                    For Each hourentry As String In finalarray
+                        'recreating time structure ( HH:MM )
+                        Dim finalentry = hourentry & ":" & seltimeminutes
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
+                        'assume the backuptype is full - make another dropdowm in gui for that?
+                        tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                    Next
+                    'when added all members, switch to next day
+                    If i = 7 Then
+                        Exit For
+                    End If
+                    dd_Day.SelectedIndex = i
+                Next
+                dd_Day.SelectedIndex = 0
+
+            Else
+                'only add for selected day
+                'add all members 
+                For Each hourentry As String In finalarray
+                    'recreating time structure ( HH:MM )
+                    Dim finalentry = hourentry & ":" & seltimeminutes
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
+                    'assume the backuptype is full - make another dropdowm in gui for that?
+                    tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                Next
+            End If
+
+
         Else
             'just add selected value
             'gt entered text and add to richtextbox (later also array)
-            Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
-            tempitem.SubItems.Add("Full")
-        End If
+
+
+
+
+            dd_Day.SelectedIndex = 0
+            For i = 1 To 7
+                'add selected entry to all days
+
+
+                Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
+                tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                'when added all members, switch to next day
+                If i = 7 Then
+                    'last day added, 7th entry doesnt exist so it cant be selected
+                    Exit For
+                End If
+                dd_Day.SelectedIndex = i
+            Next
+            dd_Day.SelectedIndex = 0
+
+
+
+
+
+            End If
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
@@ -954,10 +1009,11 @@ Public Class Timetable
             'cycle through all time data and reset it
             For i = 0 To 6 Step 1
                 dd_Day.SelectedIndex = i
+                System.Threading.Thread.Sleep(50)
                 lv_timetable.Items.Clear()
+                'select first day again (Cause autosave when changing days)
+                dd_Day.SelectedIndex = 0
             Next
-            'select first day again
-            dd_Day.SelectedIndex = 0
         Else
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1022,6 +1078,8 @@ Public Class Timetable
         'Run Settings_Reload to reload the "lv_settings"
         Settings.Settings_Reload()
     End Sub
+
+
 #End Region
 
 End Class

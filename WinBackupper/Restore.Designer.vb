@@ -195,7 +195,7 @@ Partial Class Restore
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(545, 630)
+        Me.ClientSize = New System.Drawing.Size(545, 633)
         Me.Controls.Add(Me.l_restore_active)
         Me.Controls.Add(Me.lc_restore_active)
         Me.Controls.Add(Me.l_log)

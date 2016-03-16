@@ -25,12 +25,6 @@ Partial Class Timetable
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Timetable))
         Me.b_stopediting = New System.Windows.Forms.Button()
         Me.l_settings = New System.Windows.Forms.Label()
-        Me.l_source = New System.Windows.Forms.Label()
-        Me.l_backup = New System.Windows.Forms.Label()
-        Me.b_editSource = New System.Windows.Forms.Button()
-        Me.tb_showSource = New System.Windows.Forms.TextBox()
-        Me.tb_showBackup = New System.Windows.Forms.TextBox()
-        Me.b_editBackup = New System.Windows.Forms.Button()
         Me.b_add = New System.Windows.Forms.Button()
         Me.b_remove = New System.Windows.Forms.Button()
         Me.b_reset = New System.Windows.Forms.Button()
@@ -45,20 +39,28 @@ Partial Class Timetable
         Me.dd_Day = New System.Windows.Forms.ComboBox()
         Me.dtp = New System.Windows.Forms.DateTimePicker()
         Me.l_sourcePath = New System.Windows.Forms.Label()
-        Me.gb_paths = New System.Windows.Forms.GroupBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.dd_backuptype = New System.Windows.Forms.ComboBox()
+        Me.l_backuptype = New System.Windows.Forms.Label()
+        Me.tb_showBackup = New System.Windows.Forms.TextBox()
+        Me.cb_addforalldays = New System.Windows.Forms.CheckBox()
+        Me.l_backup = New System.Windows.Forms.Label()
+        Me.l_source = New System.Windows.Forms.Label()
+        Me.tb_showSource = New System.Windows.Forms.TextBox()
+        Me.b_editBackup = New System.Windows.Forms.Button()
+        Me.b_editSource = New System.Windows.Forms.Button()
         Me.fbd_editsource = New System.Windows.Forms.FolderBrowserDialog()
         Me.fbd_editbackup = New System.Windows.Forms.FolderBrowserDialog()
-        Me.gb_paths.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'b_stopediting
         '
         Me.b_stopediting.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_stopediting.Location = New System.Drawing.Point(104, 435)
+        Me.b_stopediting.Location = New System.Drawing.Point(333, 531)
+        Me.b_stopediting.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.b_stopediting.Name = "b_stopediting"
-        Me.b_stopediting.Size = New System.Drawing.Size(239, 36)
+        Me.b_stopediting.Size = New System.Drawing.Size(281, 145)
         Me.b_stopediting.TabIndex = 22
         Me.b_stopediting.Text = "Apply Times"
         Me.b_stopediting.UseVisualStyleBackColor = True
@@ -69,80 +71,20 @@ Partial Class Timetable
         Me.l_settings.BackColor = System.Drawing.Color.Transparent
         Me.l_settings.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_settings.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_settings.Location = New System.Drawing.Point(136, 9)
+        Me.l_settings.Location = New System.Drawing.Point(172, 24)
+        Me.l_settings.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.l_settings.Name = "l_settings"
-        Me.l_settings.Size = New System.Drawing.Size(197, 31)
+        Me.l_settings.Size = New System.Drawing.Size(288, 46)
         Me.l_settings.TabIndex = 34
         Me.l_settings.Text = "Folder Settings"
-        '
-        'l_source
-        '
-        Me.l_source.AutoSize = True
-        Me.l_source.BackColor = System.Drawing.Color.Transparent
-        Me.l_source.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_source.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_source.Location = New System.Drawing.Point(6, 17)
-        Me.l_source.Name = "l_source"
-        Me.l_source.Size = New System.Drawing.Size(101, 20)
-        Me.l_source.TabIndex = 35
-        Me.l_source.Text = "Source Path:"
-        '
-        'l_backup
-        '
-        Me.l_backup.AutoSize = True
-        Me.l_backup.BackColor = System.Drawing.Color.Transparent
-        Me.l_backup.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.l_backup.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_backup.Location = New System.Drawing.Point(6, 46)
-        Me.l_backup.Name = "l_backup"
-        Me.l_backup.Size = New System.Drawing.Size(104, 20)
-        Me.l_backup.TabIndex = 36
-        Me.l_backup.Text = "Backup Path:"
-        '
-        'b_editSource
-        '
-        Me.b_editSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editSource.Location = New System.Drawing.Point(349, 43)
-        Me.b_editSource.Name = "b_editSource"
-        Me.b_editSource.Size = New System.Drawing.Size(75, 23)
-        Me.b_editSource.TabIndex = 37
-        Me.b_editSource.Text = "Edit"
-        Me.b_editSource.UseVisualStyleBackColor = True
-        '
-        'tb_showSource
-        '
-        Me.tb_showSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_showSource.Location = New System.Drawing.Point(116, 14)
-        Me.tb_showSource.Name = "tb_showSource"
-        Me.tb_showSource.ReadOnly = True
-        Me.tb_showSource.Size = New System.Drawing.Size(227, 23)
-        Me.tb_showSource.TabIndex = 38
-        '
-        'tb_showBackup
-        '
-        Me.tb_showBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_showBackup.Location = New System.Drawing.Point(116, 43)
-        Me.tb_showBackup.Name = "tb_showBackup"
-        Me.tb_showBackup.ReadOnly = True
-        Me.tb_showBackup.Size = New System.Drawing.Size(227, 23)
-        Me.tb_showBackup.TabIndex = 39
-        '
-        'b_editBackup
-        '
-        Me.b_editBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_editBackup.Location = New System.Drawing.Point(349, 13)
-        Me.b_editBackup.Name = "b_editBackup"
-        Me.b_editBackup.Size = New System.Drawing.Size(75, 23)
-        Me.b_editBackup.TabIndex = 40
-        Me.b_editBackup.Text = "Edit"
-        Me.b_editBackup.UseVisualStyleBackColor = True
         '
         'b_add
         '
         Me.b_add.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_add.Location = New System.Drawing.Point(104, 307)
+        Me.b_add.Location = New System.Drawing.Point(35, 531)
+        Me.b_add.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.b_add.Name = "b_add"
-        Me.b_add.Size = New System.Drawing.Size(112, 36)
+        Me.b_add.Size = New System.Drawing.Size(290, 47)
         Me.b_add.TabIndex = 20
         Me.b_add.Text = "Add"
         Me.b_add.UseVisualStyleBackColor = True
@@ -150,9 +92,10 @@ Partial Class Timetable
         'b_remove
         '
         Me.b_remove.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_remove.Location = New System.Drawing.Point(231, 307)
+        Me.b_remove.Location = New System.Drawing.Point(35, 629)
+        Me.b_remove.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.b_remove.Name = "b_remove"
-        Me.b_remove.Size = New System.Drawing.Size(112, 36)
+        Me.b_remove.Size = New System.Drawing.Size(290, 47)
         Me.b_remove.TabIndex = 23
         Me.b_remove.Text = "Remove"
         Me.b_remove.UseVisualStyleBackColor = True
@@ -161,9 +104,10 @@ Partial Class Timetable
         '
         Me.b_reset.BackColor = System.Drawing.Color.LightCoral
         Me.b_reset.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_reset.Location = New System.Drawing.Point(165, 391)
+        Me.b_reset.Location = New System.Drawing.Point(35, 691)
+        Me.b_reset.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.b_reset.Name = "b_reset"
-        Me.b_reset.Size = New System.Drawing.Size(112, 38)
+        Me.b_reset.Size = New System.Drawing.Size(579, 58)
         Me.b_reset.TabIndex = 30
         Me.b_reset.Text = "Reset Times"
         Me.b_reset.UseVisualStyleBackColor = False
@@ -174,9 +118,10 @@ Partial Class Timetable
         Me.cb_intervall.BackColor = System.Drawing.Color.Transparent
         Me.cb_intervall.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cb_intervall.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.cb_intervall.Location = New System.Drawing.Point(104, 280)
+        Me.cb_intervall.Location = New System.Drawing.Point(35, 492)
+        Me.cb_intervall.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.cb_intervall.Name = "cb_intervall"
-        Me.cb_intervall.Size = New System.Drawing.Size(160, 21)
+        Me.cb_intervall.Size = New System.Drawing.Size(219, 29)
         Me.cb_intervall.TabIndex = 31
         Me.cb_intervall.Text = "Add intervall entries?"
         Me.cb_intervall.UseVisualStyleBackColor = False
@@ -184,18 +129,20 @@ Partial Class Timetable
         'b_changebackuptype
         '
         Me.b_changebackuptype.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.b_changebackuptype.Location = New System.Drawing.Point(104, 349)
+        Me.b_changebackuptype.Location = New System.Drawing.Point(35, 580)
+        Me.b_changebackuptype.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.b_changebackuptype.Name = "b_changebackuptype"
-        Me.b_changebackuptype.Size = New System.Drawing.Size(239, 36)
+        Me.b_changebackuptype.Size = New System.Drawing.Size(290, 47)
         Me.b_changebackuptype.TabIndex = 33
         Me.b_changebackuptype.Text = "Change Backuptype"
         Me.b_changebackuptype.UseVisualStyleBackColor = True
         '
         'tb_intervall
         '
-        Me.tb_intervall.Location = New System.Drawing.Point(209, 68)
+        Me.tb_intervall.Location = New System.Drawing.Point(477, 235)
+        Me.tb_intervall.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.tb_intervall.Name = "tb_intervall"
-        Me.tb_intervall.Size = New System.Drawing.Size(134, 20)
+        Me.tb_intervall.Size = New System.Drawing.Size(137, 26)
         Me.tb_intervall.TabIndex = 29
         Me.tb_intervall.Text = "24"
         '
@@ -205,18 +152,20 @@ Partial Class Timetable
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.Label2.Location = New System.Drawing.Point(101, 69)
+        Me.Label2.Location = New System.Drawing.Point(293, 229)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(107, 20)
+        Me.Label2.Size = New System.Drawing.Size(182, 29)
         Me.Label2.TabIndex = 28
-        Me.Label2.Text = "Intervall (in h):"
+        Me.Label2.Text = "Intervall (in hrs):"
         '
         'lv_timetable
         '
         Me.lv_timetable.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_starttime, Me.ch_backuptype})
-        Me.lv_timetable.Location = New System.Drawing.Point(104, 94)
+        Me.lv_timetable.Location = New System.Drawing.Point(35, 271)
+        Me.lv_timetable.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.lv_timetable.Name = "lv_timetable"
-        Me.lv_timetable.Size = New System.Drawing.Size(239, 180)
+        Me.lv_timetable.Size = New System.Drawing.Size(579, 194)
         Me.lv_timetable.TabIndex = 32
         Me.lv_timetable.UseCompatibleStateImageBehavior = False
         Me.lv_timetable.View = System.Windows.Forms.View.Details
@@ -224,7 +173,7 @@ Partial Class Timetable
         'ch_starttime
         '
         Me.ch_starttime.Text = "Starttime"
-        Me.ch_starttime.Width = 117
+        Me.ch_starttime.Width = 274
         '
         'ch_backuptype
         '
@@ -237,9 +186,10 @@ Partial Class Timetable
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.Label1.Location = New System.Drawing.Point(101, 46)
+        Me.Label1.Location = New System.Drawing.Point(30, 229)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(78, 20)
+        Me.Label1.Size = New System.Drawing.Size(114, 29)
         Me.Label1.TabIndex = 27
         Me.Label1.Text = "Starttime:"
         '
@@ -247,9 +197,10 @@ Partial Class Timetable
         '
         Me.dd_Day.FormattingEnabled = True
         Me.dd_Day.Items.AddRange(New Object() {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"})
-        Me.dd_Day.Location = New System.Drawing.Point(209, 15)
+        Me.dd_Day.Location = New System.Drawing.Point(98, 193)
+        Me.dd_Day.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.dd_Day.Name = "dd_Day"
-        Me.dd_Day.Size = New System.Drawing.Size(134, 21)
+        Me.dd_Day.Size = New System.Drawing.Size(177, 28)
         Me.dd_Day.TabIndex = 25
         Me.dd_Day.Text = "Monday"
         '
@@ -257,9 +208,10 @@ Partial Class Timetable
         '
         Me.dtp.CustomFormat = "HH:mm"
         Me.dtp.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtp.Location = New System.Drawing.Point(209, 42)
+        Me.dtp.Location = New System.Drawing.Point(152, 232)
+        Me.dtp.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.dtp.Name = "dtp"
-        Me.dtp.Size = New System.Drawing.Size(134, 20)
+        Me.dtp.Size = New System.Drawing.Size(123, 26)
         Me.dtp.TabIndex = 0
         '
         'l_sourcePath
@@ -268,34 +220,29 @@ Partial Class Timetable
         Me.l_sourcePath.BackColor = System.Drawing.Color.Transparent
         Me.l_sourcePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_sourcePath.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_sourcePath.Location = New System.Drawing.Point(101, 16)
+        Me.l_sourcePath.Location = New System.Drawing.Point(30, 189)
+        Me.l_sourcePath.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.l_sourcePath.Name = "l_sourcePath"
-        Me.l_sourcePath.Size = New System.Drawing.Size(41, 20)
+        Me.l_sourcePath.Size = New System.Drawing.Size(60, 29)
         Me.l_sourcePath.TabIndex = 26
         Me.l_sourcePath.Text = "Day:"
-        '
-        'gb_paths
-        '
-        Me.gb_paths.BackColor = System.Drawing.Color.Transparent
-        Me.gb_paths.Controls.Add(Me.tb_showBackup)
-        Me.gb_paths.Controls.Add(Me.l_backup)
-        Me.gb_paths.Controls.Add(Me.l_source)
-        Me.gb_paths.Controls.Add(Me.tb_showSource)
-        Me.gb_paths.Controls.Add(Me.b_editBackup)
-        Me.gb_paths.Controls.Add(Me.b_editSource)
-        Me.gb_paths.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gb_paths.Location = New System.Drawing.Point(12, 45)
-        Me.gb_paths.Name = "gb_paths"
-        Me.gb_paths.Size = New System.Drawing.Size(430, 75)
-        Me.gb_paths.TabIndex = 41
-        Me.gb_paths.TabStop = False
         '
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox1.Controls.Add(Me.dd_backuptype)
+        Me.GroupBox1.Controls.Add(Me.l_backuptype)
+        Me.GroupBox1.Controls.Add(Me.tb_showBackup)
+        Me.GroupBox1.Controls.Add(Me.l_settings)
+        Me.GroupBox1.Controls.Add(Me.cb_addforalldays)
+        Me.GroupBox1.Controls.Add(Me.l_backup)
         Me.GroupBox1.Controls.Add(Me.lv_timetable)
+        Me.GroupBox1.Controls.Add(Me.l_source)
+        Me.GroupBox1.Controls.Add(Me.tb_showSource)
         Me.GroupBox1.Controls.Add(Me.l_sourcePath)
+        Me.GroupBox1.Controls.Add(Me.b_editBackup)
         Me.GroupBox1.Controls.Add(Me.dtp)
+        Me.GroupBox1.Controls.Add(Me.b_editSource)
         Me.GroupBox1.Controls.Add(Me.b_stopediting)
         Me.GroupBox1.Controls.Add(Me.dd_Day)
         Me.GroupBox1.Controls.Add(Me.b_reset)
@@ -306,47 +253,148 @@ Partial Class Timetable
         Me.GroupBox1.Controls.Add(Me.cb_intervall)
         Me.GroupBox1.Controls.Add(Me.b_remove)
         Me.GroupBox1.Controls.Add(Me.b_add)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 138)
+        Me.GroupBox1.Location = New System.Drawing.Point(13, 5)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(430, 477)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.GroupBox1.Size = New System.Drawing.Size(645, 758)
         Me.GroupBox1.TabIndex = 42
         Me.GroupBox1.TabStop = False
         '
+        'dd_backuptype
+        '
+        Me.dd_backuptype.FormattingEnabled = True
+        Me.dd_backuptype.Items.AddRange(New Object() {"Full", "Incremental", "Differential"})
+        Me.dd_backuptype.Location = New System.Drawing.Point(477, 197)
+        Me.dd_backuptype.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.dd_backuptype.Name = "dd_backuptype"
+        Me.dd_backuptype.Size = New System.Drawing.Size(137, 28)
+        Me.dd_backuptype.TabIndex = 42
+        Me.dd_backuptype.Text = "Full"
+        '
+        'l_backuptype
+        '
+        Me.l_backuptype.AutoSize = True
+        Me.l_backuptype.BackColor = System.Drawing.Color.Transparent
+        Me.l_backuptype.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backuptype.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_backuptype.Location = New System.Drawing.Point(293, 193)
+        Me.l_backuptype.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.l_backuptype.Name = "l_backuptype"
+        Me.l_backuptype.Size = New System.Drawing.Size(144, 29)
+        Me.l_backuptype.TabIndex = 41
+        Me.l_backuptype.Text = "Backuptype:"
+        '
+        'tb_showBackup
+        '
+        Me.tb_showBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_showBackup.Location = New System.Drawing.Point(195, 131)
+        Me.tb_showBackup.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.tb_showBackup.Name = "tb_showBackup"
+        Me.tb_showBackup.ReadOnly = True
+        Me.tb_showBackup.Size = New System.Drawing.Size(302, 30)
+        Me.tb_showBackup.TabIndex = 39
+        '
+        'cb_addforalldays
+        '
+        Me.cb_addforalldays.AutoSize = True
+        Me.cb_addforalldays.BackColor = System.Drawing.Color.Transparent
+        Me.cb_addforalldays.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cb_addforalldays.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.cb_addforalldays.Location = New System.Drawing.Point(428, 492)
+        Me.cb_addforalldays.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.cb_addforalldays.Name = "cb_addforalldays"
+        Me.cb_addforalldays.Size = New System.Drawing.Size(186, 29)
+        Me.cb_addforalldays.TabIndex = 34
+        Me.cb_addforalldays.Text = "Add for all Days?"
+        Me.cb_addforalldays.UseVisualStyleBackColor = False
+        '
+        'l_backup
+        '
+        Me.l_backup.AutoSize = True
+        Me.l_backup.BackColor = System.Drawing.Color.Transparent
+        Me.l_backup.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_backup.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_backup.Location = New System.Drawing.Point(30, 136)
+        Me.l_backup.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.l_backup.Name = "l_backup"
+        Me.l_backup.Size = New System.Drawing.Size(153, 29)
+        Me.l_backup.TabIndex = 36
+        Me.l_backup.Text = "Backup Path:"
+        '
+        'l_source
+        '
+        Me.l_source.AutoSize = True
+        Me.l_source.BackColor = System.Drawing.Color.Transparent
+        Me.l_source.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.l_source.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.l_source.Location = New System.Drawing.Point(30, 91)
+        Me.l_source.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.l_source.Name = "l_source"
+        Me.l_source.Size = New System.Drawing.Size(150, 29)
+        Me.l_source.TabIndex = 35
+        Me.l_source.Text = "Source Path:"
+        '
+        'tb_showSource
+        '
+        Me.tb_showSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_showSource.Location = New System.Drawing.Point(195, 87)
+        Me.tb_showSource.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.tb_showSource.Name = "tb_showSource"
+        Me.tb_showSource.ReadOnly = True
+        Me.tb_showSource.Size = New System.Drawing.Size(302, 30)
+        Me.tb_showSource.TabIndex = 38
+        '
+        'b_editBackup
+        '
+        Me.b_editBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_editBackup.Location = New System.Drawing.Point(505, 84)
+        Me.b_editBackup.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.b_editBackup.Name = "b_editBackup"
+        Me.b_editBackup.Size = New System.Drawing.Size(104, 33)
+        Me.b_editBackup.TabIndex = 40
+        Me.b_editBackup.Text = "Edit"
+        Me.b_editBackup.UseVisualStyleBackColor = True
+        '
+        'b_editSource
+        '
+        Me.b_editSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_editSource.Location = New System.Drawing.Point(505, 127)
+        Me.b_editSource.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.b_editSource.Name = "b_editSource"
+        Me.b_editSource.Size = New System.Drawing.Size(104, 35)
+        Me.b_editSource.TabIndex = 37
+        Me.b_editSource.Text = "Edit"
+        Me.b_editSource.UseVisualStyleBackColor = True
+        '
         'fbd_editsource
         '
+        Me.fbd_editsource.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'fbd_editbackup
         '
+        Me.fbd_editbackup.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'Timetable
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoSize = True
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 629)
+        Me.ClientSize = New System.Drawing.Size(682, 768)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.gb_paths)
-        Me.Controls.Add(Me.l_settings)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.Name = "Timetable"
         Me.Text = "Folder-Pair Settings"
-        Me.gb_paths.ResumeLayout(False)
-        Me.gb_paths.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents b_stopediting As System.Windows.Forms.Button
     Friend WithEvents l_settings As System.Windows.Forms.Label
-    Friend WithEvents l_source As System.Windows.Forms.Label
-    Friend WithEvents l_backup As System.Windows.Forms.Label
-    Friend WithEvents b_editSource As System.Windows.Forms.Button
-    Friend WithEvents tb_showSource As System.Windows.Forms.TextBox
-    Friend WithEvents tb_showBackup As System.Windows.Forms.TextBox
-    Friend WithEvents b_editBackup As System.Windows.Forms.Button
     Friend WithEvents b_add As System.Windows.Forms.Button
     Friend WithEvents b_remove As System.Windows.Forms.Button
     Friend WithEvents b_reset As System.Windows.Forms.Button
@@ -361,8 +409,16 @@ Partial Class Timetable
     Friend WithEvents dd_Day As System.Windows.Forms.ComboBox
     Friend WithEvents dtp As System.Windows.Forms.DateTimePicker
     Friend WithEvents l_sourcePath As System.Windows.Forms.Label
-    Friend WithEvents gb_paths As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents fbd_editsource As FolderBrowserDialog
     Friend WithEvents fbd_editbackup As FolderBrowserDialog
+    Friend WithEvents cb_addforalldays As CheckBox
+    Friend WithEvents tb_showBackup As TextBox
+    Friend WithEvents l_backup As Label
+    Friend WithEvents l_source As Label
+    Friend WithEvents tb_showSource As TextBox
+    Friend WithEvents b_editBackup As Button
+    Friend WithEvents b_editSource As Button
+    Friend WithEvents dd_backuptype As ComboBox
+    Friend WithEvents l_backuptype As Label
 End Class
