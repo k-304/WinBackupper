@@ -27,8 +27,8 @@
     <ErrorReportUrl>https://github.com/SnipeLike/WinBackupper</ErrorReportUrl>
     <ProductName>Winbackupper</ProductName>
     <MinimumRequiredVersion>0.0.1.3</MinimumRequiredVersion>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>0.0.1.3</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.0.2.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>

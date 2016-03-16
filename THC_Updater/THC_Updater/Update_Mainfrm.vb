@@ -23,8 +23,8 @@ Imports System.Xml
 Public Class Update_Mainfrm
     'global var's
     Public Overridable Property AllowAutoRedirect As Boolean = True
-    Public PayloadsourceURL As String = "https://github.com/SnipeLike/WinBackupper/releases/download/v0.0.1.4/Winbackupper_v0.0.1.4.exe"
-    'since there is a different URL for the "Release" part i needed another var for that
+    Public PayloadsourceURL As String = "https://github.com/SnipeLike/WinBackupper/releases/download/v0.0.1.4/Winbackupper_v0.0.2.1.exe"
+    Public ChangelogURL As String = "https://raw.githubusercontent.com/SnipeLike/WinBackupper/master/Changelog.txt"    'since there is a different URL for the "Release" part i needed another var for that
     'now it downloads everything correctly =)
     Public Domain As String = "raw.githubusercontent.com" 'your domainname - nslookup needs to be able to get the IP from it!
     Public Domainprojectdir As String = "/SnipeLike/WinBackupper/master/" 'The Directory of the Webserver
@@ -109,7 +109,7 @@ Public Class Update_Mainfrm
                 End Try
             End If
             'download new changelog
-            downloadfileoverhttp(("http://" & Domain & Domainprojectdir & Logfile), getexedir() & Logfolder, Logfile)
+            downloadfileoverhttp((ChangelogURL), getexedir() & Logfolder, Logfile)
             'initialize changelog textbox
             changelogtxtbox.Text = My.Computer.FileSystem.ReadAllText(getexedir() & Logfolder & Logfile)
         Catch ex As Exception
