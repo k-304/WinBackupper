@@ -325,6 +325,9 @@ Public Class Settings
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
+        linecurrentlyedited = lv_settings.Items.Count + 1
+
+
         'only execute once so user is forced to enter a backuppath too - old functions still exist so still changeable!
         'deselect selected folderpairs - to indicate a new pair is added!
         For Each item As ListViewItem In lv_settings.SelectedItems
@@ -401,8 +404,9 @@ Public Class Settings
 
         'if added source and backup folder =>
         If DialogResult = Windows.Forms.DialogResult.OK Then
+            Dim tt As New Timetable
             'ask user to edit the time settings for this folder pair
-            Timetable.ShowDialog()
+            tt.ShowDialog()
             'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
             'it seems as when the "finish" button on the timetableform is clicked and the dialogs are finished the settings form is closed too.
             'but there is no code to close it ...
