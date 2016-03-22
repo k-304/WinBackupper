@@ -738,8 +738,8 @@ Public Class home
                 currsourcepath = sourcepatharray(fpid)
                 currbackuppath = backupPatharray(fpid)
                 currbackuptype = passedbackuptype
-                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-                Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
+            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
                 For Each time As String In StringtoArray(timesarrayforcurrentpair, ";")
                     If time = "N" Then 'this happens if "Nothing configured"
                         'somehow pass the userinput about type here?

@@ -18,6 +18,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public Shared linecurrentlyedited As Integer = 0
+    Public Shared editing As Boolean = False
 #End Region
 
 #Region "MainCode"
@@ -72,6 +73,7 @@ Public Class Settings
 
     'Edit Time Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
+        editing = True
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
         If Not lv_settings.SelectedItems.Count = 0 Then
@@ -91,7 +93,7 @@ Public Class Settings
         Settings_Reload()
         'reload settings of home form
         home.Settings_reload()
-
+        editing = False
     End Sub
 
     Function Check_Application_Autostart()

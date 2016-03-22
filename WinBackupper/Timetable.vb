@@ -784,12 +784,12 @@ Public Class Timetable
         'check if there is a entry to edit or not - set index accordingly (Folder arrays are updated by settings form via add button)
         'if an entry in settings form was selected  - assume user wants to edit it
         MsgBox(home.timesettingsarray.Count)
-        If Not Settings.lv_settings.SelectedItems.Count = 0 Then
+        If Settings.editing Then
             'user wants to edit entry
             'loop trhough the lines (all selected)
             For Each item As ListViewItem In Settings.lv_settings.SelectedItems
                 'loop through all selected entries to set time
-                home.timesettingsarray(item.Index) = finalstring
+                home.timesettingsarray(Settings.linecurrentlyedited) = finalstring
                 MsgBox(home.timesettingsarray.Count)
             Next
         Else
@@ -1005,12 +1005,12 @@ Public Class Timetable
 
         'asume the user aborted => Fill timesettgins var with normal value 
         'write the timesetting values into "home.vb" to store the data (currently all ar's are there - should be in settings though)
-        Dim tsa = home.timesettingsarray 'define TimeSettingsArray (tsa)
-        If tsa.Count = 0 Then 'if 0 cant use %var%.count -1 (it would result in -1)
-            home.timesettingsarray.Add(finalstring) 'first one so use the add function
-        Else
-            home.timesettingsarray(Settings.linecurrentlyedited) = finalstring 'settings timesettingsarray over direct call cause I think it otherwise won't change the home.timesettingsarray variable (dim creates a new var I guess -so it would change the local one?)
-        End If
+        '    Dim tsa = home.timesettingsarray 'define TimeSettingsArray (tsa)
+        '     If tsa.Count = 0 Then 'if 0 cant use %var%.count -1 (it would result in -1)
+        ' '     home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        '     Else
+        '    home.timesettingsarray(Settings.linecurrentlyedited) = finalstring 'settings timesettingsarray over direct call cause I think it otherwise won't change the home.timesettingsarray variable (dim creates a new var I guess -so it would change the local one?)
+        '    End If
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
