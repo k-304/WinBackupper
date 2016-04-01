@@ -263,7 +263,7 @@ Public Class Settings
         'try to update home GUI
         home.Settings_reload()
         'close
-        Me.Close()
+        ' Me.Close()
     End Sub
 
     'Reset Button
@@ -344,6 +344,7 @@ Public Class Settings
         'do sanity check before adding (check if already existing?)
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
+            Addition_FP_Aborted()
             Exit Sub
         End If
         If sourcepatharray.Contains(SourcePathresult) Then
@@ -354,6 +355,7 @@ Public Class Settings
                 sourcepatharray.Add(SourcePathresult)
             Else
                 MessageBox.Show("Adding of Folderpair aborted!")
+                Addition_FP_Aborted()
                 If DialogResult = Windows.Forms.DialogResult.OK Then
                     'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
                     'see further down
@@ -374,6 +376,7 @@ Public Class Settings
         Dim BackupPathresult As String = fbd_searchDefaultBackup.SelectedPath.ToString
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
+            Addition_FP_Aborted()
             Exit Sub
         End If
         'do sanity check before adding (check if already existing?)
@@ -384,6 +387,7 @@ Public Class Settings
                 backupPatharray.Add(BackupPathresult)
             Else
                 MessageBox.Show("Adding of Folderpair aborted!")
+                Addition_FP_Aborted()
                 'if aborted here - the source path s already in the array - so celan up
                 sourcepatharray.RemoveAt(sourcepatharray.Count - 1)
                 If DialogResult = Windows.Forms.DialogResult.OK Then
@@ -417,6 +421,41 @@ Public Class Settings
             DialogResult = DialogResult.None
         End If
     End Sub
+
+    Public Function Addition_FP_Aborted()
+        'function needed to clean up Arrays when Settings array get corrupted.
+        'Will clean all Entries which aren't in sync.
+        'f.E if there are 4 Source but oly 3 BAckuppaths, the 4th will be deleted.
+
+        Dim srcctr = sourcepatharray.Count
+        Dim bckctr = backupPatharray.Count
+        Dim timectr = home.timesettingsarray.Count
+        Dim smallestnumber = 0
+        If smallestnumber < srcctr Then
+            smallestnumber = srcctr
+        End If
+        If smallestnumber < bckctr Then
+            smallestnumber = bckctr
+        End If
+        If smallestnumber < timectr Then
+            smallestnumber = timectr
+        End If
+
+        If Not (srcctr = bckctr = timectr) Then
+            'some differences were detected - Clean up !
+            If (srcctr < smallestnumber) Then
+                home.sourcepatharray.RemoveAt(home.sourcepatharray.Count - 1)
+            ElseIf (smallestnumber < bckctr) Then
+                home.backupPatharray.RemoveAt(home.backupPatharray.Count - 1)
+            ElseIf (smallestnumber < timectr) Then
+                home.timesettingsarray.RemoveAt(home.timesettingsarray.Count - 1)
+            End If
+            'log errors
+        Else
+            'log noe errors
+        End If
+
+    End Function
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
     Private Sub Settings_Shown(sender As Object, e As EventArgs) _
