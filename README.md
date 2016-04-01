@@ -5,6 +5,7 @@
 - [How to use](#How to use)
 - [Bugs](#Bugs)
 - [Next Update](#Next Update)
+- [Code Flow](#Code Flow)
 
 A simple and automated Backup-Tool for Windows.
 
@@ -46,6 +47,12 @@ https://github.com/SnipeLike/WinBackupper/issues
 <div id='Next Update'/>
 ## Next Update
 Restore will be automated.
+
+<div id='Code Flow'/>
+## Code Flow
+I started to create a Flowchart for General Codeflow. Watch it in a Single page form the Link or looka t it below:
+https://www.lucidchart.com/publicSegments/view/afe9d81e-1cce-4fdb-8c15-74e4a5facf10/image.jpeg
+![alt tag]https://www.lucidchart.com/publicSegments/view/afe9d81e-1cce-4fdb-8c15-74e4a5facf10/image.jpeg
 
 # Credits
 - T0mH4rr1s0n
