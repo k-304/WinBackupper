@@ -50,8 +50,7 @@ Restore will be automated.
 
 <div id='Code Flow'/>
 ## Code Flow
-I started to create a Flowchart for General Codeflow. Watch it in a Single page form the Link or looka t it below:
-https://www.lucidchart.com/publicSegments/view/afe9d81e-1cce-4fdb-8c15-74e4a5facf10/image.jpeg
+I started to create a Flowchart for General Codeflow. To watch it in a single page just click on it!
 ![alt tag](https://www.lucidchart.com/publicSegments/view/afe9d81e-1cce-4fdb-8c15-74e4a5facf10/image.jpeg)
 
 # Credits
