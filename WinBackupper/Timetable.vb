@@ -380,38 +380,73 @@ Public Class Timetable
         For i = 0 To settingsstringserialized.Length - 1 Step 1
             Dim currchar = settingsstringserialized(i)
             alreadyread = alreadyread & settingsstringserialized(i)
-
             'check if last and current char are ":" => this is the seperator
             If currchar = ":" And lastchar = ":" Then
                 'remeber start point in loop for segment. (the index of first char after seperator!)
-                If Not Daysalreadyscanned = 6 Then
-                    startpoints(Daysalreadyscanned) = i + 1
-                Else
-                    endpoints(Daysalreadyscanned) = i + 10
-                End If
+                startpoints(Daysalreadyscanned) = i + 1
+
 
                 If (Daysalreadyscanned >= 1) Then
-                        'notice the endpoint too (startpoint already found)
-                        endpoints(Daysalreadyscanned - 1) = i - 5 'the startpoint may also be an endpoint except the first one! minus 5 because "MON::" does not count!
+                    'notice the endpoint too (startpoint already found)
+                    endpoints(Daysalreadyscanned - 1) = i - 5 'the startpoint may also be an endpoint except the first one! minus 5 because "MON::" does not count!
                     'set 1 "lower"(-1) in array because it s in the next loop
 
                 End If
 
-
                 'check if there is any data left to extract? (maybe only 1 day is filled)
                 If Not contentextracted + 35 > settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
                     '35 is the nr of chars needed for all Day seperators (MON:: = 5 chars * 7 days = 35 chars)
+                    Dim currstartpoint
+                    Dim currendpoint
+
                     If Not Daysalreadyscanned = 0 Then 'fires when i is not 0 => the first loop (i=0) will contain "MON::"
-                        Dim currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
-                        Dim currendpoint = endpoints(Daysalreadyscanned - 1)
-                        daystring(Daysalreadyscanned - 1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
-                        contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
+                        currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
+                        currendpoint = endpoints(Daysalreadyscanned - 1)
+                        Dim daypartstring = settingsstringserialized.Substring(startpoints(Daysalreadyscanned - 1) - 5, 3) 'grabs text before start point to receive DAY:: part and grabs only the "DAY" part
+                        Select Case daypartstring
+                            Case "MON"
+                                daystring(0) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "TUE"
+                                daystring(1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "WED"
+                                daystring(2) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "THU"
+                                daystring(3) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "FRI"
+                                daystring(4) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "SAT"
+                                daystring(5) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "SUN"
+                                daystring(6) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                        End Select
+                    End If
+                    If Daysalreadyscanned = 6 Then
+                            currstartpoint = startpoints(Daysalreadyscanned) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
+                            Dim daypartstring = settingsstringserialized.Substring(startpoints(Daysalreadyscanned) - 5, 3) 'grabs text before start point to receive DAY:: part and grabs only the "DAY" part
+                            Select Case daypartstring
+                                Case "MON"
+                                    daystring(0) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "TUE"
+                                    daystring(1) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "WED"
+                                    daystring(2) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "THU"
+                                    daystring(3) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "FRI"
+                                    daystring(4) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "SAT"
+                                    daystring(5) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "SUN"
+                                    daystring(6) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint)
+                            End Select
+
+                        End If
+                        '   contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
+
+
                     End If
 
-
-                End If
-
-                daystring(6) = settingsstringserialized.Substring(settingsstringserialized.Length - 10, 10)
+                'buggy statement - is hardcoding staurday - bad idea! daystring(6) = settingsstringserialized.Substring(settingsstringserialized.Length - 10, 10)
                 'reset charssincelasttoplevelseparator variable
                 charssincelasttoplevelseperator = 0
 
@@ -787,11 +822,8 @@ Public Class Timetable
         If Settings.editing Then
             'user wants to edit entry
             'loop trhough the lines (all selected)
-            For Each item As ListViewItem In Settings.lv_settings.SelectedItems
-                'loop through all selected entries to set time
-                home.timesettingsarray(Settings.linecurrentlyedited) = finalstring
-                MsgBox(home.timesettingsarray.Count)
-            Next
+            home.timesettingsarray(Settings.linecurrentlyedited) = finalstring
+
         Else
             'user wants to add entry (form is called when adding new entry)
             home.timesettingsarray.Add(finalstring)
@@ -812,9 +844,9 @@ Public Class Timetable
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
-        Try
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
+        ' Try
+        'reset text before reloading settings (for each day)
+        lv_timetable.Items.Clear()
             If Not Settings.lv_settings.SelectedItems.Count = 0 Then
                 'get values of home class (which have relevant settings in home/settings class to calculate this variables)
                 'get timesettings for the current folderpair
@@ -988,10 +1020,10 @@ Public Class Timetable
                 tb_showBackup.Text = backuppath
 
             End If
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return -1
-        End Try
+        ' Catch ex As Exception
+        ''   MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '  Return -1
+        '  End Try
         Return 0
     End Function
 
