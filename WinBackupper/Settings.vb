@@ -73,7 +73,7 @@ Public Class Settings
 
     'Edit Time Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
-        editing = True
+
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
         If Not lv_settings.SelectedItems.Count = 0 Then
@@ -82,7 +82,9 @@ Public Class Settings
             For Each item As ListViewItem In lv_settings.SelectedItems
                 'set currently edited index
                 linecurrentlyedited = item.Index
+                editing = True
                 Timetable.ShowDialog()
+                editing = False
             Next
 
 
@@ -93,7 +95,7 @@ Public Class Settings
         Settings_Reload()
         'reload settings of home form
         home.Settings_reload()
-        editing = False
+
     End Sub
 
     Function Check_Application_Autostart()
@@ -451,7 +453,9 @@ Public Class Settings
                 home.timesettingsarray.RemoveAt(home.timesettingsarray.Count - 1)
             End If
             'log errors
+            Return -1
         Else
+            Return 0
             'log noe errors
         End If
 

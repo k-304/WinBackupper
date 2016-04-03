@@ -35,12 +35,13 @@ Public Class Restore
         lc_loading_datasets.InnerCircleRadius = 12
         lc_loading_datasets.OuterCircleRadius = 15
         lc_loading_datasets.SpokeThickness = 3
-        lc_loading_datasets.NumberSpoke = 35
+        lc_loading_datasets.NumberSpoke = 50
 
         lc_restore_active.InnerCircleRadius = 12
         lc_restore_active.OuterCircleRadius = 15
         lc_restore_active.SpokeThickness = 3
-        lc_restore_active.NumberSpoke = 35
+        lc_restore_active.NumberSpoke = 50
+
 
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)

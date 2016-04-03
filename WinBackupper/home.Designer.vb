@@ -47,6 +47,7 @@ Partial Class home
         Me.cb_defaultmanualbackup = New System.Windows.Forms.CheckBox()
         Me.btn_Restore = New System.Windows.Forms.Button()
         Me.bw_dobackup = New System.ComponentModel.BackgroundWorker()
+        Me.ch_FileCount = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -69,7 +70,7 @@ Partial Class home
         Me.b_start.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.b_start.Location = New System.Drawing.Point(12, 256)
         Me.b_start.Name = "b_start"
-        Me.b_start.Size = New System.Drawing.Size(430, 35)
+        Me.b_start.Size = New System.Drawing.Size(458, 35)
         Me.b_start.TabIndex = 7
         Me.b_start.Text = "Start Backup"
         Me.b_start.UseVisualStyleBackColor = True
@@ -106,7 +107,7 @@ Partial Class home
         Me.l_version.BackColor = System.Drawing.Color.Transparent
         Me.l_version.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.l_version.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.l_version.Location = New System.Drawing.Point(342, 340)
+        Me.l_version.Location = New System.Drawing.Point(370, 347)
         Me.l_version.Name = "l_version"
         Me.l_version.Size = New System.Drawing.Size(100, 17)
         Me.l_version.TabIndex = 11
@@ -152,7 +153,7 @@ Partial Class home
         Me.rtb_log.Location = New System.Drawing.Point(12, 394)
         Me.rtb_log.Name = "rtb_log"
         Me.rtb_log.ReadOnly = True
-        Me.rtb_log.Size = New System.Drawing.Size(430, 55)
+        Me.rtb_log.Size = New System.Drawing.Size(458, 96)
         Me.rtb_log.TabIndex = 14
         Me.rtb_log.Text = ""
         '
@@ -170,11 +171,11 @@ Partial Class home
         '
         'lv_overview
         '
-        Me.lv_overview.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_index, Me.ch_source, Me.ch_backup, Me.ch_nextstarttime})
+        Me.lv_overview.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ch_index, Me.ch_source, Me.ch_backup, Me.ch_nextstarttime, Me.ch_FileCount})
         Me.lv_overview.FullRowSelect = True
         Me.lv_overview.Location = New System.Drawing.Point(12, 45)
         Me.lv_overview.Name = "lv_overview"
-        Me.lv_overview.Size = New System.Drawing.Size(430, 179)
+        Me.lv_overview.Size = New System.Drawing.Size(458, 179)
         Me.lv_overview.TabIndex = 16
         Me.lv_overview.UseCompatibleStateImageBehavior = False
         Me.lv_overview.View = System.Windows.Forms.View.Details
@@ -182,22 +183,22 @@ Partial Class home
         'ch_index
         '
         Me.ch_index.Text = "#"
-        Me.ch_index.Width = 25
+        Me.ch_index.Width = 22
         '
         'ch_source
         '
         Me.ch_source.Text = "Sourcepath:"
-        Me.ch_source.Width = 156
+        Me.ch_source.Width = 140
         '
         'ch_backup
         '
         Me.ch_backup.Text = "Backuppath:"
-        Me.ch_backup.Width = 156
+        Me.ch_backup.Width = 130
         '
         'ch_nextstarttime
         '
-        Me.ch_nextstarttime.Text = "Next start time:"
-        Me.ch_nextstarttime.Width = 89
+        Me.ch_nextstarttime.Text = "Next Start:"
+        Me.ch_nextstarttime.Width = 78
         '
         'cb_defaultmanualbackup
         '
@@ -219,7 +220,7 @@ Partial Class home
         Me.btn_Restore.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Restore.Location = New System.Drawing.Point(12, 288)
         Me.btn_Restore.Name = "btn_Restore"
-        Me.btn_Restore.Size = New System.Drawing.Size(430, 35)
+        Me.btn_Restore.Size = New System.Drawing.Size(458, 35)
         Me.btn_Restore.TabIndex = 33
         Me.btn_Restore.Text = "Restore"
         Me.btn_Restore.UseVisualStyleBackColor = True
@@ -227,13 +228,17 @@ Partial Class home
         'bw_dobackup
         '
         '
+        'ch_FileCount
+        '
+        Me.ch_FileCount.Text = "File Count"
+        '
         'home
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
-        Me.ClientSize = New System.Drawing.Size(454, 462)
+        Me.ClientSize = New System.Drawing.Size(482, 502)
         Me.Controls.Add(Me.btn_Restore)
         Me.Controls.Add(Me.cb_defaultmanualbackup)
         Me.Controls.Add(Me.lv_overview)
@@ -276,4 +281,5 @@ End Sub
     Friend WithEvents cb_defaultmanualbackup As System.Windows.Forms.CheckBox
     Friend WithEvents btn_Restore As Button
     Friend WithEvents bw_dobackup As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ch_FileCount As ColumnHeader
 End Class
