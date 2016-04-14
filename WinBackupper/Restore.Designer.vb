@@ -37,6 +37,8 @@ Partial Class Restore
         Me.l_restore_active = New System.Windows.Forms.Label()
         Me.lc_restore_active = New MRG.Controls.UI.LoadingCircle()
         Me.fbd_searchRestoretargetpath = New System.Windows.Forms.FolderBrowserDialog()
+        Me.b_editSource = New System.Windows.Forms.Button()
+        Me.fbd_edittargetpath = New System.Windows.Forms.FolderBrowserDialog()
         Me.SuspendLayout()
         '
         'l_restore
@@ -88,7 +90,7 @@ Partial Class Restore
         Me.tb_targetdir.AccessibleRole = System.Windows.Forms.AccessibleRole.Border
         Me.tb_targetdir.Location = New System.Drawing.Point(26, 440)
         Me.tb_targetdir.Name = "tb_targetdir"
-        Me.tb_targetdir.Size = New System.Drawing.Size(490, 20)
+        Me.tb_targetdir.Size = New System.Drawing.Size(438, 20)
         Me.tb_targetdir.TabIndex = 30
         '
         'L_targetpath
@@ -190,12 +192,27 @@ Partial Class Restore
         Me.lc_restore_active.Text = "Wait while Content is loading...."
         Me.lc_restore_active.Visible = False
         '
+        'b_editSource
+        '
+        Me.b_editSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.b_editSource.Location = New System.Drawing.Point(464, 438)
+        Me.b_editSource.Name = "b_editSource"
+        Me.b_editSource.Size = New System.Drawing.Size(69, 23)
+        Me.b_editSource.TabIndex = 38
+        Me.b_editSource.Text = "Edit"
+        Me.b_editSource.UseVisualStyleBackColor = True
+        '
+        'fbd_edittargetpath
+        '
+        Me.fbd_edittargetpath.RootFolder = System.Environment.SpecialFolder.MyComputer
+        '
         'Restore
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.WinBackupper.My.Resources.Resources.gray_background_3
         Me.ClientSize = New System.Drawing.Size(545, 633)
+        Me.Controls.Add(Me.b_editSource)
         Me.Controls.Add(Me.l_restore_active)
         Me.Controls.Add(Me.lc_restore_active)
         Me.Controls.Add(Me.l_log)
@@ -233,4 +250,6 @@ Partial Class Restore
     Friend WithEvents l_restore_active As Label
     Friend WithEvents lc_restore_active As MRG.Controls.UI.LoadingCircle
     Friend WithEvents fbd_searchRestoretargetpath As FolderBrowserDialog
+    Friend WithEvents b_editSource As Button
+    Friend WithEvents fbd_edittargetpath As FolderBrowserDialog
 End Class

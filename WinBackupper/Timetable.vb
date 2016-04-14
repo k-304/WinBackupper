@@ -590,6 +590,8 @@ Public Class Timetable
     'Loading Timetable Form
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'check if there are any settings to prevent errors
+
+
         If System.IO.File.Exists(home.getexedir() & home.Settings_Directory & "default.xml") Then
             Settings_Reload()
         End If
@@ -754,10 +756,13 @@ Public Class Timetable
                     'later get it back by serializing the string and get data for each line
                     tempsuntimesettingsarray.Add(time & seperator)
                 Next
-                lvc_Sun = tempsuntimesettingsarray
-                'select index 0 again (monday = 0) / or current day?
-                dd_Day.SelectedIndex = 0
-            Else
+            lvc_Sun = tempsuntimesettingsarray
+
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+
+            dd_Day.SelectedIndex = 0
+        Else
                 'is nothing => a new entry is created)
 
                 'If a new entry is added, load the path settings from the last choice 
@@ -991,7 +996,7 @@ Public Class Timetable
         'check if there are values to write
         If Not lvc_Sat Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Sun
+            For Each item As String In lvc_Sat
                 If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
                     'dont write the nothing configured into settings file it looks ugly
                     Exit For
@@ -1007,7 +1012,7 @@ Public Class Timetable
         'check if there are values to write
         If Not lvc_Sun Is Nothing Then
             'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Sat
+            For Each item As String In lvc_Sun
                 If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
                     'dont write the nothing configured into settings file it looks ugly
                     Exit For
@@ -1019,7 +1024,6 @@ Public Class Timetable
 
         'check if there is a entry to edit or not - set index accordingly (Folder arrays are updated by settings form via add button)
         'if an entry in settings form was selected  - assume user wants to edit it
-        MsgBox(home.timesettingsarray.Count)
         If Settings.editing Then
             'user wants to edit entry
             'loop trhough the lines (all selected)
@@ -1119,6 +1123,7 @@ Public Class Timetable
 
     'On Form Closeing
     Private Sub Timetable_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+        lv_timetable.Items.Clear()
         'Run Settings_Reload to reload the "lv_settings"
         Settings.Settings_Reload()
     End Sub

@@ -671,6 +671,10 @@ Public Class Settings
         End If
     End Sub
 
+    Private Sub lv_settings_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lv_settings.SelectedIndexChanged
+        'When Entry is clicked -  load the next Starttimes into the LV below!
+    End Sub
+
 #End Region
 
 End Class

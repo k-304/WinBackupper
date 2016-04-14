@@ -517,6 +517,21 @@ Public Class Restore
 
     End Sub
 
+    Private Sub b_editSource_Click(sender As Object, e As EventArgs) Handles b_editSource.Click
+
+        'Dialog select other Backup Path (Same as in Settings.vb by adding new Folderpair!)
+        fbd_edittargetpath.Description = "Change Backup Folder!"
+        fbd_edittargetpath.RootFolder = Environment.SpecialFolder.MyComputer
+        'do sanity check before adding (check if already existing?)
+        If Not fbd_edittargetpath.ShowDialog() = DialogResult.OK Then
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
+
+        tb_targetdir.Text = fbd_edittargetpath.SelectedPath.ToString
+
+    End Sub
+
 
 
 #End Region
