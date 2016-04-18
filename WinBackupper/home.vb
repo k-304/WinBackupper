@@ -548,7 +548,9 @@ Public Class home
 
     'executed when restore buttonis clicked
     Private Sub btn_Restore_Click(sender As Object, e As EventArgs) Handles btn_Restore.Click
-        Restore.ShowDialog()
+        If lv_overview.Items.Count > 0 Then
+            Restore.ShowDialog()
+        End If
     End Sub
 
     Public Function getdayofweek() As String
