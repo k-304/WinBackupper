@@ -35,12 +35,13 @@ Public Class Restore
         lc_loading_datasets.InnerCircleRadius = 12
         lc_loading_datasets.OuterCircleRadius = 15
         lc_loading_datasets.SpokeThickness = 3
-        lc_loading_datasets.NumberSpoke = 35
+        lc_loading_datasets.NumberSpoke = 50
 
         lc_restore_active.InnerCircleRadius = 12
         lc_restore_active.OuterCircleRadius = 15
         lc_restore_active.SpokeThickness = 3
-        lc_restore_active.NumberSpoke = 35
+        lc_restore_active.NumberSpoke = 50
+
 
         'everything else about the loading circle is handlet within the background worker
         'call everything which consumes times within a seperate thread (Background worker)
@@ -59,15 +60,15 @@ Public Class Restore
 
                 Try
                     Dim processname As String = "robocopy.exe"
-                    Dim filestocopy As String = "*.*" 'used in the robocopy command to only copy that file
+                    Dim filestocopy As String = Path.GetFileName(filepath) 'used in the robocopy command to only copy that file
                     ' Dim ARGFull As String = "/A-:A"
-                    Dim Proc As New System.Diagnostics.Process
+                    Dim Proc As New Process
                     Proc.StartInfo = New ProcessStartInfo("C:\Windows\System32\cmd.exe")
                     Proc.StartInfo.UseShellExecute = False
                     Proc.StartInfo.CreateNoWindow = True
 
                     Proc.StartInfo.Arguments = "/C " & processname & " " & currentlyselectedtreenode_Fullsourcepath & " " _
-                                                    & currentlyselectedtreenode_Fulltargetpath & " " & filestocopy & " /E /Z" '& ARGFull
+                                                    & targetpath & " " & filestocopy & " /Z" '& ARGFull
 
 
 
@@ -81,7 +82,7 @@ Public Class Restore
                         'assume success
                     Else
                         'assume problem
-                        Dim Logentry = "The following File could not be restored - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine
+                        Dim Logentry = "The following File could not be restored - is it opened? Errorcode:" & exitcode & vbNewLine & filepath & vbNewLine & Proc.StartInfo.Arguments.ToString & vbNewLine
                         Me.Invoke(Ldel, Logentry)
                     End If
                 Catch ex As Exception
@@ -515,6 +516,22 @@ Public Class Restore
         Me.Invoke(logdel, False)
 
     End Sub
+
+    Private Sub b_editSource_Click(sender As Object, e As EventArgs) Handles b_editSource.Click
+
+        'Dialog select other Backup Path (Same as in Settings.vb by adding new Folderpair!)
+        fbd_edittargetpath.Description = "Change Backup Folder!"
+        fbd_edittargetpath.RootFolder = Environment.SpecialFolder.MyComputer
+        'do sanity check before adding (check if already existing?)
+        If Not fbd_edittargetpath.ShowDialog() = DialogResult.OK Then
+            MessageBox.Show("Adding of Folderpair aborted!")
+            Exit Sub
+        End If
+
+        tb_targetdir.Text = fbd_edittargetpath.SelectedPath.ToString
+
+    End Sub
+
 
 
 

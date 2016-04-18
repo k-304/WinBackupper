@@ -173,6 +173,9 @@ Public Class home
                         If (xmlReader2.Name = "StartTimes") Then
                             home.timesettingsarray.Add(xmlReader2.ReadInnerXml.ToString)
                         End If
+                        If (xmlReader2.Name = "Debugmode_Enabled") Then
+                            DebugmodeOn = xmlReader2.ReadInnerXml.ToString
+                        End If
                     End If
 
                 End While
@@ -194,6 +197,10 @@ Public Class home
     Public Function Settings_reload()
         'reset the content of the listview (lv_overview) (the .items. is important! otherwise it deletes the columns to!
         lv_overview.Items.Clear()
+        'set debug mode checkbox
+        If Me.DebugmodeOn = True Then
+            Settings.cb_Debugmode.Checked = True
+        End If
         'loop through all source/dest. path's (Display in form Richtextbox)
         For i = 0 To sourcepatharray.Count - 1 Step 1
             'first, fill in the index, the "main item" (look at the code and you ll understand)
@@ -287,7 +294,7 @@ Public Class home
             'no lines selected, assume all pairs should be backed up
             For i = 0 To lv_overview.Items.Count - 1
                 'loop through all of them and add their index to the list
-                templist.Add(i & "\" & backuptype & "\")
+                templist.Add(i.ToString & "\" & backuptype & "\")
             Next
         Else
             'only backup selected line
@@ -338,7 +345,7 @@ Public Class home
                     'check if nothing is configured for this day
                     'this string will be returned by the settings_of_day_n function if no settings are configured for that day
                     If time.Substring(0, 7) = "Nothing" Then
-                        Exit Sub
+                        Exit For
                     End If
                     'time is written like HH:MM
                     'so get hours and minutes
@@ -347,14 +354,25 @@ Public Class home
                     Dim backuptype = time.Substring(5, 4) ' get chars 5-8 which re the backuptype as a 4 char code (Full Diff and Incr)
                     If checkhour = currhour Then
                         If checkMinute = currmin Then
+
                             'log the auto start
                             rtb_log.AppendText("The Following Backup Process was autostarted:" & vbNewLine)
                             'before starting set "silent" var to true- so no msgbox pooops up to ask user
                             silent = True
                             'start backup. only for current dir
-                            bw_dobackup.RunWorkerAsync(i)
+
+                            Dim templist = New ArrayList
+                            For i2 = 0 To lv_overview.Items.Count - 1
+                                If i2 = i Then
+                                    templist.Add(i.ToString & "\" & backuptype & "\")
+                                End If
+
+                            Next
+                            bw_dobackup.RunWorkerAsync(templist)
+                            ''''''''''''''''''    bw_dobackup.RunWorkerAsync(i)
                             'after autobackup- set silent to false again!
                             silent = False
+
                         End If
                     End If
 
@@ -530,7 +548,9 @@ Public Class home
 
     'executed when restore buttonis clicked
     Private Sub btn_Restore_Click(sender As Object, e As EventArgs) Handles btn_Restore.Click
-        Restore.ShowDialog()
+        If lv_overview.Items.Count > 0 Then
+            Restore.ShowDialog()
+        End If
     End Sub
 
     Public Function getdayofweek() As String
@@ -687,13 +707,15 @@ Public Class home
         'This backgroundworker does the actual backup
         'also it writes an overview xml file into the backuproot
         'from there it can read restore information about it.
-        Try
-            'this is needed to get "arguments" in a backgroundworker
-            'passed by "runworkerasync(param)"
-            'we cannot specify it in the sub as usual in a function
-            Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
-            'loop thourgh them, get all settings and start the backup.
-            Dim currsourcepath As String
+        ''''''''  Try
+        'this is needed to get "arguments" in a backgroundworker
+        'passed by "runworkerasync(param)"
+        'we cannot specify it in the sub as usual in a function
+        ''''''''''''''  Dim param1 = DirectCast(e.Argument, ArrayList)
+        Dim param1 = DirectCast(e.Argument, ArrayList)        'param 1 stores all FP Id's which should be backed up.
+
+        'loop thourgh them, get all settings and start the backup.
+        Dim currsourcepath As String
             Dim currbackuppath As String
             Dim currbackuptype As String
             'define the starttime 
@@ -718,9 +740,9 @@ Public Class home
                 currsourcepath = sourcepatharray(fpid)
                 currbackuppath = backupPatharray(fpid)
                 currbackuptype = passedbackuptype
-                Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
-                Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
-                For Each time As String In timesarrayforcurrentpair
+            Dim timesettingsforcurrentfolderpair As String = home.timesettingsarray(Settings.linecurrentlyedited)
+            Dim timesarrayforcurrentpair = Timetable.settings_of_dayn(getdayofweek, timesettingsforcurrentfolderpair)
+                For Each time As String In StringtoArray(timesarrayforcurrentpair, ";")
                     If time = "N" Then 'this happens if "Nothing configured"
                         'somehow pass the userinput about type here?
                         '  currbackuptype = "Full"
@@ -857,6 +879,43 @@ Public Class home
                 'for each entry in source array => Need a corresponding entry in backuppatharray!!! (even if same backupdir 100 times)
                 For i = 0 To sourcepatharray.Count - 1 Step 1
                     If fpid = i Then
+                        'check if the Referenced Drive letters are available. 
+                        'prevent major exception which prevents backup of further Folderpairs. 
+
+                        'first get drive letter
+                        Dim srcdrvletter = sourcepatharray(i).substring(0, 3)
+                        Dim bckdrvletter = backupPatharray(i).substring(0, 3)
+
+                        'then check if it's availlable. 
+
+                        If IO.Directory.Exists(srcdrvletter) Then
+                            If DebugmodeOn = True Then
+                            Dim Logentrysrcdrvok = DateTime.Now.ToString & ": Source Drive exists and is responding." & vbNewLine
+                            Me.Invoke(Ldel, Logentrysrcdrvok)
+
+                            End If
+                        Else
+                            If DebugmodeOn = True Then
+                                Dim LogentrysrcdrvNOTok = (DateTime.Now.ToString & ": BACKUP CANCELED! Source Drive DOES NOT exists and is NOT responding." & vbNewLine)
+                                Me.Invoke(Ldel, LogentrysrcdrvNOTok)
+
+                            End If
+                            Exit For
+                        End If
+
+                        If IO.Directory.Exists(bckdrvletter) Then
+                            If DebugmodeOn = True Then
+                            Dim Logentrybckdrvok = (DateTime.Now.ToString & ": Backup Drive exists and is responding." & vbNewLine)
+                            Me.Invoke(Ldel, Logentrybckdrvok)
+                            End If
+                        Else
+                            If DebugmodeOn = True Then
+                                Dim LogentrybckdrvNOTok = (DateTime.Now.ToString & ": BACKUP CANCELED!  Backup Drive DOES NOT exists and is NOT responding." & vbNewLine)
+                                Me.Invoke(Ldel, LogentrybckdrvNOTok)
+                            End If
+                            Exit For
+                        End If
+
                         'log start of specific folderpair
                         Dim Logentrystart = DateTime.Now.ToString & ": Starting Backup from: '" & sourcepatharray(i) & "' to: '" & backupPatharray(i) & vbNewLine
                         Me.Invoke(Ldel, Logentrystart)
@@ -872,9 +931,9 @@ Public Class home
 
                 'end of current folderpair - next one if there is any
             Next
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+            '      Catch ex As Exception
+        '        MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in dobackup BWorker", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '   End Try
     End Sub
 
     Private Sub bw_dobackup_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bw_dobackup.RunWorkerCompleted

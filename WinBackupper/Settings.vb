@@ -18,6 +18,7 @@ Public Class Settings
     Dim Allbackuppaths As String ' this is the whole string see above
     Dim formfullyloaded As Boolean = False
     Public Shared linecurrentlyedited As Integer = 0
+    Public Shared editing As Boolean = False
 #End Region
 
 #Region "MainCode"
@@ -72,6 +73,7 @@ Public Class Settings
 
     'Edit Time Settings
     Private Sub b_showtimetable_Click(sender As Object, e As EventArgs) Handles b_showtimetable.Click
+
         'gives the user ability to edit a certain configuration for a folderpair
         'check if any is selected-  if so continue
         If Not lv_settings.SelectedItems.Count = 0 Then
@@ -80,11 +82,19 @@ Public Class Settings
             For Each item As ListViewItem In lv_settings.SelectedItems
                 'set currently edited index
                 linecurrentlyedited = item.Index
+                editing = True
                 Timetable.ShowDialog()
+                editing = False
             Next
+
+
         Else
             MessageBox.Show("No Entry Selected!" & vbNewLine & "Which folderpair's Timesettings do you want to edit? Please Select a Folderpair above before editing Timesettings. (Or add a new Folderpair)", "No Folderpair selected!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
+        'reload settings of settings form
+        Settings_Reload()
+        'reload settings of home form
+        home.Settings_reload()
 
     End Sub
 
@@ -109,12 +119,13 @@ Public Class Settings
                 'Value seems to be wrong - rewrite it (Consider to keep the startup argument!)
                 'delete the value
                 runkey.DeleteValue("Winbackupper_Autostart")
-                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", _
+                My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
                                               "Winbackupper_Autostart", home.getexedir() & Assembly.GetEntryAssembly().ToString & parameters)
                 Return 0
             Else
                 'the value is already correct - exe name/location didn't change.               
             End If
+
             'function didn't return a excpected value - return -1 as error code  
             Return -1
         Catch ex As Exception
@@ -254,7 +265,7 @@ Public Class Settings
         'try to update home GUI
         home.Settings_reload()
         'close
-        Me.Close()
+        ' Me.Close()
     End Sub
 
     'Reset Button
@@ -318,6 +329,9 @@ Public Class Settings
     End Sub
 
     Private Sub b_addfolderpair_Click(sender As Object, e As EventArgs) Handles b_addfolderpair.Click
+        linecurrentlyedited = lv_settings.Items.Count + 1
+
+
         'only execute once so user is forced to enter a backuppath too - old functions still exist so still changeable!
         'deselect selected folderpairs - to indicate a new pair is added!
         For Each item As ListViewItem In lv_settings.SelectedItems
@@ -332,6 +346,7 @@ Public Class Settings
         'do sanity check before adding (check if already existing?)
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
+            Addition_FP_Aborted()
             Exit Sub
         End If
         If sourcepatharray.Contains(SourcePathresult) Then
@@ -342,6 +357,7 @@ Public Class Settings
                 sourcepatharray.Add(SourcePathresult)
             Else
                 MessageBox.Show("Adding of Folderpair aborted!")
+                Addition_FP_Aborted()
                 If DialogResult = Windows.Forms.DialogResult.OK Then
                     'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
                     'see further down
@@ -362,6 +378,7 @@ Public Class Settings
         Dim BackupPathresult As String = fbd_searchDefaultBackup.SelectedPath.ToString
         If Not DialogResult = Windows.Forms.DialogResult.OK Then ' makes sure the user clicked on "ok" if not it exists the function
             MessageBox.Show("Adding of Folderpair aborted!")
+            Addition_FP_Aborted()
             Exit Sub
         End If
         'do sanity check before adding (check if already existing?)
@@ -372,6 +389,7 @@ Public Class Settings
                 backupPatharray.Add(BackupPathresult)
             Else
                 MessageBox.Show("Adding of Folderpair aborted!")
+                Addition_FP_Aborted()
                 'if aborted here - the source path s already in the array - so celan up
                 sourcepatharray.RemoveAt(sourcepatharray.Count - 1)
                 If DialogResult = Windows.Forms.DialogResult.OK Then
@@ -388,12 +406,15 @@ Public Class Settings
 
             'Refresh Richtextbox by simply reloading settings (array is filled now)
             Settings_Reload()
+            'refresh settings of home form
+            home.Settings_reload()
         End If
 
         'if added source and backup folder =>
         If DialogResult = Windows.Forms.DialogResult.OK Then
+            Dim tt As New Timetable
             'ask user to edit the time settings for this folder pair
-            Timetable.ShowDialog()
+            tt.ShowDialog()
             'this is a workaround for a weird behavior when calling forms as dialog (and other dialogs)
             'it seems as when the "finish" button on the timetableform is clicked and the dialogs are finished the settings form is closed too.
             'but there is no code to close it ...
@@ -402,6 +423,43 @@ Public Class Settings
             DialogResult = DialogResult.None
         End If
     End Sub
+
+    Public Function Addition_FP_Aborted()
+        'function needed to clean up Arrays when Settings array get corrupted.
+        'Will clean all Entries which aren't in sync.
+        'f.E if there are 4 Source but oly 3 BAckuppaths, the 4th will be deleted.
+
+        Dim srcctr = sourcepatharray.Count
+        Dim bckctr = backupPatharray.Count
+        Dim timectr = home.timesettingsarray.Count
+        Dim smallestnumber = 0
+        If smallestnumber < srcctr Then
+            smallestnumber = srcctr
+        End If
+        If smallestnumber < bckctr Then
+            smallestnumber = bckctr
+        End If
+        If smallestnumber < timectr Then
+            smallestnumber = timectr
+        End If
+
+        If Not (srcctr = bckctr = timectr) Then
+            'some differences were detected - Clean up !
+            If (srcctr < smallestnumber) Then
+                home.sourcepatharray.RemoveAt(home.sourcepatharray.Count - 1)
+            ElseIf (smallestnumber < bckctr) Then
+                home.backupPatharray.RemoveAt(home.backupPatharray.Count - 1)
+            ElseIf (smallestnumber < timectr) Then
+                home.timesettingsarray.RemoveAt(home.timesettingsarray.Count - 1)
+            End If
+            'log errors
+            Return -1
+        Else
+            Return 0
+            'log noe errors
+        End If
+
+    End Function
 
     'executed when settingsform is fully loaded (and therefore shown to the user)
     Private Sub Settings_Shown(sender As Object, e As EventArgs) _
@@ -502,8 +560,26 @@ Public Class Settings
                 .WriteEndElement()
             Next
 
+            'write second "options" element.
+            .WriteStartElement("options")
+            .WriteStartElement("Debugmode_Enabled")
+            If (cb_Debugmode.Checked = True) Then
+                .WriteString("true")
+            Else
+                .WriteString("false")
+            End If
+
+            .WriteEndElement()
+            'end options element
+            .WriteEndElement()
+
             'write ending "<default>" tag
             .WriteEndElement()
+
+
+
+
+
             .WriteEndDocument()
             .Close()
             .Dispose()
@@ -593,6 +669,10 @@ Public Class Settings
         Else
             home.DebugmodeOn = False
         End If
+    End Sub
+
+    Private Sub lv_settings_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lv_settings.SelectedIndexChanged
+        'When Entry is clicked -  load the next Starttimes into the LV below!
     End Sub
 
 #End Region
