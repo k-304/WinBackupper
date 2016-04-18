@@ -329,7 +329,7 @@ Partial Class Timetable
         Me.b_editBackup.Name = "b_editBackup"
         Me.b_editBackup.Size = New System.Drawing.Size(69, 25)
         Me.b_editBackup.TabIndex = 40
-        Me.b_editBackup.Text = "Edit"
+        Me.b_editBackup.Text = "Browse"
         Me.b_editBackup.UseVisualStyleBackColor = True
         '
         'b_editSource
@@ -339,7 +339,7 @@ Partial Class Timetable
         Me.b_editSource.Name = "b_editSource"
         Me.b_editSource.Size = New System.Drawing.Size(69, 25)
         Me.b_editSource.TabIndex = 37
-        Me.b_editSource.Text = "Edit"
+        Me.b_editSource.Text = "Browse"
         Me.b_editSource.UseVisualStyleBackColor = True
         '
         'fbd_editsource
