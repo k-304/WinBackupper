@@ -101,6 +101,8 @@ Public Class Timetable
     'ComboBox Day
     Private Sub ComboBox_Day_SelectedIndexChanged(sender As Object, e As EventArgs) Handles dd_Day.SelectedIndexChanged
 
+
+
         'this code gets executed when the Selection of the "Daypickbox" (dropdown) changes
         'use this to reread all settings when user changes to another Day
 
@@ -146,7 +148,9 @@ Public Class Timetable
                 If Not lv_timetable.Items.Count = 0 Then ' check if there are no elemts, if so leave old array
                     lvc_Tue = temparray
                 End If
-                temparray = Nothing
+
+
+
             Case 2
                 Dim temparray As New ArrayList
                 For Each item As ListViewItem In lv_timetable.Items
@@ -345,7 +349,7 @@ Public Class Timetable
             If Not lv_timetable.SelectedItems.Count = 0 Then
                 For Each item As ListViewItem In lv_timetable.SelectedItems
                     'loop thourgh each selected item and change backuptype
-                    Select Case item.SubItems(1).Text
+                    Select Case item.SubItems(1).Text.Substring(0, 4)
                         Case "Full"
                             item.SubItems(1).Text = "Diff"
                         Case "Diff"
@@ -376,48 +380,87 @@ Public Class Timetable
         For i = 0 To settingsstringserialized.Length - 1 Step 1
             Dim currchar = settingsstringserialized(i)
             alreadyread = alreadyread & settingsstringserialized(i)
-
             'check if last and current char are ":" => this is the seperator
             If currchar = ":" And lastchar = ":" Then
                 'remeber start point in loop for segment. (the index of first char after seperator!)
                 startpoints(Daysalreadyscanned) = i + 1
+
+
                 If (Daysalreadyscanned >= 1) Then
                     'notice the endpoint too (startpoint already found)
                     endpoints(Daysalreadyscanned - 1) = i - 5 'the startpoint may also be an endpoint except the first one! minus 5 because "MON::" does not count!
                     'set 1 "lower"(-1) in array because it s in the next loop
+
                 End If
 
-
                 'check if there is any data left to extract? (maybe only 1 day is filled)
-                If Not contentextracted + 35 = settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
+                If Not contentextracted + 35 > settingsstringserialized.Length Then 'if this nr is reached, all characters are understood (only MON:: etc left - no real data)
                     '35 is the nr of chars needed for all Day seperators (MON:: = 5 chars * 7 days = 35 chars)
+                    Dim currstartpoint
+                    Dim currendpoint
+
                     If Not Daysalreadyscanned = 0 Then 'fires when i is not 0 => the first loop (i=0) will contain "MON::"
-                        Dim currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
-                        Dim currendpoint = endpoints(Daysalreadyscanned - 1)
-                        daystring(Daysalreadyscanned - 1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
-                        contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
-                        ''msgboxes only for debugging...
-                        '  MsgBox(daystring(Daysalreadyscanned - 1)) => returns the string from the array (daystring array)
-                        ' MsgBox("Real Day : " & Daysalreadyscanned - 1) '-1because the seperator comes first (MON::%DATA%) => returns ht eactual day (0 = monday)
+                        currstartpoint = startpoints(Daysalreadyscanned - 1) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
+                        currendpoint = endpoints(Daysalreadyscanned - 1)
+                        Dim daypartstring = settingsstringserialized.Substring(startpoints(Daysalreadyscanned - 1) - 5, 3) 'grabs text before start point to receive DAY:: part and grabs only the "DAY" part
+                        Select Case daypartstring
+                            Case "MON"
+                                daystring(0) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "TUE"
+                                daystring(1) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "WED"
+                                daystring(2) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "THU"
+                                daystring(3) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "FRI"
+                                daystring(4) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "SAT"
+                                daystring(5) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                            Case "SUN"
+                                daystring(6) = settingsstringserialized.Substring(currstartpoint, currendpoint - currstartpoint + 1)
+                        End Select
+                    End If
+                    If Daysalreadyscanned = 6 Then
+                            currstartpoint = startpoints(Daysalreadyscanned) 'to access the last segment (seperator comes first hen the segment MON::%DATA%
+                            Dim daypartstring = settingsstringserialized.Substring(startpoints(Daysalreadyscanned) - 5, 3) 'grabs text before start point to receive DAY:: part and grabs only the "DAY" part
+                            Select Case daypartstring
+                                Case "MON"
+                                    daystring(0) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "TUE"
+                                    daystring(1) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "WED"
+                                    daystring(2) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "THU"
+                                    daystring(3) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "FRI"
+                                    daystring(4) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "SAT"
+                                    daystring(5) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint + 1)
+                                Case "SUN"
+                                    daystring(6) = settingsstringserialized.Substring(currstartpoint, settingsstringserialized.Length - currstartpoint)
+                            End Select
+
+                        End If
+                        '   contentextracted = contentextracted + daystring(Daysalreadyscanned - 1).ToString.Length
+
 
                     End If
 
-                End If
-
-
+                'buggy statement - is hardcoding staurday - bad idea! daystring(6) = settingsstringserialized.Substring(settingsstringserialized.Length - 10, 10)
                 'reset charssincelasttoplevelseparator variable
                 charssincelasttoplevelseperator = 0
 
-                'next day is reached - put in the end that the first "MON::" is not counted - otherwise it would produce errors
-                Daysalreadyscanned += 1
+                    'next day is reached - put in the end that the first "MON::" is not counted - otherwise it would produce errors
+                    Daysalreadyscanned += 1
 
-            End If
-            'no sperator found - increase counter
-            charssincelasttoplevelseperator += 1
+                End If
+                'no sperator found - increase counter
+                charssincelasttoplevelseperator += 1
 
             'set the last char variable for next loop
             lastchar = currchar
         Next
+
         If daystring(day) Is Nothing Then
             Return "Nothing Configured" & seperator 'This will be used to fill a array - and the string to array function needs the seperator to work correctly
         End If
@@ -438,6 +481,7 @@ Public Class Timetable
                 Return daystring(6)
         End Select
         Return -1
+
     End Function
 
     Private Sub b_add_Click(sender As Object, e As EventArgs) Handles b_add.Click
@@ -472,270 +516,80 @@ Public Class Timetable
                 finalarray.Add(i)
             Next
 
-            'add all members 
-            For Each hourentry As String In finalarray
-                'recreating time structure ( HH:MM )
-                Dim finalentry = hourentry & ":" & seltimeminutes
-                Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
-                'assume the backuptype is full - make another dropdowm in gui for that?
-                tempitem.SubItems.Add("Full")
-            Next
+            'd_Day.SelectedIndex = 0
+            If cb_addforalldays.Checked = True Then
+                For i = 1 To 7
+
+                    'add all members for all days
+                    For Each hourentry As String In finalarray
+                        'recreating time structure ( HH:MM )
+                        Dim finalentry = hourentry & ":" & seltimeminutes
+                        Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
+                        'assume the backuptype is full - make another dropdowm in gui for that?
+                        tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                    Next
+                    'when added all members, switch to next day
+                    If i = 7 Then
+                        Exit For
+                    End If
+                    dd_Day.SelectedIndex = i
+                Next
+                dd_Day.SelectedIndex = 0
+
+            Else
+                'only add for selected day
+                'add all members 
+                For Each hourentry As String In finalarray
+                    'recreating time structure ( HH:MM )
+                    Dim finalentry = hourentry & ":" & seltimeminutes
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(finalentry)
+                    'assume the backuptype is full - make another dropdowm in gui for that?
+                    tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                Next
+            End If
+
+
         Else
             'just add selected value
             'gt entered text and add to richtextbox (later also array)
-            Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
-            tempitem.SubItems.Add("Full")
+
+
+
+            If cb_addforalldays.Checked = True Then
+                dd_Day.SelectedIndex = 0
+                For i = 1 To 7
+                    'add selected entry to all days
+
+
+                    Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
+                    tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                    'when added all members, switch to next day
+                    If i = 7 Then
+                        'last day added, 7th entry doesnt exist so it cant be selected
+                        Exit For
+                    End If
+                    dd_Day.SelectedIndex = i
+                Next
+                dd_Day.SelectedIndex = 0
+            Else
+                Dim tempitem As ListViewItem = lv_timetable.Items.Add(dtp.ToString.Substring(dtp.ToString.Length - 8, 5))
+                tempitem.SubItems.Add(dd_backuptype.SelectedItem.ToString.Substring(0, 4))
+                Dim curindex = dd_Day.SelectedIndex
+                'swithc indexes to save value
+                If curindex = 6 Then
+                    dd_Day.SelectedIndex = curindex - 1
+                ElseIf curindex <= 0 Then
+                    dd_Day.SelectedIndex = curindex + 1
+                End If
+                dd_Day.SelectedIndex = curindex
+            End If
+
+
         End If
+        finalarray = Nothing
     End Sub
 
     Private Sub b_stopediting_Click(sender As Object, e As EventArgs) Handles b_stopediting.Click
-        'first create timesettings string to save to xml
-        'reset finalstring if executed before (var is public)
-        finalstring = ""
-
-        Select Case dd_Day.SelectedIndex
-            Case 0
-                'build an array out of all items in listview and save them accoridngly in var as string
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Mon = temparray
-                End If
-            Case 1
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Tue = temparray
-                End If
-            Case 2
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Wed = temparray
-                End If
-            Case 3
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Thu = temparray
-                End If
-            Case 4
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Fri = temparray
-                End If
-            Case 5
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings fil
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Sat = temparray
-                End If
-            Case 6
-                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
-                    Dim temparray As New ArrayList
-                    For Each item As ListViewItem In lv_timetable.Items
-                        If item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
-                            'dont write the nothing configured into settings file it looks ugly
-                            Exit For
-                        End If
-                        'gett al entry of a line in lv and save them as 1 entry in array
-                        'later get it back by serializing the string and get data for each line
-                        Dim tempitemtext As String
-                        tempitemtext = item.Text
-                        tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
-                        temparray.Add(tempitemtext)
-                    Next
-                    lvc_Sun = temparray
-                End If
-        End Select
-
-        'Process Monday Times 
-        'write top lvl speerator =>
-        finalstring = finalstring & "MON" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Mon Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-
-            For Each item As String In lvc_Mon
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-        'set Tuesday
-        'write top lvl speerator =>
-        finalstring = finalstring & "TUE" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Tue Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Tue
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-        'set Wednesday
-        'write top lvl speerator =>
-        finalstring = finalstring & "WED" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Wed Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Wed
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-        'set thusday 
-        'write top lvl speerator =>
-        finalstring = finalstring & "THU" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Thu Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Thu
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-        'set friday
-        'write top lvl speerator =>
-        finalstring = finalstring & "FRI" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Fri Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Fri
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-        'set Saturday
-        'write top lvl speerator =>
-        finalstring = finalstring & "SAT" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Sat Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Sun
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-        'set Sunday
-        '  ComboBox_Day.SelectedIndex = 6
-        'write top lvl speerator =>
-        finalstring = finalstring & "SUN" & ToplevelSeperator
-        'check if there are values to write
-        If Not lvc_Sun Is Nothing Then
-            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
-            For Each item As String In lvc_Sat
-                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
-                    'dont write the nothing configured into settings file it looks ugly
-                    Exit For
-                End If
-                finalstring = finalstring & item
-            Next
-        End If
-
-
-        'check if there is a entry to edit or not - set index accordingly (Folder arrays are updated by settings form via add button)
-        'if an entry in settings form was selected  - assume user wants to edit it
-        If Not Settings.lv_settings.SelectedItems.Count = 0 Then
-            'user wants to edit entry
-            'loop trhough the lines (all selected)
-            For Each item As ListViewItem In Settings.lv_settings.SelectedItems
-                'loop through all selected entries to set time
-                home.timesettingsarray(item.Index) = finalstring
-            Next
-        Else
-            'user wants to add entry (form is called when adding new entry)
-            home.timesettingsarray.Add(finalstring)
-        End If
 
         'Exit Form
         Me.Close()
@@ -744,6 +598,8 @@ Public Class Timetable
     'Loading Timetable Form
     Private Sub Timetable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'check if there are any settings to prevent errors
+
+
         If System.IO.File.Exists(home.getexedir() & home.Settings_Directory & "default.xml") Then
             Settings_Reload()
         End If
@@ -752,9 +608,9 @@ Public Class Timetable
 
     'function to reload all settings displayed in the form. Only use this one!
     Public Function Settings_Reload()
-        Try
-            'reset text before reloading settings (for each day)
-            lv_timetable.Items.Clear()
+        ' Try
+        'reset text before reloading settings (for each day)
+        lv_timetable.Items.Clear()
             If Not Settings.lv_settings.SelectedItems.Count = 0 Then
                 'get values of home class (which have relevant settings in home/settings class to calculate this variables)
                 'get timesettings for the current folderpair
@@ -908,10 +764,13 @@ Public Class Timetable
                     'later get it back by serializing the string and get data for each line
                     tempsuntimesettingsarray.Add(time & seperator)
                 Next
-                lvc_Sun = tempsuntimesettingsarray
-                'select index 0 again (monday = 0) / or current day?
-                dd_Day.SelectedIndex = 0
-            Else
+            lvc_Sun = tempsuntimesettingsarray
+
+            'reset text before reloading settings (for each day)
+            lv_timetable.Items.Clear()
+
+            dd_Day.SelectedIndex = 0
+        Else
                 'is nothing => a new entry is created)
 
                 'If a new entry is added, load the path settings from the last choice 
@@ -928,23 +787,268 @@ Public Class Timetable
                 tb_showBackup.Text = backuppath
 
             End If
-        Catch ex As Exception
-            MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return -1
-        End Try
+        ' Catch ex As Exception
+        ''   MessageBox.Show(ex.Message & vbNewLine & "Above Error occured in Settings_Reload Function", "Error occured!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '  Return -1
+        '  End Try
         Return 0
     End Function
 
     'sub executed when form is closed
     Private Sub Timetable_FormClosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
+        'first create timesettings string to save to xml
+        'reset finalstring if executed before (var is public)
+        finalstring = ""
+
+        Select Case dd_Day.SelectedIndex
+            Case 0
+                'build an array out of all items in listview and save them accoridngly in var as string
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Mon = temparray
+                End If
+            Case 1
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Tue = temparray
+                End If
+            Case 2
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Wed = temparray
+                End If
+            Case 3
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Thu = temparray
+                End If
+            Case 4
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Fri = temparray
+                End If
+            Case 5
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings fil
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Sat = temparray
+                End If
+            Case 6
+                If Not lv_timetable.Items.Count = 0 Then 'check if there are no items , otherwise it would add unnessecery ";" chars which kills the settings file
+                    Dim temparray As New ArrayList
+                    For Each item As ListViewItem In lv_timetable.Items
+                        If Not item.Text.Substring(0, 5) = "Nothi" Then 'only 6 to avoid errors
+                            'gett al entry of a line in lv and save them as 1 entry in array
+                            'later get it back by serializing the string and get data for each line
+                            Dim tempitemtext As String
+                            tempitemtext = item.Text
+                            tempitemtext = tempitemtext & item.SubItems(1).Text & seperator
+                            temparray.Add(tempitemtext)
+                        End If
+
+                    Next
+                    lvc_Sun = temparray
+                End If
+        End Select
+
+        'Process Monday Times 
+        'write top lvl speerator =>
+        finalstring = finalstring & "MON" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Mon Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+
+            For Each item As String In lvc_Mon
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+        'set Tuesday
+        'write top lvl speerator =>
+        finalstring = finalstring & "TUE" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Tue Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Tue
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+        'set Wednesday
+        'write top lvl speerator =>
+        finalstring = finalstring & "WED" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Wed Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Wed
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+        'set thusday 
+        'write top lvl speerator =>
+        finalstring = finalstring & "THU" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Thu Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Thu
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+        'set friday
+        'write top lvl speerator =>
+        finalstring = finalstring & "FRI" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Fri Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Fri
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+        'set Saturday
+        'write top lvl speerator =>
+        finalstring = finalstring & "SAT" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Sat Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Sat
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+        'set Sunday
+        '  ComboBox_Day.SelectedIndex = 6
+        'write top lvl speerator =>
+        finalstring = finalstring & "SUN" & ToplevelSeperator
+        'check if there are values to write
+        If Not lvc_Sun Is Nothing Then
+            'now loop through timearray and write all time and backuptype values into variable (later stored in array)
+            For Each item As String In lvc_Sun
+                If item.Substring(0, 6) = "Nothin" Then 'only 6 to avoid errors
+                    'dont write the nothing configured into settings file it looks ugly
+                    Exit For
+                End If
+                finalstring = finalstring & item
+            Next
+        End If
+
+
+        'check if there is a entry to edit or not - set index accordingly (Folder arrays are updated by settings form via add button)
+        'if an entry in settings form was selected  - assume user wants to edit it
+        If Settings.editing Then
+            'user wants to edit entry
+            'loop trhough the lines (all selected)
+            home.timesettingsarray(Settings.linecurrentlyedited) = finalstring
+            Settings.linecurrentlyedited = 0
+
+        Else
+            'user wants to add entry (form is called when adding new entry)
+            home.timesettingsarray.Add(finalstring)
+        End If
+
+        ' b_stopediting_Click(Nothing, Nothing)
+
+
+
+
         'asume the user aborted => Fill timesettgins var with normal value 
         'write the timesetting values into "home.vb" to store the data (currently all ar's are there - should be in settings though)
-        Dim tsa = home.timesettingsarray 'define TimeSettingsArray (tsa)
-        If tsa.Count = 0 Then 'if 0 cant use %var%.count -1 (it would result in -1)
-            home.timesettingsarray.Add(finalstring) 'first one so use the add function
-        Else
-            home.timesettingsarray(tsa.Count - 1) = finalstring 'settings timesettingsarray over direct call cause I think it otherwise won't change the home.timesettingsarray variable (dim creates a new var I guess -so it would change the local one?)
-        End If
+        '    Dim tsa = home.timesettingsarray 'define TimeSettingsArray (tsa)
+        '     If tsa.Count = 0 Then 'if 0 cant use %var%.count -1 (it would result in -1)
+        ' '     home.timesettingsarray.Add(finalstring) 'first one so use the add function
+        '     Else
+        '    home.timesettingsarray(Settings.linecurrentlyedited) = finalstring 'settings timesettingsarray over direct call cause I think it otherwise won't change the home.timesettingsarray variable (dim creates a new var I guess -so it would change the local one?)
+        '    End If
     End Sub
 
     Private Sub b_reset_Click(sender As Object, e As EventArgs) Handles b_reset.Click
@@ -954,10 +1058,11 @@ Public Class Timetable
             'cycle through all time data and reset it
             For i = 0 To 6 Step 1
                 dd_Day.SelectedIndex = i
+                System.Threading.Thread.Sleep(50)
                 lv_timetable.Items.Clear()
+                'select first day again (Cause autosave when changing days)
+                dd_Day.SelectedIndex = 0
             Next
-            'select first day again
-            dd_Day.SelectedIndex = 0
         Else
             'user aborted - maybe misclicked 
             MessageBox.Show("Reseting Configuration Aborted!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1019,9 +1124,12 @@ Public Class Timetable
 
     'On Form Closeing
     Private Sub Timetable_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+        lv_timetable.Items.Clear()
         'Run Settings_Reload to reload the "lv_settings"
         Settings.Settings_Reload()
     End Sub
+
+
 #End Region
 
 End Class

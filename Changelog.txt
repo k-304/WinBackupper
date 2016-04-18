@@ -1,4 +1,4 @@
-WinBackupper v 0.0.1.0 RC 
+WinBackupper v 0.0.2.0 RC 
 
 Legend:
 -B = Bugfix
@@ -6,7 +6,6 @@ Legend:
 -ENF = Experimental New Feature
 -RF = Removed Feature
 -RW = Re Wrote (Function)
-<***> = In work. What ever is inside of the brackets (<>) isn't implemented yet, it's planned. (Testbuilds only)
 
 Examples:
 -B Changelog is now loading correctly!
@@ -15,9 +14,14 @@ Examples:
 Please note that not every Minor Version change there will be an entry. 
 There will be entries for all Release Candidates for sure though. (Keeping track of everything between them)
 -------------------------------------------------------------------------------------------
+Current Version: 0.0.2.0
+-NF Adding automated Backuptimes is now possible for the whole week and in Intervalls of hours instead of adding them to each day automatically
+-B Editing a second Folderpair results in it loading the Sundaytimes of the last Folderpair (other dayys unafected!)
+-B Fixxed bug with automated Backuptimes not firing for Sunday in special cases
 
-Current Version: 0.0.1.X (Testbuild)
--<NF Restore Logic> = 		Restores are now possible over the GUI. (In work)
+
+Depricated Version: 0.0.1.4)
+-NF Restore Logic 		Restores are now possible over the GUI. (In work)
 -NF Restoreoverview.xml		An XML File is written to keep track of all backups done.
 -B IndexoutofRange		Fixxed several IndexoutofRange Exceptions (while deleting multiple FolderPairs in the settings form)
 -RW Backup function(s)		Rewrote Backup function(s) into 1 function and a backgroundworker to support heavy load.
