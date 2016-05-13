@@ -77,6 +77,7 @@ Public Class home
     Private Sub home_Formclosed(sender As Object, e As EventArgs) Handles MyBase.FormClosed
         'write Log here?
         WriteLogfile(getexedir() & LogfileFolder & Logfilename_Prefix & GetDate() & "_" & GetTime() & ".txt", rtb_log, True) 'writes logfile and overwrites axisting ones with the same name
+        NotifyIcon1.Dispose()
     End Sub
 
     'Function to write a Logfile
@@ -663,6 +664,7 @@ Public Class home
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         'Close
         Me.Close()
+
     End Sub
 
     'Notify Backup-Start
